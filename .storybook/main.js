@@ -1,5 +1,6 @@
 
-   
+const path = require('path');
+
 module.exports = {
   stories: [
     '../src/components/**/*.stories.mdx',
@@ -23,7 +24,14 @@ module.exports = {
       test: /\.(graphql|gql)$/,
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
+      
     })
+
+    config.resolve.modules = [
+      ...(config.resolve.modules || []),
+      path.resolve(__dirname, "../src"),
+    ];
+
     return config
   },
 }
