@@ -1,35 +1,43 @@
 import React, { FC } from "react";
 
 type ButtonTypes = {
-  /**
-   * Label of the button
-   */
-  label: string;
-  /**
-   * Boolean value to define the button style
-   */
+  label?: string;
+  //TODO change type?
+  icon?: string;
+  iconRight?: boolean;
   outlined?: boolean;
-  /**
-   * Button click action
-   */
-  onClick(): void;
+  onClick?(): void;
+  type: BUTTON_TYPE;
+  fullWidth?: boolean;
 };
+//TODO: add  clicked, hover effects
 
 const BASE_BUTTON =
-  "outline-none rounded-full shadow py-3 px-12 font-normal uppercase tracking-wider text-lg focus:outline-none";
-const CONTAINED_BUTTON = `${BASE_BUTTON}  bg-blue-500  hover:bg-blue-700 text-white`;
-const OUTLINED_BUTTON = `${BASE_BUTTON}   border-2 border-blue-500  hover:border-blue-700   text-blue-500 `;
+  "text-white font-bold outline-none rounded shadow py-2 px-4 font-normal focus:outline-none border border-transparent";
+
+export enum BUTTON_TYPE {
+  primary = "bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border	",
+  secondary = "bg-secondary border-gray-800 ",
+  main = "bg-main border-gray-800",
+}
+
 const Button: FC<ButtonTypes> = ({
   onClick,
-  label = "Some label",
-  outlined,
+  icon,
+  label,
+  iconRight,
+  fullWidth,
+  type,
 }) => {
   return (
     <button
       onClick={onClick}
-      className={outlined ? OUTLINED_BUTTON : CONTAINED_BUTTON}
+      className={`${BASE_BUTTON} ${type} ${
+        fullWidth ? "w-full" : "w-max"
+      } inline-flex flex-row${iconRight ? "" : "-reverse"}`}
     >
-      <span>{label}</span>
+      {label && <span>{label}</span>}
+      {icon && <img className={`inline `} src={icon} />}
     </button>
   );
 };
