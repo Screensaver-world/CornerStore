@@ -34,7 +34,7 @@ const Button: FC<ButtonTypes> = ({
       onClick={onClick}
       className={`${BASE_BUTTON} ${type} ${
         fullWidth ? "w-full" : "w-max"
-      } inline-flex flex-row${iconRight ? "" : "-reverse"}`}
+      } inline-flex ${iconRight ? "flex-row" : "flex-row-reverse"}`}
     >
       {label && <span>{label}</span>}
       {icon && <img className={`inline `} src={icon} />}
