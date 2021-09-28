@@ -4,4 +4,16 @@
 
 html,
 body {
+  @apply w-full;
+  @apply h-full;
+}
+
+@layer components {
+    .modal-title-bar {
+        @apply flex items-center justify-between px-2 h-11;
+    }
+
+    .modal-main-content {
+        @apply overflow-y-auto bg-white rounded-b-md;
+    }
 }

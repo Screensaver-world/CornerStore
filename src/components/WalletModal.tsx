@@ -15,7 +15,7 @@ const WalletModal: React.VFC<IProps> = ({ open, onClose }) => {
         onClose();
       }}
     >
-        <WalletView />
+      <WalletView onClose={onClose} />
     </Modal>
   );
 };

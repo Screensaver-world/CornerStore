@@ -22,24 +22,24 @@ const Modal: React.FC<IProps> = ({
 }) => {
   return (
     <div className={classNames({ hidden: !open })}>
-      <div className={'fixed top-0 left-0 bg-white opacity-30 w-full h-full'} />
+      <div className={'fixed top-0 left-0 bg-black z-10 opacity-20 w-full h-full'} onClick={onClose} />
       <div
         className={
-          'fixed top-0 left-0 w-full h-full z-20 max-w-3xl md:w-2/3 md:h-4/5 md:top-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2'
+          'fixed bottom-0 left-0 w-full border bg-white border-gray-200 shadow-sm rounded-xl z-20 max-w-xl md:w-2/3 md:bottom-1/4 md:left-1/2 md:transform md:-translate-x-1/2 md:-translate-y-1/2'
         }
       >
-        {/* <div className={'modal-title-bar'}>
+        <div className={'modal-title-bar'}>
           <button onClick={onBack} className={!onBack && 'invisible'}>
-            <ArrowSmLeftIcon className={'w-5 h-5 text-white'} />
+            <ArrowSmLeftIcon className={'w-5 h-5'} />
           </button>
 
           <div className={'font-bold text-sm text-center'}>{title}</div>
 
           <button onClick={onClose} className={!onClose && 'invisible'}>
-            <XIcon className={'w-5 h-5 text-white'} />
+            <XIcon className={'w-5 h-5'} />
           </button>
-        </div> */}
-        <div>{children}</div>
+        </div>
+        <div className={'p-7'}>{children}</div>
       </div>
     </div>
   )
