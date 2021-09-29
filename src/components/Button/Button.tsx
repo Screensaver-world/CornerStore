@@ -11,24 +11,23 @@ export enum ButtonType {
 }
 
 type Props = {
-  label?: string;
+  title?: string;
   // TODO change type?
   icon?: string;
   iconRight?: boolean;
-  outlined?: boolean;
   onClick?(): void;
   type: ButtonType;
   fullWidth?: boolean;
 };
 
-const Button: FC<Props> = ({ onClick, icon, label, iconRight, fullWidth, type }) => (
+const Button: FC<Props> = ({ onClick, icon, title, iconRight, fullWidth, type = ButtonType.Primary }) => (
   <button
     onClick={onClick}
     className={`${BASE_BUTTON} ${type} ${fullWidth ? 'w-full' : 'w-max'} inline-flex ${
       iconRight ? 'flex-row' : 'flex-row-reverse'
     }`}
   >
-    {label && <span>{label}</span>}
+    {title && <span>{title}</span>}
     {icon && <img className="inline " src={icon} />}
   </button>
 );

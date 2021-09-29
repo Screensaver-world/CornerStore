@@ -12,7 +12,7 @@ export default function ErrorMessage({ form, name }: Props): JSX.Element {
     <OriginalErrorMessage
       errors={form.formState.errors}
       name={name}
-      render={(error) => <p className="mt-2 text-sm text-red-600">{error.message}</p>}
+      render={(error) => <p className="mt-1 text-sm text-red-600">{error.message}</p>}
     />
   );
 }

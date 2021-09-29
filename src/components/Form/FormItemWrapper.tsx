@@ -8,6 +8,7 @@ export type Props<FormType> = {
   name: string;
   children?: ReactNode;
   label?: string;
+  helperText?: string;
   optional?: boolean;
 };
 
@@ -17,6 +18,7 @@ const FormItemWrapper = <FormType extends FieldValues>({
   children,
   label,
   optional,
+  helperText,
 }: Props<FormType>): JSX.Element => {
   const hasError = form.formState.errors[name];
   return (
@@ -34,6 +36,7 @@ const FormItemWrapper = <FormType extends FieldValues>({
             <ErrorMessage form={form} name={name} />
           </>
         )}
+        {!hasError && helperText && <div className={'text-xs mt-2 text-gray-500 bold'}>{helperText}</div>}
       </div>
     </div>
   );
