@@ -10,7 +10,10 @@
     "storybook": "start-storybook -p 5000"
   },
   "dependencies": {
+    "@heroicons/react": "^1.0.4",
+    "@hookform/error-message": "^2.0.0",
     "@storybook/addon-docs": "^6.3.8",
+    "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9.8.6",
     "next": "10.0.6",
@@ -19,7 +22,9 @@
     "postcss-cli": "^8.3.1",
     "postcss-loader": "^4.2.0",
     "react": "17.0.1",
+    "react-currency-input-field": "^3.5.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.16.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
   },
   "devDependencies": {
