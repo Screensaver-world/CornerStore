@@ -1,16 +1,16 @@
-import React, { FC } from "react";
-import Arrow from "./Arrow.svg";
-type BreadcrumbTypes = {
-  path: BreadcrumbItem[];
-};
-import styles from "./Breadcrumb.module.css";
+import React, { FC } from 'react';
+import Arrow from './Arrow.svg';
+import styles from './Breadcrumb.module.css';
+
+const SELECTED_TEXT_COLOR = 'text-transparent bg-clip-text bg-gradient-to-b from-primary-start to-primary-stop';
 
 type BreadcrumbItem = { label: string; url: string };
 
-const SELECTED_TEXT_COLOR =
-  "text-transparent bg-clip-text bg-gradient-to-b from-primary-start to-primary-stop";
+type Props = {
+  path: BreadcrumbItem[];
+};
 
-const Breadcrumb: FC<BreadcrumbTypes> = ({ path }) => {
+const Breadcrumb: FC<Props> = ({ path }) => {
   const pathLength = path.length;
   return (
     <nav
@@ -24,15 +24,13 @@ const Breadcrumb: FC<BreadcrumbTypes> = ({ path }) => {
               <a
                 href={item.url}
                 className={`text-sm font-medium hover:text-primary-stop ${
-                  pathLength === idx + 1 ? SELECTED_TEXT_COLOR : ""
+                  pathLength === idx + 1 ? SELECTED_TEXT_COLOR : ''
                 }`}
               >
                 <span>{item.label}</span>
               </a>
             </div>
-            {pathLength !== idx + 1 && (
-              <img className="ml-4 flex-shrink-0 w-4" src={Arrow} />
-            )}
+            {pathLength !== idx + 1 && <img className="ml-4 flex-shrink-0 w-4" src={Arrow} />}
           </li>
         ))}
       </ol>
