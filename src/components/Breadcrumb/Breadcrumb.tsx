@@ -19,23 +19,21 @@ const Breadcrumb: FC<BreadcrumbTypes> = ({ path }) => {
     >
       <ol role="list" className="rounded-md px-6 flex space-x-4">
         {path.map((item, idx) => (
-          <>
-            <li className="flex">
-              <div className="flex items-center">
-                <a
-                  href={item.url}
-                  className={`text-sm font-medium hover:text-primary-stop ${
-                    pathLength === idx + 1 ? SELECTED_TEXT_COLOR : ""
-                  }`}
-                >
-                  <span>{item.label}</span>
-                </a>
-              </div>
-            </li>
+          <li key={idx} className="flex">
+            <div className="flex items-center">
+              <a
+                href={item.url}
+                className={`text-sm font-medium hover:text-primary-stop ${
+                  pathLength === idx + 1 ? SELECTED_TEXT_COLOR : ""
+                }`}
+              >
+                <span>{item.label}</span>
+              </a>
+            </div>
             {pathLength !== idx + 1 && (
-              <img className="flex-shrink-0 w-4" src={Arrow} />
+              <img className="ml-4 flex-shrink-0 w-4" src={Arrow} />
             )}
-          </>
+          </li>
         ))}
       </ol>
     </nav>
