@@ -1,5 +1,6 @@
+import React, { FC, useCallback } from 'react';
 import NextLink from 'next/link';
-import { FC } from 'react';
+
 //TODO: add other types
 export enum LinkType {
   Main = 'text-white font-bold',
@@ -8,12 +9,19 @@ export enum LinkType {
 }
 
 type Props = {
-  to: string;
+  to?: string;
   title?: string;
   type?: LinkType;
+  onClick?: () => void;
 };
 
-const Link: FC<Props> = ({ to, title = '', type = LinkType.Primary, children }) => {
-  return <NextLink href={to}>{children ?? <a className={`${type}`}> {title}</a>}</NextLink>;
+const Link: FC<Props> = ({ to, title = '', type = LinkType.Primary, children, onClick }) => {
+  const renderComponent = useCallback(() => {
+    return children ?? <a className={`${type}`}> {title}</a>;
+  }, [children, type, title]);
+  if (onClick) {
+    return renderComponent();
+  }
+  return <NextLink href={to}>{renderComponent()}</NextLink>;
 };
 export default Link;
