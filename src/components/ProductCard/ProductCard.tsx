@@ -3,7 +3,7 @@ import Button from '../Button';
 import { ButtonType } from '../Button/Button';
 import React, { FC } from 'react';
 import { NFTItem } from '../../types/NFTItem';
-import Link from 'components/Link/Llink';
+import Link from 'components/Link/Link';
 
 type Props = {
   item: NFTItem;
@@ -12,7 +12,7 @@ type Props = {
 const ProductCard: FC<Props> = ({ item }) => {
   return (
     <li className="text-white bold">
-      <div className="space-y-4 bg-main border border-gray-600 px-4 py-3 rounded-md flex flex-col justify-between h-full">
+      <div className="space-y-4 border border-gray-600 px-4 py-3 rounded-md flex flex-col justify-between h-full">
         <div className="flex items-center space-x-4 lg:space-x-6">
           <Link to="#">
             <img className="w-16 h-16 rounded-full lg:w-15 lg:h-15" src={item.ownerProfileImageUrl} alt="" />
