@@ -2,12 +2,12 @@ import React, { FC } from 'react';
 // TODO: add  clicked, hover effects
 
 const BASE_BUTTON =
-  'text-white font-bold outline-none rounded shadow py-2 px-4 font-normal focus:outline-none border border-transparent items-center';
+  'text-white font-bold outline-none rounded shadow font-normal focus:outline-none border border-transparent items-center py-2';
 
 export enum ButtonType {
-  Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border	',
-  Secondary = 'bg-secondary border-gray-500 ',
-  Main = 'bg-main border-gray-500',
+  Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border px-4',
+  Secondary = 'bg-secondary border-gray-500 px-4',
+  Main = 'bg-main border-gray-500 px-2',
 }
 
 type Props = {

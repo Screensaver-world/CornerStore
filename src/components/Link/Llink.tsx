@@ -2,6 +2,8 @@ import NextLink from 'next/link';
 import { FC } from 'react';
 //TODO: add other types
 export enum LinkType {
+  Main = 'text-white font-bold',
+  Secondary = 'text-gray-600 font-semibold',
   Primary = 'text-transparent bg-clip-text bg-gradient-to-b from-primary-start to-primary-stop hover:from-primary-stop ',
 }
 
