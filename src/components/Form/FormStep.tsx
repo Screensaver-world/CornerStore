@@ -6,9 +6,9 @@ const FormStep: FC<Props> = ({ title, footer, children }) => (
   <div className="max-w-screen-lg	px-4 py-4 space-y-8 sm:space-y-5 bg-secondary">
     <div>
       <div>
-        <h3 className="text-lg py-4 leading-6 font-medium text-white py-2 border-b ">{title}</h3>
+        <h3 className="text-lg py-4 leading-6 font-medium text-white py-2 border-gray-600 border-b">{title}</h3>
       </div>
-      {children}
+      <div className={'pt-8'}>{children}</div>
     </div>
     <div className="flex justify-end ">{footer}</div>
   </div>

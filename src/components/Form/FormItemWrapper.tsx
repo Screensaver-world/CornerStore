@@ -9,7 +9,7 @@ export type Props<FormType> = {
   children?: ReactNode;
   label?: string;
   helperText?: string;
-  optional?: boolean;
+  required?: boolean;
 };
 
 const FormItemWrapper = <FormType extends FieldValues>({
@@ -17,14 +17,14 @@ const FormItemWrapper = <FormType extends FieldValues>({
   name,
   children,
   label,
-  optional,
+  required = true,
   helperText,
 }: Props<FormType>): JSX.Element => {
   const hasError = form.formState.errors[name];
   return (
-    <div>
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {`${label} ${optional ? '(Optional)' : ''}`}
+    <div className={'pb-4'}>
+      <label htmlFor={name} className="block text-sm mb-2 text-gray-700">
+        {`${label} ${!required ? '(Optional)' : ''}`}
       </label>
       <div className="mt-1 relative rounded-md shadow-sm">
         {children}
@@ -36,7 +36,7 @@ const FormItemWrapper = <FormType extends FieldValues>({
             <ErrorMessage form={form} name={name} />
           </>
         )}
-        {!hasError && helperText && <div className={'text-xs mt-2 text-gray-500 bold'}>{helperText}</div>}
+        {!hasError && helperText && <div className={'text-xs mt-2 text-gray-700 bold'}>{helperText}</div>}
       </div>
     </div>
   );

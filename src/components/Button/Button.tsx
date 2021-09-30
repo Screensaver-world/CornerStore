@@ -6,8 +6,8 @@ const BASE_BUTTON =
 
 export enum ButtonType {
   Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border px-4',
-  Secondary = 'bg-secondary border-gray-500 px-4',
-  Main = 'bg-main border-gray-500 px-2',
+  Secondary = 'bg-secondary border-gray-600 px-4',
+  Main = 'bg-main border-gray-600 px-2',
 }
 
 type Props = {
