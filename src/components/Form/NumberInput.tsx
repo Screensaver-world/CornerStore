@@ -25,7 +25,7 @@ const NumberInput: FC<Props> = ({
   <FormItemWrapper form={form} name={name} label={title} helperText={helperText}>
     <div className="mt-1">
       <CurrencyInput
-        allowDecimals={allowDecimals}
+        allowDecimals={type !== 'quantity' && allowDecimals}
         placeholder={placeholder}
         {...form.register(name, options)}
         type="text"
@@ -43,7 +43,7 @@ const NumberInput: FC<Props> = ({
         </div>
       )}
       {type === 'currency' && currencies && (
-        <div className="absolute inset-y-0 top-px right-5 items-center">
+        <div className="absolute inset-y-0 top-px right-2 items-center">
           <select className="inline-flex bg-secondary border-0 items-center rounded text-sm font-sans font-medium text-gray-400 border-none">
             {currencies.map((currency) => (
               <option key={currency}>{currency}</option>

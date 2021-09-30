@@ -13,8 +13,9 @@ module.exports = {
         'primary-start': '#FCA963',
         'primary-stop': '#FD4857',
         gray: {
-          700: '#898989',
+          500: '#2A2A2A',
           600: '#3F3F3F',
+          700: '#898989',
         },
       },
     },

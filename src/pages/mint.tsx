@@ -2,6 +2,8 @@ import { FormStep, NumberInput, TextArea, TextInput } from '../components/Form';
 import Breadcrumb from '../components/Breadcrumb';
 import { routes } from './routes';
 import { useForm } from 'react-hook-form';
+import UploadArea from '../components/Upload';
+import Button, { ButtonType } from '../components/Button';
 
 const MintPage = () => {
   const form = useForm();
@@ -12,24 +14,34 @@ const MintPage = () => {
         <div className={'flex flex-start my-8 bold text-white text-xl'}>Create multiple collectible</div>
         <div className={'pb-8'}>
           <FormStep title={'Upload File'}>
-
+            <UploadArea />
           </FormStep>
         </div>
         <div className={'pb-8'}>
           <FormStep title={'Price'}>
-            <NumberInput
-              form={form}
-              name={'price'}
-              title={'Enter price for one piece'}
-              placeholder={'5.0 ETH'}
-              type={'currency'}
-              helperText={'Services Fee : 2.5%'}
-              currencies={['BTC', 'ETH', 'RARI']}
-            />
+            <div className={'w-1/2'}>
+              <NumberInput
+                form={form}
+                name={'price'}
+                title={'Enter price for one piece'}
+                placeholder={'5.0 ETH'}
+                type={'currency'}
+                helperText={'Services Fee : 2.5%'}
+                currencies={['BTC', 'ETH', 'RARI']}
+              />
+            </div>
           </FormStep>
         </div>
         <div className={'pb-8'}>
-          <FormStep title={'Other Information'}>
+          <FormStep
+            title={'Other Information'}
+            footer={
+              <div className={'flex justify-end'}>
+                <Button title={'Preview'} type={ButtonType.Secondary} />
+                <Button customClasses={'ml-4'} title={'Create Item'} />
+              </div>
+            }
+          >
             <TextInput label={'Title'} placeholder={'e.g. "Redeemable T-Shirt with logo"'} form={form} name={'title'} />
             <TextArea
               title={'Description'}
