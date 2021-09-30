@@ -1,36 +1,34 @@
-import React, { FC } from "react";
-
-type ButtonTypes = {
-  /**
-   * Label of the button
-   */
-  label: string;
-  /**
-   * Boolean value to define the button style
-   */
-  outlined?: boolean;
-  /**
-   * Button click action
-   */
-  onClick(): void;
-};
+import React, { FC } from 'react';
+// TODO: add  clicked, hover effects
 
 const BASE_BUTTON =
-  "outline-none rounded-full shadow py-3 px-12 font-normal uppercase tracking-wider text-lg focus:outline-none";
-const CONTAINED_BUTTON = `${BASE_BUTTON}  bg-blue-500  hover:bg-blue-700 text-white`;
-const OUTLINED_BUTTON = `${BASE_BUTTON}   border-2 border-blue-500  hover:border-blue-700   text-blue-500 `;
-const Button: FC<ButtonTypes> = ({
-  onClick,
-  label = "Some label",
-  outlined,
-}) => {
-  return (
-    <button
-      onClick={onClick}
-      className={outlined ? OUTLINED_BUTTON : CONTAINED_BUTTON}
-    >
-      <span>{label}</span>
-    </button>
-  );
+  'text-white font-bold outline-none rounded shadow py-2 px-4 font-normal focus:outline-none border border-transparent';
+
+export enum ButtonType {
+  Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border	',
+  Secondary = 'bg-secondary border-gray-800 ',
+  Main = 'bg-main border-gray-800',
+}
+
+type Props = {
+  title?: string;
+  // TODO change type?
+  icon?: string;
+  iconRight?: boolean;
+  onClick?(): void;
+  type: ButtonType;
+  fullWidth?: boolean;
 };
+
+const Button: FC<Props> = ({ onClick, icon, title, iconRight, fullWidth, type = ButtonType.Primary }) => (
+  <button
+    onClick={onClick}
+    className={`${BASE_BUTTON} ${type} ${fullWidth ? 'w-full' : 'w-max'} inline-flex ${
+      iconRight ? 'flex-row' : 'flex-row-reverse'
+    }`}
+  >
+    {title && <span>{title}</span>}
+    {icon && <img className="inline " src={icon} />}
+  </button>
+);
 export default Button;
