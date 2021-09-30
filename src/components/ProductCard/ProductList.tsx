@@ -1,4 +1,6 @@
+import { InstagramIcon } from 'assets';
 import Button from 'components/Button';
+import { ButtonType } from 'components/Button/Button';
 import React, { FC } from 'react';
 import { NFTItem } from 'types/NFTItem';
 import ProductCard from './ProductCard';
@@ -22,7 +24,9 @@ const ProductList: FC<Props> = ({ items }) => {
           </ul>
         </div>
       </div>
-      <div className='flex'><Button title='Load more'>/></div>
+      <div className="flex w-full mx-auto content-center my-4">
+        <Button type={ButtonType.Main} title="Load more" customClasses="px-4" icon={InstagramIcon} />
+      </div>
     </div>
   );
 };

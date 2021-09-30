@@ -36,7 +36,7 @@ const Button: FC<Props> = ({
       iconRight ? 'flex-row' : 'flex-row-reverse'
     } ${customClasses} `}
   >
-    {title && <span>{title}</span>}
+    {title && <span className={`${title && icon ? '' : ''}`}>{title}</span>}
     {icon && <img className="inline " src={icon} />}
   </button>
 );
