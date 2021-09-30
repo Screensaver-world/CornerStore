@@ -1,4 +1,4 @@
-import { InstagramIcon } from 'assets';
+import { ReloadIcon } from 'assets';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import React, { FC } from 'react';
@@ -25,7 +25,7 @@ const ProductList: FC<Props> = ({ items }) => {
         </div>
       </div>
       <div className="flex w-full mx-auto content-center my-4">
-        <Button type={ButtonType.Main} title="Load more" customClasses="px-4" icon={InstagramIcon} />
+        <Button type={ButtonType.Main} title="Load more items" customClasses="px-7 py-3" icon={ReloadIcon} />
       </div>
     </div>
   );
