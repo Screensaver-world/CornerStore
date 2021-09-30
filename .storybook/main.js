@@ -1,5 +1,5 @@
+const path = require('path')
 
-   
 module.exports = {
   stories: [
     '../src/components/**/*.stories.mdx',
@@ -24,6 +24,17 @@ module.exports = {
       exclude: /node_modules/,
       loader: 'graphql-tag/loader',
     })
+
+    const appSrc = path.resolve(__dirname, '../src');
+
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@assets': `${appSrc}/assets/`,
+      '@components': `${appSrc}/components/`,
+      '@types': `${appSrc}/types/`,
+      '@i18n': `${appSrc}/i18n/`,
+    };
+
     return config
   },
 }
