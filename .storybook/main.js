@@ -29,10 +29,10 @@ module.exports = {
 
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@assets': `${appSrc}/assets/`,
-      '@components': `${appSrc}/components/`,
-      '@types': `${appSrc}/types/`,
-      '@i18n': `${appSrc}/i18n/`,
+      'assets': `${appSrc}/assets/`,
+      'components': `${appSrc}/components/`,
+      'types': `${appSrc}/types/`,
+      'i18n': `${appSrc}/i18n/`,
     };
 
     return config
