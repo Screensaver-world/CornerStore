@@ -1,3 +1,4 @@
+import Button from 'components/Button';
 import React, { FC } from 'react';
 import { NFTItem } from 'types/NFTItem';
 import ProductCard from './ProductCard';
@@ -8,7 +9,7 @@ type Props = {
 
 const ProductList: FC<Props> = ({ items }) => {
   return (
-    <div className="bg-main">
+    <div>
       <div className="mx-auto py-3 px-4 max-w-screen-2xl sm:px-6 lg:px-6 lg:py-6">
         <div className="space-y-12">
           <ul
@@ -21,6 +22,7 @@ const ProductList: FC<Props> = ({ items }) => {
           </ul>
         </div>
       </div>
+      <div className='flex'><Button title='Load more'>/></div>
     </div>
   );
 };
