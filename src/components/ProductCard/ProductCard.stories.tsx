@@ -1,11 +1,16 @@
-import * as React from 'react';
-import { ProductList } from 'components/ProductCard';
-import Button from 'components/Button';
-import { ButtonType } from 'components/Button/Button';
+import React from 'react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { ComponentMeta, ComponentStory } from '@storybook/react';
+import ProductList from './ProductList';
 
-export interface HomeProps {}
+export default {
+  title: 'ProductList',
+  component: ProductList,
+  decorators: [withKnobs],
+} as ComponentMeta<typeof ProductList>;
 
-//MOCKED DATA
+const Template: ComponentStory<typeof ProductList> = (args) => <ProductList {...args} />;
+
 const dummyItems = [
   {
     id: '123',
@@ -48,16 +53,7 @@ const dummyItems = [
       'https://cdn.fastly.picmonkey.com/contentful/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=800&q=70',
   },
 ];
-const Home: React.FunctionComponent<HomeProps> = () => {
-  return (
-    <>
-      <div className="flex py-6 justify-between max-w-screen-2xl mx-auto px-6 pt-10">
-        <h1 className="text-white text-4xl font-bold">Explore</h1>
-        <Button type={ButtonType.Secondary} title="TODO: dropdown" />
-      </div>
-      <ProductList items={new Array(5).fill(dummyItems).flat()} />
-    </>
-  );
+export const Default = Template.bind({});
+Default.args = {
+  items: new Array(5).fill(dummyItems).flat(),
 };
-
-export default Home;
