@@ -24,7 +24,7 @@ const ProductList: FC<Props> = ({ items }) => {
           </ul>
         </div>
       </div>
-      <div className="flex w-full mx-auto content-center my-4">
+      <div className="flex w-full mx-auto justify-center my-4">
         <Button type={ButtonType.Main} title="Load more items" customClasses="px-7 py-3" icon={ReloadIcon} />
       </div>
     </div>
