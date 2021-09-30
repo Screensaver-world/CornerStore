@@ -5,7 +5,7 @@ import { Logo, SunIcon, TwitterIcon, TelegramIcon, DiscordIcon, InstagramIcon } 
 import React, { FC } from 'react';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
-import Link, { LinkType } from 'components/Link/Llink';
+import Link, { LinkType } from 'components/Link/Link';
 
 //TODO update links
 const socialButtons = [
