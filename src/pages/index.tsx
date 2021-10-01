@@ -1,9 +1,7 @@
 import * as React from 'react';
 import { ProductList } from 'components/ProductCard';
-import Button from 'components/Button';
-import { ButtonType } from 'components/Button/Button';
-
-export interface HomeProps {}
+import Dropdown from 'components/Dropdown/Dropdown';
+import { useCallback } from 'react';
 
 //MOCKED DATA
 const dummyItems = [
@@ -48,12 +46,35 @@ const dummyItems = [
       'https://cdn.fastly.picmonkey.com/contentful/h6goo9gw1hh6/2sNZtFAWOdP1lmQ33VwRN3/24e953b920a9cd0ff2e1d587742a2472/1-intro-photo-final.jpg?w=800&q=70',
   },
 ];
+
+enum OrderBy {
+  RecentlyAdded = 'Recently added',
+  PriceLowToHigh = 'Price: Low to High',
+  PriceHighToLow = 'Price: High to Low',
+  AuctionEndingSoon = 'Auction ending soon',
+}
+
+export interface HomeProps {}
+
 const Home: React.FunctionComponent<HomeProps> = () => {
+  const renderDropDownContent = useCallback(
+    () =>
+      Object.keys(OrderBy).map((key) => (
+        <div className="px-2 py-2 hover:bg-gray-600 bg-secondary text-white" key={key}>
+          {OrderBy[key]}
+        </div>
+      )),
+    []
+  );
+
   return (
     <>
       <div className="flex py-6 justify-between max-w-screen-2xl mx-auto px-6 pt-10">
         <h1 className="text-white text-4xl font-bold">Explore</h1>
-        <Button type={ButtonType.Secondary} title="TODO: dropdown" />
+        <Dropdown
+          displayText="Recently added"
+          dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}
+        />
       </div>
       <ProductList items={new Array(5).fill(dummyItems).flat()} />
     </>

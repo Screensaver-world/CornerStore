@@ -22,7 +22,7 @@ type Props = {
 };
 const HamburgerMenu: FC<Props> = ({ renderSocialButtons }) => {
   return (
-    <div className="lg:hidden w-screen h-screen bg-main flex-col flex">
+    <div className="lg:hidden w-screen h-screen bg-main flex-col flex fixed z-10">
       <div>
         <div className="px-8 divide-gray-300 divide-y pt-2 pb-3 space-y-1 flex flex-col text-white text-xl	">
           {renderLinks()}
