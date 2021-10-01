@@ -19,3 +19,11 @@ export type NFTOwner = {
   price: string;
   currency: Currency;
 };
+
+export type NFTTransaction = {
+  quantity: number;
+  price: string;
+  currency: Currency;
+  createdBy: NFTOwner;
+  createdAt: Date;
+};

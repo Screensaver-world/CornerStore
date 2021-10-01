@@ -3,6 +3,7 @@ import Breadcrumb from 'components/Breadcrumb';
 import { useForm } from 'react-hook-form';
 import { routes } from '../routes';
 import Button from 'components/Button';
+import ChooseProfilePicture from 'features/profile/components/ChooseProfilePicture';
 
 const EditProfilePage = () => {
   const form = useForm();
@@ -12,7 +13,9 @@ const EditProfilePage = () => {
         <Breadcrumb path={[routes.Home, routes.EditProfile]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Edit Profile</div>
         <div className={'pb-8'}>
-          <FormStep title={'Profile'} />
+          <FormStep title={'Profile'}>
+            <ChooseProfilePicture />
+          </FormStep>
         </div>
         <div className={'pb-8'}>
           <FormStep title={'Other Information'} footer={<Button customClasses={'ml-4'} title={'Update Profile'} />}>

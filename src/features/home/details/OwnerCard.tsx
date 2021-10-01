@@ -9,23 +9,19 @@ type Props = {
 };
 
 function OwnerCard({ data, total }: Props) {
-  const { quantity, price, currency } = data;
-
-  const renderSubtitle = useCallback(() => {
-    return (
-      <div>
-        {quantity}/{total} on sale for{' '}
-        <span className={'font-bold'}>
-          {price} {currency}
-        </span>
-      </div>
-    );
-  }, []);
+  const { name, avatarUrl, quantity, price, currency } = data;
   return (
     <HorizontalCard
-      imageUrl={data.avatarUrl}
-      title={data.name}
-      subtitle={renderSubtitle()}
+      imageUrl={avatarUrl}
+      title={name}
+      subtitle={
+        <div>
+          {quantity}/{total} on sale for{' '}
+          <span className={'font-bold'}>
+            {price} {currency}
+          </span>
+        </div>
+      }
       actions={
         <div>
           <Button title={'Buy'} />

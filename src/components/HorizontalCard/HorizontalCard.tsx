@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 type Props = {
   imageUrl: string;
@@ -19,7 +19,7 @@ function HorizontalCard({ imageUrl, title, subtitle, actions }: Props) {
           <p className="text-sm font-medium text-gray-900">{title}</p>
           <p className="text-sm text-gray-500 truncate">{subtitle}</p>
         </div>
-        <div className={'flex mt-2 sm:mt-0 justify-end pr-2'}>{actions}</div>
+        {actions && <div className={'flex mt-2 sm:mt-0 justify-end pr-2'}>{actions}</div>}
       </div>
     </div>
   );
