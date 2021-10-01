@@ -35,6 +35,7 @@ module.exports = {
       'types': `${appSrc}/types/`,
       'i18n': `${appSrc}/i18n/`,
       'hooks': `${appSrc}/hooks/`,
+      'utils': `${appSrc}/utils/`,
     };
 
     return config
