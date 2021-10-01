@@ -7,4 +7,8 @@ export const routes = {
     label: 'Create Mint',
     url: '/mint',
   },
+  EditProfile: {
+    label: 'Edit Profile',
+    url: 'profile/edit',
+  },
 };

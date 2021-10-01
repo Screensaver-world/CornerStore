@@ -9,9 +9,9 @@ const MintPage = () => {
   const form = useForm();
   return (
     <>
-      <div className="flex-col flex py-6 justify-between max-w-screen-2xl mx-auto px-6 pt-10">
+      <div className="flex-col flex py-6 justify-between max-w-screen-lg mx-auto px-6 pt-10">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
-        <div className={'flex flex-start my-8 bold text-white text-xl'}>Create multiple collectible</div>
+        <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <div className={'pb-8'}>
           <FormStep title={'Upload File'}>
             <UploadArea />
