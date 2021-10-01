@@ -9,7 +9,10 @@ export { default as TelegramIcon } from './icons/telegram.svg';
 export { default as ReloadIcon } from './icons/reload.svg';
 export { default as UploadIcon } from './images/upload-icon.svg';
 export { default as SearchIcon } from './icons/search.svg';
+export { default as CopyIcon } from './icons/copy.svg';
 
 export { default as Logo } from './logo.png';
 
 export { ChevronDownIcon, CheckIcon };
+
+export { default as CoverPhoto } from './images/cover.png';
