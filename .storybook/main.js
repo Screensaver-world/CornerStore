@@ -2,10 +2,11 @@ const path = require('path')
 
 module.exports = {
   stories: [
-    '../src/components/**/*.stories.mdx',
-    '../src/components/**/*.stories.@(js|jsx|ts|tsx)',
+    '../src/**/*.stories.mdx',
+    '../src/**/*.stories.@(js|jsx|ts|tsx)',
   ],
   addons: [
+    '@storybook/addon-viewport',
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     'storybook-addon-apollo-client',
@@ -33,6 +34,7 @@ module.exports = {
       'components': `${appSrc}/components/`,
       'types': `${appSrc}/types/`,
       'i18n': `${appSrc}/i18n/`,
+      'hooks': `${appSrc}/hooks/`,
     };
 
     return config

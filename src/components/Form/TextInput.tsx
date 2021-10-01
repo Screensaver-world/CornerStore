@@ -18,7 +18,7 @@ const TextInput: FC<Props> = (props) => {
           placeholder={placeholder}
           type={type}
           name={name}
-          className="shadow-sm bg-secondary focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md"
+          className="shadow-sm text-white bg-secondary focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md"
         />
       </div>
     </FormItemWrapper>
