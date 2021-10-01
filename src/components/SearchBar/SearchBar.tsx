@@ -26,21 +26,29 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           type="search"
         />
         {!displaySearchOverlay && (
-          <div className="flex absolute justify-center items-center absoulte w-full bg-main h-40  text-white border border-gray-600">
+          <div className="z-10 flex absolute justify-center items-center absoulte w-full bg-main h-40  text-white border border-gray-600">
             Search results will go here
           </div>
         )}
       </div>
     );
-  }, [displayResults, setDisplayResults]);
-  const mobileSeardh = (
-    <div className=" h-screen w-screen fixed bg-main top-0 left-0 z-10 md:hidden px-4 py-4 ">
-      <span className="flex gap-x-3 items-center">
-        {renderInput()}
-        <XIcon onClick={() => setDisplaySearchOverlay(false)} className="block h-7 w-7 text-white" aria-hidden="true" />
-      </span>
-      <div className="flex  justify-center items-center h-full w-full text-white">Search results will go here</div>
-    </div>
+  }, [displayResults, displaySearchOverlay, setDisplayResults]);
+
+  const renderMobileSearch = useCallback(
+    () => (
+      <div className=" h-screen w-screen fixed bg-main top-0 left-0 z-10 md:hidden px-4 py-4 ">
+        <span className="flex gap-x-3 items-center">
+          {renderInput()}
+          <XIcon
+            onClick={() => setDisplaySearchOverlay(false)}
+            className="block h-7 w-7 text-white"
+            aria-hidden="true"
+          />
+        </span>
+        <div className="flex  justify-center items-center h-full w-full text-white">Search results will go here</div>
+      </div>
+    ),
+    [renderInput, setDisplaySearchOverlay]
   );
 
   return hidden ? null : (
@@ -56,7 +64,7 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
       <div className="flex w-full block md:hidden right-0 justify-end">
         <Button icon={SVGSearchIcon} type={ButtonType.Main} onClick={() => setDisplaySearchOverlay(true)} />
       </div>
-      {displaySearchOverlay && mobileSeardh}
+      {displaySearchOverlay && renderMobileSearch()}
     </>
   );
 };
