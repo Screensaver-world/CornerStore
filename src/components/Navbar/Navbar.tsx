@@ -30,7 +30,7 @@ const socialButtons = [
 const renderSocialButtons = () => (
   <div className="flex gap-x-1 lg:gap-x-2 xl:gap-x:4">
     {socialButtons.map(({ link, icon }) => (
-      <Button key={link} type={ButtonType.Main} icon={icon} />
+      <Button key={link} type={ButtonType.Main} equalPadding icon={icon} />
     ))}
   </div>
 );
@@ -65,7 +65,7 @@ const Navbar: FC<unknown> = () => {
             <div className="flex space-x-4 lg:space-12 items-center">
               <Button type={ButtonType.Primary} title="Create" />
               <Button type={ButtonType.Secondary} title="Connect wallet" />
-              <Button type={ButtonType.Main} icon={SunIcon} />
+              <Button type={ButtonType.Main} icon={SunIcon} equalPadding />
             </div>
           </div>
         </div>

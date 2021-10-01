@@ -5,9 +5,9 @@ const BASE_BUTTON =
   'text-white font-semibold outline-none rounded shadow font-normal focus:outline-none border border-transparent items-center py-2';
 
 export enum ButtonType {
-  Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border px-4',
-  Secondary = 'bg-secondary border-gray-600 px-4',
-  Main = 'bg-main border-gray-600 px-2',
+  Primary = 'bg-gradient-to-b from-primary-start to-primary-stop bg-origin-border',
+  Secondary = 'bg-secondary border-gray-600',
+  Main = 'bg-main border-gray-600',
 }
 
 type Props = {
@@ -19,6 +19,7 @@ type Props = {
   type?: ButtonType;
   fullWidth?: boolean;
   customClasses?: string;
+  equalPadding?: boolean;
 };
 
 const Button: FC<Props> = ({
@@ -28,13 +29,14 @@ const Button: FC<Props> = ({
   title,
   iconRight,
   fullWidth,
+  equalPadding,
   type = ButtonType.Primary,
 }) => (
   <button
     onClick={onClick}
     className={`${BASE_BUTTON} ${type} ${fullWidth ? 'w-full' : 'w-max'} inline-flex ${
       iconRight ? 'flex-row' : 'flex-row-reverse'
-    } ${customClasses} `}
+    } ${customClasses} ${equalPadding ? 'px-2' : 'px-4'}`}
   >
     {title && <span className={`${title && icon ? (iconRight ? 'pr-2' : 'pl-2') : ''}`}>{title}</span>}
     {icon && <img className="inline " src={icon} />}
