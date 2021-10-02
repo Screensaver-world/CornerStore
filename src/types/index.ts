@@ -27,3 +27,14 @@ export type NFTTransaction = {
   createdBy: NFTOwner;
   createdAt: Date;
 };
+
+export type NFTItem = {
+  name: string;
+  description: string;
+  imageUrls: string[];
+  price: string;
+  currency: Currency;
+  totalQuantity: number;
+  availableQuantity: number;
+  royalties: number;
+};
