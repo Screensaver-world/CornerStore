@@ -1,10 +1,19 @@
 const plugin = require('tailwindcss/plugin');
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 module.exports = {
   purge: ['./components/**/*.tsx', './pages/**/*.tsx'],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    fontFamily: {
+      sans: ['Montserrat', ...defaultTheme.fontFamily.sans],
+      serif: ['Optima', ...defaultTheme.fontFamily.serif],
+      mono: [...defaultTheme.fontFamily.mono],
+    },
     extend: {
+      fontSize: {
+        '2xl': '2rem',
+      },
       colors: {
         primary: '#121212',
         secondary: '#242424',
