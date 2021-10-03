@@ -3,7 +3,7 @@ import CurrencyInput from 'react-currency-input-field';
 import FormItemWrapper, { Props as FormItemWrapperPops } from './FormItemWrapper';
 
 type Props = {
-  title: string;
+  title?: string;
   placeholder?: string;
   type: 'currency' | 'percent' | 'quantity';
   options?: any; // TODO update to validation rules

@@ -7,6 +7,9 @@ import HistoryTab from 'features/home/details/components/HistoryTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import BidsTab from 'features/home/details/components/BidsTab';
 import OwnersTab from 'features/home/details/components/OwnersTab';
+import Button from 'components/Button';
+import CheckoutModal from '../../features/home/details/components/CheckoutModal';
+import { useToggle } from '../../hooks/useToggle';
 
 type Props = {};
 
@@ -55,6 +58,7 @@ const props = {
 function ItemDetailsPage({}: Props) {
   const { item, createdBy, collection } = props;
   const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
+  const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   return (
     <div>
       <main className="mt-8 max-w-2xl mx-auto pb-16 px-4 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
@@ -65,6 +69,7 @@ function ItemDetailsPage({}: Props) {
             </div>
           </div>
 
+          {/*// LEFT SIDE CONTENT*/}
           <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
             <div className={'flex justify-center bg-secondary'}>
               {/*// todo fix*/}
@@ -72,6 +77,7 @@ function ItemDetailsPage({}: Props) {
             </div>
           </div>
 
+          {/*RIGHT SIDE CONTENT*/}
           <div className="font-bold text-white mt-4 lg:col-span-5">
             <p className="pb-5">
               On sale for {item.price} {item.currency}{' '}
@@ -102,6 +108,18 @@ function ItemDetailsPage({}: Props) {
               {isBidsTab && <BidsTab />}
               {isDetailsTab && <DetailsTab owner={createdBy} categories={[collection]} />}
               {isHistoryTab && <HistoryTab />}
+            </div>
+            <div>
+              <div>
+                <Button fullWidth title={`Buy for ${item.price} ${item.currency}`} onClick={setCheckoutVisible} />
+              </div>
+              {isCheckoutVisible && (
+                <CheckoutModal
+                  isOpen={isCheckoutVisible}
+                  onClose={setCheckoutVisible}
+                  availableQuantity={item.availableQuantity}
+                />
+              )}
             </div>
           </div>
         </div>

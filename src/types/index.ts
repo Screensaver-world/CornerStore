@@ -3,6 +3,12 @@ export enum Currency {
   RARI = 'RARI',
 }
 
+export class Currencies {
+  static all() {
+    return [Currency.ETH, Currency.RARI];
+  }
+}
+
 export type BidItem = {
   createdAt: Date;
   createdByName: string;

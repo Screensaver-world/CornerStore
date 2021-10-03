@@ -23,9 +23,11 @@ const FormItemWrapper = <FormType extends FieldValues>({
   const hasError = form.formState.errors[name];
   return (
     <div className={'pb-4'}>
-      <label htmlFor={name} className="block text-sm mb-2 text-gray-700">
-        {`${label} ${!required ? '(Optional)' : ''}`}
-      </label>
+      {label && (
+        <label htmlFor={name} className="block text-sm mb-2 text-gray-700">
+          {`${label} ${!required ? '(Optional)' : ''}`}
+        </label>
+      )}
       <div className="mt-1 relative rounded-md shadow-sm">
         {children}
         {hasError && (
