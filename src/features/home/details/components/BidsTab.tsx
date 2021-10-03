@@ -1,20 +1,20 @@
 import React from 'react';
-import { BidItem } from 'types';
 import BidCard from './BidCard';
+import { useGetNftBids } from 'api/raribleApi';
 
-type Props = {
-  data: BidItem[];
-};
+type Props = {};
 
-function BidsTab({ data }: Props) {
+function BidsTab({}: Props) {
+  const { isLoading, data } = useGetNftBids();
+  if (isLoading || !data) {
+    return null;
+  }
   return (
-    <div className="flex flex-col">
+    <>
       {data.map((item, index) => (
-        <div className={'mb-4'}>
-          <BidCard key={index} data={item} />
-        </div>
+        <BidCard key={index} data={item} />
       ))}
-    </div>
+    </>
   );
 }
 

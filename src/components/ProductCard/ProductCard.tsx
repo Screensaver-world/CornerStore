@@ -1,9 +1,8 @@
-import { FavouriteIcon } from '../../assets';
-import Button from '../Button';
-import { ButtonType } from '../Button/Button';
+import { FavouriteIcon } from 'assets';
+import Button, { ButtonType } from '../Button';
 import React, { FC } from 'react';
-import { NFTItem } from '../../types/NFTItem';
-import Link from 'components/Link/Link';
+import { NFTItem } from 'types/NFTItem';
+import Link from 'components/Link';
 
 type Props = {
   item: NFTItem;

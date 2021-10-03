@@ -2,7 +2,7 @@ import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import Button, { ButtonType } from './Button';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import { TwitterIcon } from '../../assets';
+import { TwitterIcon } from 'assets';
 
 export default {
   title: 'Button',

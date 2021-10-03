@@ -15,9 +15,9 @@ export type BidItem = {
 export type NFTOwner = {
   avatarUrl: string;
   name: string;
-  quantity: number;
-  price: string;
-  currency: Currency;
+  quantity?: number;
+  price?: string;
+  currency?: Currency;
 };
 
 export type NFTTransaction = {
@@ -37,4 +37,14 @@ export type NFTItem = {
   totalQuantity: number;
   availableQuantity: number;
   royalties: number;
+};
+
+// todo mock
+export type NFTItemOrder = {
+  '@type': 'transfer' | 'mint';
+  quantity: number;
+  price: string;
+  currency: Currency;
+  createdBy: NFTOwner;
+  createdAt: Date;
 };

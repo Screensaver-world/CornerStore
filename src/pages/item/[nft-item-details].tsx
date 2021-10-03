@@ -1,10 +1,16 @@
 import React from 'react';
-import HorizontalCard from '../../components/HorizontalCard';
+import HorizontalCard from 'components/HorizontalCard';
 import { Currency, NFTItem, NFTOwner } from 'types';
+import Tabs from 'components/Tabs';
+import { useItemDetailsData } from 'features/home/details/useItemDetailsData';
+import HistoryTab from 'features/home/details/components/HistoryTab';
+import DetailsTab from 'features/home/details/components/DetailsTab';
+import BidsTab from 'features/home/details/components/BidsTab';
+import OwnersTab from 'features/home/details/components/OwnersTab';
 
 type Props = {};
 
-const data = {
+const props = {
   item: {
     name: '#44 Hopper - Abduction',
     description:
@@ -47,7 +53,8 @@ const data = {
 };
 
 function ItemDetailsPage({}: Props) {
-  const { item, createdBy, collection } = data;
+  const { item, createdBy, collection } = props;
+  const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   return (
     <div>
       <main className="mt-8 max-w-2xl mx-auto pb-16 px-4 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
@@ -86,6 +93,15 @@ function ItemDetailsPage({}: Props) {
                 <div className={'pb-5'}>Collection</div>
                 <HorizontalCard title={collection.name} imageUrl={collection.imageUrl} />
               </div>
+            </div>
+            <div className={'flex flex-1 justify-start pt-5'}>
+              <Tabs titles={tabs} active={activeTab} onChange={setActiveTab} />
+            </div>
+            <div className={'pt-5'}>
+              {isOwnersTab && <OwnersTab total={item.totalQuantity} />}
+              {isBidsTab && <BidsTab />}
+              {isDetailsTab && <DetailsTab owner={createdBy} categories={[collection]} />}
+              {isHistoryTab && <HistoryTab />}
             </div>
           </div>
         </div>
