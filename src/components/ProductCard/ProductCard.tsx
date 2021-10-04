@@ -12,7 +12,7 @@ type Props = {
 const ProductCard: FC<Props> = ({ item }) => {
   return (
     <Link to={`/item/${item.id}`}>
-      <li className="text-white bold">
+      <li className="text-white bold hover:bg-gray-900">
         <div className="space-y-4 border border-gray-600 px-4 py-3 rounded-md flex flex-col justify-between h-full">
           <div className="flex items-center space-x-4 lg:space-x-6">
             <Link to={`/profile/${item.ownerUsername}`}>
