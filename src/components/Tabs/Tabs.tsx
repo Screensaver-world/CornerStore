@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 type Props = { titles: string[]; active?: number; onChange?: (index: number) => void };
 const Tabs: FC<Props> = ({ titles, active, onChange }) => {
   return (
-    <div className="flex text-gray-300 lg:w-2/3 w-11/12 sm:w-10/12  md:-top-16 mx-auto justify-around pb-2">
+    <div className="flex text-gray-300 lg:w-2/3 w-11/12 sm:w-10/12  md:-top-16 mx-auto justify-around pb-2 max-w-screen-lg">
       {titles.map((title, index) => (
         <div className="bg-gradient-to-tr from-primary-start to-primary-stop border-none">
           <a
