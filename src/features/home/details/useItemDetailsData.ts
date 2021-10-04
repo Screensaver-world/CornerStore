@@ -7,15 +7,22 @@ export function useItemDetailsData() {
   const { tab = itemDetailsTabs[0] } = router.query;
   const activeTab = itemDetailsTabs.findIndex((t) => t === tab) || 0;
 
-  const setActiveTab = useCallback(async (index) => {
-    if (typeof window !== 'undefined') {
-      const tab = itemDetailsTabs[index];
-      router.push({
-        pathname: window.location.pathname,
-        query: { ...router.query, tab },
-      });
-    }
-  }, []);
+  const setActiveTab = useCallback(
+    async (index) => {
+      if (typeof window !== 'undefined') {
+        const tab = itemDetailsTabs[index];
+        router.push(
+          {
+            pathname: window.location.pathname,
+            query: { ...router.query, tab },
+          },
+          `/item/${router.query['nft-item-details']}?tab=${tab}`,
+          { scroll: false, shallow: true }
+        );
+      }
+    },
+    [router]
+  );
 
   const isHistoryTab = tab === 'History';
   const isBidsTab = tab === 'Bids';

@@ -55,5 +55,8 @@ const dummyItems = [
 ];
 export const Default = Template.bind({});
 Default.args = {
-  items: new Array(5).fill(dummyItems).flat(),
+  items: new Array(5)
+    .fill(dummyItems)
+    .flat()
+    .map((item) => ({ ...item, id: Math.random() })),
 };

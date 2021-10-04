@@ -15,7 +15,7 @@ type Props = {
   // TODO change type?
   icon?: string;
   iconRight?: boolean;
-  onClick?(): void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: ButtonType;
   fullWidth?: boolean;
   customClasses?: string;

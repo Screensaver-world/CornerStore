@@ -109,18 +109,19 @@ function ItemDetailsPage({}: Props) {
               {isDetailsTab && <DetailsTab owner={createdBy} categories={[collection]} />}
               {isHistoryTab && <HistoryTab />}
             </div>
-            <div>
-              <div>
-                <Button fullWidth title={`Buy for ${item.price} ${item.currency}`} onClick={setCheckoutVisible} />
-              </div>
-              {isCheckoutVisible && (
-                <CheckoutModal
-                  isOpen={isCheckoutVisible}
-                  onClose={setCheckoutVisible}
-                  availableQuantity={item.availableQuantity}
-                />
-              )}
-            </div>
+            <Button
+              fullWidth
+              title={`Buy for ${item.price} ${item.currency}`}
+              onClick={setCheckoutVisible}
+              customClasses="sticky bottom-4 lg:static"
+            />
+            {isCheckoutVisible && (
+              <CheckoutModal
+                isOpen={isCheckoutVisible}
+                onClose={setCheckoutVisible}
+                availableQuantity={item.availableQuantity}
+              />
+            )}
           </div>
         </div>
       </main>

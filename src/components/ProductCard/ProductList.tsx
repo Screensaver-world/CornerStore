@@ -7,9 +7,11 @@ import ProductCard from './ProductCard';
 
 type Props = {
   items: NFTItem[];
+  hideLoadMoreButton?: boolean;
+  onLoadMore?: () => void;
 };
 
-const ProductList: FC<Props> = ({ items }) => {
+const ProductList: FC<Props> = ({ items, hideLoadMoreButton = false, onLoadMore }) => {
   return (
     <div>
       <div className="mx-auto py-3 px-4 max-w-screen-2xl sm:px-6 lg:px-6 lg:py-6">
@@ -25,7 +27,15 @@ const ProductList: FC<Props> = ({ items }) => {
         </div>
       </div>
       <div className="flex w-full mx-auto justify-center my-4">
-        <Button type={ButtonType.Main} title="Load more items" customClasses="px-7 py-3" icon={ReloadIcon} />
+        {!hideLoadMoreButton && (
+          <Button
+            type={ButtonType.Main}
+            title="Load more items"
+            customClasses="px-7 py-3"
+            icon={ReloadIcon}
+            onClick={onLoadMore}
+          />
+        )}
       </div>
     </div>
   );

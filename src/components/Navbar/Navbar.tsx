@@ -1,12 +1,12 @@
-import { SearchIcon } from '@heroicons/react/solid';
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Logo, SunIcon, TwitterIcon, TelegramIcon, DiscordIcon, InstagramIcon } from 'assets';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import Link, { LinkType } from 'components/Link/Link';
 import HamburgerMenu from './HamburgerMenu';
 import SearchBar from 'components/SearchBar/SearchBar';
+import { useRouter } from 'next/router';
 
 //TODO update links
 const socialButtons = [
@@ -37,6 +37,10 @@ const renderSocialButtons = () => (
 
 const Navbar: FC<unknown> = () => {
   const [hamburgerOpened, setHamburgerOpened] = useState(false);
+  const router = useRouter();
+  const goToHome = useCallback(() => {
+    router.push('/');
+  }, [router]);
   return (
     <nav className="bg-secondary">
       <div className="max-w-screen-2xl flex mx-auto px-2 sm:px-4 lg:px-8 h-16">
@@ -44,8 +48,11 @@ const Navbar: FC<unknown> = () => {
           <div className="flex-shrink-0">
             <img className="block lg:hidden h-8 w-auto" src={Logo} alt="Rarible" />
             <div className="flex items-center">
-              <img className="hidden lg:block h-8 w-auto" src={Logo} alt="Rarible" />
-              <span className="hidden lg:block h-8 text-xl h-auto flex align-center text-white font-bold pl-3">
+              <img onClick={goToHome} className="hidden lg:block h-8 w-auto" src={Logo} alt="Rarible" />
+              <span
+                onClick={goToHome}
+                className="hidden lg:block h-8 text-xl h-auto flex align-center text-white font-bold pl-3"
+              >
                 Rarible
               </span>
             </div>
@@ -54,7 +61,7 @@ const Navbar: FC<unknown> = () => {
           <SearchBar hidden={hamburgerOpened} />
           <div className="hidden lg:block lg:ml-6 lg:mr-6">
             <div className="flex space-x-10 items-center">
-              <Link type={LinkType.Main} title="Explore" to="#" />
+              <Link type={LinkType.Main} title="Explore" to="/" />
               <Link type={LinkType.Secondary} title="How it works" to="#" />
             </div>
           </div>
@@ -63,7 +70,7 @@ const Navbar: FC<unknown> = () => {
           </div>
           <div className="hidden lg:block lg:ml-6">
             <div className="flex space-x-4 lg:space-12 items-center">
-              <Button type={ButtonType.Primary} title="Create" />
+              <Button type={ButtonType.Primary} title="Create" onClick={() => router.push('/mint')} />
               <Button type={ButtonType.Secondary} title="Connect wallet" />
               <Button type={ButtonType.Main} icon={SunIcon} equalPadding />
             </div>
