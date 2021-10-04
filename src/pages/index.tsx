@@ -19,7 +19,7 @@ export const dummyItems = [
       'https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',
   },
   {
-    id: '123',
+    id: '234',
     title: 'Product 1',
     imageUrl:
       'https://images.unsplash.com/photo-1494253109108-2e30c049369b?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cmFuZG9tJTIwZm9vZCUyMHN0b3JlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80',
@@ -33,7 +33,7 @@ export const dummyItems = [
       'https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
   },
   {
-    id: '123',
+    id: '4212',
     title: 'Product 1',
     imageUrl: 'http://www.mandysam.com/img/random.jpg',
     description: 'random',

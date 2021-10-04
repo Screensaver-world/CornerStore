@@ -1,4 +1,4 @@
-import { format, isAfter, isBefore, isPast, set, subDays } from 'date-fns'
+import { format, isAfter, isBefore, isPast, set, subDays } from 'date-fns';
 
 export const DATE_FORMAT = 'MM/dd/yyyy';
 export const TIME_FORMAT = 'HH:mm aa';

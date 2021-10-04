@@ -11,23 +11,18 @@ type Props = {
 // todo handle 5 minutes ago for recent transactions..
 function HistoryCard({ data }: Props) {
   const { createdBy, createdAt, quantity, price, currency } = data;
-
   return (
     <HorizontalCard
       imageUrl={createdBy.avatarUrl}
       title={
-        <div>
+        <span className={'text-gray-700'}>
           Listed {quantity} edition for{' '}
-          <span className={'font-bold'}>
+          <span className={'text-white font-bold'}>
             {price} {currency}
           </span>
-        </div>
+        </span>
       }
-      subtitle={
-        <div>
-          By <span className={'font-bold'}>{createdBy.name}</span> {formatDate(createdAt)}
-        </div>
-      }
+      subtitle={`By ${createdBy.name} ${formatDate(createdAt)}`}
     />
   );
 }

@@ -1,16 +1,16 @@
 import React from 'react';
 import { withKnobs } from '@storybook/addon-knobs';
 import { ComponentMeta, ComponentStory } from '@storybook/react';
-import Bids from './Bids';
-import { BidItem, Currency } from 'types'
+import BidsTab from './BidsTab';
+import { BidItem, Currency } from 'types';
 
 export default {
   title: 'Bid Item',
-  component: Bids,
+  component: BidsTab,
   decorators: [withKnobs],
-} as ComponentMeta<typeof Bids>;
+} as ComponentMeta<typeof BidsTab>;
 
-const Template: ComponentStory<typeof Bids> = (args) => <Bids {...args} />;
+const Template: ComponentStory<typeof BidsTab> = (args) => <BidsTab {...args} />;
 
 const data: BidItem[] = [
   {

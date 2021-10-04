@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-type Props = {
+export type ModalProps = {
   title: string;
   description: string;
   isOpen: boolean;
@@ -9,7 +9,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-function Modal({ isOpen, onClose, title, description, children }: Props) {
+function Modal({ isOpen, onClose, title, description, children }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
@@ -39,12 +39,12 @@ function Modal({ isOpen, onClose, title, description, children }: Props) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-md">
-              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+            <div className="inline-block w-full max-w-md px-6 py-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-secondary shadow-2xl rounded-md border-2 border-gray-700">
+              <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-white">
                 {title}
               </Dialog.Title>
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">{description}</p>
+              <div className="mt-4">
+                <p className="text-sm font-semibold text-white">{description}</p>
               </div>
               <div className="mt-4">{children}</div>
             </div>
