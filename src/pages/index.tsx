@@ -4,7 +4,7 @@ import Dropdown from 'components/Dropdown/Dropdown';
 import { useCallback } from 'react';
 
 //MOCKED DATA
-const dummyItems = [
+export const dummyItems = [
   {
     id: '123',
     title: 'Product 1',

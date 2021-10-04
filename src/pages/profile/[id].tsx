@@ -5,6 +5,8 @@ import Button, { ButtonType } from 'components/Button';
 import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
 import { useCallback, useState } from 'react';
+import { ProductList } from 'components/ProductCard';
+import { dummyItems } from 'pages';
 
 //MOCKED DATA
 const dummyData = {
@@ -16,7 +18,9 @@ const dummyData = {
   links: { twitter: 'asds', instagram: 'hgk' },
   site: 'www.google.com',
 };
+
 const tabs = ['On sale', 'Owned', 'Created', 'Activity'];
+
 export interface ProfileProps {
   name: string;
   twitterUsername: string;
@@ -32,13 +36,14 @@ const Home: React.FunctionComponent<null> = () => {
   const user = dummyData;
   const { address } = dummyData;
   const shortAddress = `${address.slice(0, 10)}...${address.slice(address.length - 4, address.length)}`;
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState(0);
   const onTabChange = useCallback(
     (index) => {
       setActiveTab(index);
     },
     [setActiveTab]
   );
+
   return (
     <>
       <div className="flex flex-col items-center text-white max-w-screen-2xl  text-2xl m-auto">
@@ -70,6 +75,9 @@ const Home: React.FunctionComponent<null> = () => {
         </div>
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
+      <div className="bg-secondary">
+        <ProductList items={new Array(4).fill(dummyItems).flat()} hideLoadMoreButton />
+      </div>
     </>
   );
 };
