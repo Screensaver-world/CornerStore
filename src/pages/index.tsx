@@ -76,7 +76,12 @@ const Home: React.FunctionComponent<HomeProps> = () => {
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}
         />
       </div>
-      <ProductList items={new Array(5).fill(dummyItems).flat()} />
+      <ProductList
+        items={new Array(5)
+          .fill(dummyItems)
+          .flat()
+          .map((item) => ({ ...item, id: Math.random() }))}
+      />
     </>
   );
 };

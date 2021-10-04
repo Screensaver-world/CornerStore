@@ -100,7 +100,7 @@ const Home: React.FunctionComponent<null> = () => {
     (index) => {
       router.push(
         {
-          pathname: 'profile',
+          pathname: window.location.pathname,
           query: {
             id: router.query.id,
             tab: tabs[index],
@@ -147,10 +147,34 @@ const Home: React.FunctionComponent<null> = () => {
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="bg-secondary">
-        {activeTab === 0 && <ProductList items={new Array(4).fill(dummyItems).flat()} hideLoadMoreButton />}
+        {activeTab === 0 && (
+          <ProductList
+            items={new Array(4)
+              .fill(dummyItems)
+              .flat()
+              .map((item) => ({ ...item, id: Math.random() }))}
+            hideLoadMoreButton
+          />
+        )}
         {/*TODO update these to use real data*/}
-        {activeTab === 1 && <ProductList items={new Array(4).fill(dummyItems).flat()} hideLoadMoreButton />}
-        {activeTab === 2 && <ProductList items={new Array(4).fill(dummyItems).flat()} hideLoadMoreButton />}
+        {activeTab === 1 && (
+          <ProductList
+            items={new Array(4)
+              .fill(dummyItems)
+              .flat()
+              .map((item) => ({ ...item, id: Math.random() }))}
+            hideLoadMoreButton
+          />
+        )}
+        {activeTab === 2 && (
+          <ProductList
+            items={new Array(4)
+              .fill(dummyItems)
+              .flat()
+              .map((item) => ({ ...item, id: Math.random() }))}
+            hideLoadMoreButton
+          />
+        )}
         {activeTab === 3 && (
           <div>
             <div className="mx-auto py-3 px-4 max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
