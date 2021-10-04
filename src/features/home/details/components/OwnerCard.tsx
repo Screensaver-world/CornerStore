@@ -15,12 +15,12 @@ function OwnerCard({ data, total }: Props) {
       imageUrl={avatarUrl}
       title={name}
       subtitle={
-        <div>
+        <span>
           {quantity}/{total} on sale for{' '}
-          <span className={'font-bold'}>
+          <span className={'font-bold text-white'}>
             {price} {currency}
           </span>
-        </div>
+        </span>
       }
       actions={
         <div>

@@ -30,6 +30,7 @@ module.exports = {
 
     config.resolve.alias = {
       ...config.resolve.alias,
+      'api': `${appSrc}/api/`,
       'assets': `${appSrc}/assets/`,
       'components': `${appSrc}/components/`,
       'types': `${appSrc}/types/`,
