@@ -25,7 +25,7 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           placeholder="Collection, item or user"
           type="search"
         />
-        {!displaySearchOverlay && (
+        {!displaySearchOverlay && displayResults && (
           <div className="z-10 flex absolute justify-center items-center absoulte w-full bg-main h-40  text-white border border-gray-600">
             Search results will go here
           </div>
