@@ -5,12 +5,17 @@ type Props = {
   title: React.ReactNode;
   subtitle?: React.ReactNode;
   actions?: React.ReactNode;
+  mainBackground?: boolean;
 };
 
-function HorizontalCard({ imageUrl, title, subtitle, actions }: Props) {
+function HorizontalCard({ imageUrl, title, subtitle, actions, mainBackground = false }: Props) {
   return (
     <div className={'pb-5'}>
-      <div className="relative rounded-lg bg-secondary px-2 py-4 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+      <div
+        className={`relative rounded-lg ${
+          mainBackground ? 'bg-main' : 'bg-secondary'
+        } px-2 py-4 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+      >
         <div className="flex-shrink-0">
           <img className="h-16 w-16 rounded-full border-2 border-gray-700" src={imageUrl} alt="" />
         </div>
