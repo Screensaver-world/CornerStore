@@ -7,7 +7,7 @@ const itemClasses =
 const OverlayClasses =
   'w-full bg-red-300 py-2 h-full absolute left-0 top-0 bg-gradient-to-b  from-secondary to-secondary hover:from-primary-start hover:to-primary-stop opacity-10';
 const renderListItem = ({ title, handler }: { title: string; handler?: () => void }) => (
-  <li className={itemClasses} onClick={handler}>
+  <li className={itemClasses} onClick={handler} key={title}>
     {title}
     <div className={OverlayClasses}></div>
   </li>
