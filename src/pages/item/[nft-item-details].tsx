@@ -7,9 +7,12 @@ import HistoryTab from 'features/home/details/components/HistoryTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import BidsTab from 'features/home/details/components/BidsTab';
 import OwnersTab from 'features/home/details/components/OwnersTab';
-import Button from 'components/Button';
+import Button, { ButtonType } from 'components/Button';
 import CheckoutModal from '../../features/home/details/components/CheckoutModal';
 import { useToggle } from '../../hooks/useToggle';
+import { DotsIcon, DotsVerticalIcon } from 'assets';
+import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
+import { Popover } from '@headlessui/react';
 
 type Props = {};
 
@@ -59,13 +62,24 @@ function ItemDetailsPage({}: Props) {
   const { item, createdBy, collection } = props;
   const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
+
   return (
     <div>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
-            <div className="flex flex-col">
-              <h1 className="text-2xl font-bold text-white">{item.name}</h1>
+            <div className="flex flex-row justify-between">
+              <h1 className="text-2xl text-white font-bold">{item.name}</h1>
+              <Popover className="relative text-white">
+                <Popover.Button>
+                  <Button icon={DotsIcon} type={ButtonType.Secondary} />
+                </Popover.Button>
+                <Popover.Panel className="absolute z-10 right-0 text-white">
+                  <div className="flex absolute right-0">
+                    <PurchaseDropdown />
+                  </div>
+                </Popover.Panel>
+              </Popover>
             </div>
           </div>
 

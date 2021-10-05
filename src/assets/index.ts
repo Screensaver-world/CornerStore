@@ -10,6 +10,7 @@ export { default as ReloadIcon } from './icons/reload.svg';
 export { default as UploadIcon } from './images/upload-icon.svg';
 export { default as SearchIcon } from './icons/search.svg';
 export { default as CopyIcon } from './icons/copy.svg';
+export { default as DotsIcon } from './icons/dots.svg';
 export { default as VerifiedIcon } from './icons/verified.svg';
 
 export { default as Logo } from './logo.png';
