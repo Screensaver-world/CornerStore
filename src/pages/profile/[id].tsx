@@ -7,6 +7,7 @@ import Tabs from 'components/Tabs/Tabs';
 import { ProductList } from 'components/ProductCard';
 import { dummyItems } from 'pages';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
+import Avatar from 'components/Avatar/Avatar';
 
 //MOCKED DATA
 const dummyData = {
@@ -115,27 +116,26 @@ const Home: React.FunctionComponent<null> = () => {
 
   return (
     <>
-      <div className="flex flex-col items-center text-white max-w-screen-2xl  text-2xl m-auto">
-        <img className=" overflow-hidden" src={CoverPhoto} />
-        <div className="bg-secondary lg:w-2/3 w-11/12 sm:w-10/12 relative md:-top-16 -top-4 flex flex-col items-center">
-          <img
-            className="w-10 h-10 rounded-full lg:w-32 lg:h-32 relative md:-top-5 lg:-top-16 -top-5 md:w-20 md:h-20 md:-top-10 "
-            src={
-              'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg'
-            }
-            alt=""
+      <div className="flex flex-col items-center m-auto text-2xl text-white max-w-screen-2xl">
+        <img className="overflow-hidden " src={CoverPhoto} />
+        <div className="relative flex flex-col items-center w-11/12 bg-secondary lg:w-2/3 sm:w-10/12 md:-top-16 -top-4">
+          <Avatar
+            additionalClasses="relative transform -translate-y-1/2"
+            sizeClasses="w-20 h-20 lg:w-40 lg:h-40 md:w-20 md:h-20"
+            username="USERNAME"
+            imageSrc="https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg"
           />
-          <h1 className="lg:text-5xl md:text-4xl text-2xl -top-4 relative ">{user.name}</h1>
-          <div className="flex gap-y-4 items-center gap-x-10 flex-col sm:flex-row md:gap-x-20 text-lg md:text-2xl md:pt-4">
+          <h1 className="relative text-2xl lg:text-5xl md:text-4xl -top-4 ">{user.name}</h1>
+          <div className="flex flex-col items-center text-lg gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:text-2xl md:pt-4">
             <Link title={`@${user.twitterUsername}`} to="#" />
-            <div className="flex items-center gap-x-4 bg-main px-3 py-2">
+            <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddress}</div>
               <Button type={ButtonType.Secondary} icon={CopyIcon} equalPadding />
             </div>
           </div>
-          <p className="text-center py-10 px-5 sm:px-0 text-lg md:w-9/12 sm:px-4">{user.about}</p>
-          <div className="flex sm:justify-between justify-center md:w-9/12 w-full px-4 md:px-0 pb-4">
-            <div className="sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 hidden ">
+          <p className="px-5 py-10 text-lg text-center sm:px-0 md:w-9/12 sm:px-4">{user.about}</p>
+          <div className="flex justify-center w-full px-4 pb-4 sm:justify-between md:w-9/12 md:px-0">
+            <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
               <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />
               <Button type={ButtonType.Main} equalPadding icon={InstagramIcon} />
               <Button type={ButtonType.Main} equalPadding icon={TelegramIcon} />
@@ -177,7 +177,7 @@ const Home: React.FunctionComponent<null> = () => {
         )}
         {activeTab === 3 && (
           <div>
-            <div className="mx-auto py-3 px-4 max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
+            <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
               <div className="space-y-12">
                 <ul role="list">
                   {dummyHistory.map((item) => (

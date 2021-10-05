@@ -3,6 +3,7 @@ import Button, { ButtonType } from '../Button';
 import React, { FC } from 'react';
 import { NFTItem } from 'types/NFTItem';
 import Link from 'components/Link';
+import Avatar from 'components/Avatar/Avatar';
 
 type Props = {
   item: NFTItem;
@@ -12,12 +13,12 @@ const ProductCard: FC<Props> = ({ item }) => {
   return (
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold hover:bg-gray-900">
-        <div className="space-y-4 border border-gray-600 px-4 py-3 rounded-md flex flex-col justify-between h-full">
+        <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
           <div className="flex items-center space-x-4 lg:space-x-6">
             <Link to={`/profile/${item.ownerUsername}`}>
-              <img className="w-16 h-16 rounded-full lg:w-15 lg:h-15" src={item.ownerProfileImageUrl} alt="" />
+              <Avatar imageSrc={item.ownerProfileImageUrl} username={item.ownerUsername} />
             </Link>
-            <div className="font-medium	text-lg leading-6 space-y-1">
+            <div className="space-y-1 text-lg font-medium leading-6">
               <Link to={`/profile/${item.ownerUsername}`}>
                 <h3 className="text-gray-500 hover:text-white">{`@ ${item.ownerUsername}`}</h3>
               </Link>
@@ -25,16 +26,16 @@ const ProductCard: FC<Props> = ({ item }) => {
           </div>
 
           <div className="aspect-w-3 aspect-h-2">
-            <img className="object-cover shadow-lg rounded-lg" src={item.imageUrl} alt="" />
+            <img className="object-cover rounded-lg shadow-lg" src={item.imageUrl} alt="" />
           </div>
 
           <div>
-            <div className="px-4 text-lg leading-6 font-medium ">
+            <div className="px-4 text-lg font-medium leading-6 ">
               <h3>{item.title}</h3>
               <span>{item.price} ETH</span>
-              <span className="px-1 text-gray-600 normal	">{`${item.availableQuantity}/${item.createdQuantity}`}</span>
+              <span className="px-1 text-gray-600 normal ">{`${item.availableQuantity}/${item.createdQuantity}`}</span>
             </div>
-            <div className="pl-4 text-lg leading-6 font-medium flex items-end	justify-between">
+            <div className="flex items-end justify-between pl-4 text-lg font-medium leading-6">
               <Link to="#" title="Buy Now" />
               <Button
                 customClasses="text-lg text-gray-600 py-0"
