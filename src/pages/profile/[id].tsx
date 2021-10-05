@@ -119,12 +119,15 @@ const Home: React.FunctionComponent<null> = () => {
       <div className="flex flex-col items-center m-auto text-2xl text-white max-w-screen-2xl">
         <img className="overflow-hidden " src={CoverPhoto} />
         <div className="relative flex flex-col items-center w-11/12 bg-secondary lg:w-2/3 sm:w-10/12 md:-top-16 -top-4">
-          <Avatar
-            additionalClasses="relative transform -translate-y-1/2"
-            sizeClasses="w-20 h-20 lg:w-40 lg:h-40 md:w-20 md:h-20"
-            username="USERNAME"
-            imageSrc="https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg"
-          />
+          <div className="transform -translate-y-1/2">
+            <Avatar
+              verified
+              sizeClasses="w-20 h-20 lg:w-40 lg:h-40"
+              verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
+              username="USERNAME"
+              imageSrc="https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg"
+            />
+          </div>
           <h1 className="relative text-2xl lg:text-5xl md:text-4xl -top-4 ">{user.name}</h1>
           <div className="flex flex-col items-center text-lg gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:text-2xl md:pt-4">
             <Link title={`@${user.twitterUsername}`} to="#" />
@@ -177,7 +180,7 @@ const Home: React.FunctionComponent<null> = () => {
         )}
         {activeTab === 3 && (
           <div>
-            <div className="px-4 py-3 mx-auto max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
+            <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
               <div className="space-y-12">
                 <ul role="list">
                   {dummyHistory.map((item) => (
