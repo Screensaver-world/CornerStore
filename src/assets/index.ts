@@ -11,9 +11,13 @@ export { default as UploadIcon } from './images/upload-icon.svg';
 export { default as SearchIcon } from './icons/search.svg';
 export { default as CopyIcon } from './icons/copy.svg';
 export { default as DotsIcon } from './icons/dots.svg';
+export { default as VerifiedIcon } from './icons/verified.svg';
 
 export { default as Logo } from './logo.png';
 
 export { ChevronDownIcon, CheckIcon };
 
 export { default as CoverPhoto } from './images/cover.png';
+
+export { default as WalletPageCover } from './images/wallet-page-cover.svg';
+export { default as WalletImage } from './images/wallet-image.svg';

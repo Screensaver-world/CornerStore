@@ -17,6 +17,7 @@ export const dummyItems = [
     ownerUsername: 'random',
     ownerProfileImageUrl:
       'https://as1.ftcdn.net/v2/jpg/03/46/83/96/1000_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg',
+    userVerified: true,
   },
   {
     id: '234',
@@ -60,7 +61,7 @@ const Home: React.FunctionComponent<HomeProps> = () => {
   const renderDropDownContent = useCallback(
     () =>
       Object.keys(OrderBy).map((key) => (
-        <div className="px-2 py-2 hover:bg-gray-600 bg-secondary text-white" key={key}>
+        <div className="px-2 py-2 text-white hover:bg-gray-600 bg-secondary" key={key}>
           {OrderBy[key]}
         </div>
       )),
@@ -69,8 +70,8 @@ const Home: React.FunctionComponent<HomeProps> = () => {
 
   return (
     <>
-      <div className="flex py-6 justify-between max-w-screen-2xl mx-auto px-6 pt-10">
-        <h1 className="text-white text-4xl font-bold">Explore</h1>
+      <div className="flex justify-between px-6 py-6 pt-10 mx-auto max-w-screen-2xl">
+        <h1 className="text-4xl font-bold text-white">Explore</h1>
         <Dropdown
           displayText="Recently added"
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}

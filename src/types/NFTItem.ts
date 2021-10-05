@@ -10,4 +10,5 @@ export type NFTItem = {
   price: number;
   ownerUsername: string;
   ownerProfileImageUrl: string;
+  userVerified?: boolean;
 };

@@ -12,7 +12,7 @@ const renderLinks = () => (
   <>
     {navigationLinks.map(({ title, to }) => (
       <Link key={title} to={to}>
-        <div className="pb-1 pt-4 font-bold">{title}</div>
+        <div className="pt-4 pb-1 font-bold">{title}</div>
       </Link>
     ))}
   </>
@@ -22,14 +22,14 @@ type Props = {
 };
 const HamburgerMenu: FC<Props> = ({ renderSocialButtons }) => {
   return (
-    <div className="lg:hidden w-screen h-screen bg-main flex-col flex fixed z-10">
+    <div className="fixed z-10 flex flex-col w-screen h-screen lg:hidden bg-main">
       <div>
-        <div className="px-8 divide-gray-300 divide-y pt-2 pb-3 space-y-1 flex flex-col text-white text-xl	">
+        <div className="flex flex-col px-8 pt-2 pb-3 text-white divide-gray-300 divide-y space-y-1 text-xl	">
           {renderLinks()}
-          <div className="pt-10 flex justify-center"> {renderSocialButtons()}</div>
+          <div className="flex justify-center pt-10"> {renderSocialButtons()}</div>
         </div>
       </div>
-      <div className="flex justify-around w-full bottom-4 fixed">
+      <div className="fixed flex justify-around w-full bottom-4">
         <Button type={ButtonType.Primary} title="Create" />
         <Button type={ButtonType.Secondary} title="Connect" />
       </div>
