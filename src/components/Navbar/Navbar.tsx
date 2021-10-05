@@ -43,15 +43,15 @@ const Navbar: FC<unknown> = () => {
   }, [router]);
   return (
     <nav className="bg-secondary">
-      <div className="max-w-screen-2xl flex mx-auto px-2 sm:px-4 lg:px-8 h-16">
-        <div className="flex items-center px-2 lg:px-0 w-full justify-between	">
+      <div className="flex h-16 px-2 mx-auto max-w-screen-2xl sm:px-4 lg:px-8">
+        <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
           <div className="flex-shrink-0">
-            <img className="block lg:hidden h-8 w-auto" src={Logo} alt="Rarible" />
+            <img className="block w-auto h-8 lg:hidden" src={Logo} alt="Rarible" />
             <div className="flex items-center">
-              <img onClick={goToHome} className="hidden lg:block h-8 w-auto" src={Logo} alt="Rarible" />
+              <img onClick={goToHome} className="hidden w-auto h-8 lg:block" src={Logo} alt="Rarible" />
               <span
                 onClick={goToHome}
-                className="hidden lg:block h-8 text-xl h-auto flex align-center text-white font-bold pl-3"
+                className="flex hidden h-8 h-auto pl-3 text-xl font-bold text-white lg:block align-center"
               >
                 Rarible
               </span>
@@ -60,7 +60,7 @@ const Navbar: FC<unknown> = () => {
 
           <SearchBar hidden={hamburgerOpened} />
           <div className="hidden lg:block lg:ml-6 lg:mr-6">
-            <div className="flex space-x-10 items-center">
+            <div className="flex items-center space-x-10">
               <Link type={LinkType.Main} title="Explore" to="/" />
               <Link type={LinkType.Secondary} title="How it works" to="#" />
             </div>
@@ -69,9 +69,13 @@ const Navbar: FC<unknown> = () => {
             <div className="flex items-center">{renderSocialButtons()} </div>
           </div>
           <div className="hidden lg:block lg:ml-6">
-            <div className="flex space-x-4 lg:space-12 items-center">
+            <div className="flex items-center space-x-4 lg:space-12">
               <Button type={ButtonType.Primary} title="Create" onClick={() => router.push('/mint')} />
-              <Button type={ButtonType.Secondary} title="Connect wallet" />
+              <Button
+                type={ButtonType.Secondary}
+                title="Connect wallet"
+                onClick={() => router.push('/wallet/connect')}
+              />
               <Button type={ButtonType.Main} icon={SunIcon} equalPadding />
             </div>
           </div>
@@ -81,12 +85,12 @@ const Navbar: FC<unknown> = () => {
           {/* Mobile menu button */}
           <div
             onClick={() => setHamburgerOpened(!hamburgerOpened)}
-            className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            className="inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
           >
             {hamburgerOpened ? (
-              <XIcon className="block h-6 w-6" aria-hidden="true" />
+              <XIcon className="block w-6 h-6" aria-hidden="true" />
             ) : (
-              <MenuIcon className="block h-6 w-6" aria-hidden="true" />
+              <MenuIcon className="block w-6 h-6" aria-hidden="true" />
             )}
           </div>
         </div>

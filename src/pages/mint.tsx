@@ -9,7 +9,7 @@ const MintPage = () => {
   const form = useForm();
   return (
     <>
-      <div className="flex-col flex py-6 justify-between max-w-screen-lg mx-auto px-6 pt-10">
+      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <div className={'pb-8'}>

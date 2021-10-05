@@ -24,16 +24,16 @@ const FormItemWrapper = <FormType extends FieldValues>({
   return (
     <div className={'pb-4'}>
       {label && (
-        <label htmlFor={name} className="block text-sm mb-2 text-gray-700">
+        <label htmlFor={name} className="block mb-2 text-sm text-gray-700">
           {`${label} ${!required ? '(Optional)' : ''}`}
         </label>
       )}
-      <div className="mt-1 relative rounded-md shadow-sm">
+      <div className="relative mt-1 rounded-md shadow-sm">
         {children}
         {hasError && (
           <>
-            <div className="absolute inset-y-0 top-2 right-0 pr-3 pointer-events-none">
-              <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />
+            <div className="absolute inset-y-0 right-0 pr-3 pointer-events-none top-2">
+              <ExclamationCircleIcon className="w-5 h-5 text-red-500" aria-hidden="true" />
             </div>
             <ErrorMessage form={form} name={name} />
           </>

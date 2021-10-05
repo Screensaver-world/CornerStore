@@ -61,11 +61,11 @@ function ItemDetailsPage({}: Props) {
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   return (
     <div>
-      <main className="mt-8 max-w-2xl mx-auto pb-16 px-4 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
+      <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
             <div className="flex flex-col">
-              <h1 className="text-2xl text-white font-bold">{item.name}</h1>
+              <h1 className="text-2xl font-bold text-white">{item.name}</h1>
             </div>
           </div>
 
@@ -78,7 +78,7 @@ function ItemDetailsPage({}: Props) {
           </div>
 
           {/*RIGHT SIDE CONTENT*/}
-          <div className="font-bold text-white mt-4 lg:col-span-5">
+          <div className="mt-4 font-bold text-white lg:col-span-5">
             <p className="pb-5">
               On sale for {item.price} {item.currency}{' '}
               <span className={'pl-5 text-gray-700'}>
@@ -86,7 +86,7 @@ function ItemDetailsPage({}: Props) {
               </span>
             </p>
 
-            <p className="font-semibold text-white pb-10">{item.description}</p>
+            <p className="pb-10 font-semibold text-white">{item.description}</p>
 
             <div className={'flex flex-col xl:flex-row'}>
               <div className={'flex-1 xl:pr-8'}>
