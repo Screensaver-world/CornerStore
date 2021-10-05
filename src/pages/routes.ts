@@ -11,4 +11,8 @@ export const routes = {
     label: 'Edit Profile',
     url: 'profile/edit',
   },
+  ConnectWallet: {
+    label: 'Connect your wallet',
+    url: '/wallet/connect',
+  },
 };

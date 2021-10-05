@@ -16,3 +16,6 @@ export { default as Logo } from './logo.png';
 export { ChevronDownIcon, CheckIcon };
 
 export { default as CoverPhoto } from './images/cover.png';
+
+export { default as WalletPageCover } from './images/wallet-page-cover.svg';
+export { default as WalletImage } from './images/wallet-image.svg';
