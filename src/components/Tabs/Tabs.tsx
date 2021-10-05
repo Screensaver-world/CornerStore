@@ -3,9 +3,9 @@ import React, { FC } from 'react';
 type Props = { titles: string[]; active?: number; onChange?: (index: number) => void };
 const Tabs: FC<Props> = ({ titles, active = 0, onChange }) => {
   return (
-    <div className="flex text-gray-300 lg:w-2/3 w-11/12 sm:w-10/12  md:-top-16 mx-auto justify-around pb-2 max-w-screen-lg">
+    <div className="flex justify-around w-11/12 pb-2 mx-auto text-gray-300 lg:w-2/3 sm:w-10/12  md:-top-16 max-w-screen-lg">
       {titles.map((title, index) => (
-        <div key={index} className="bg-gradient-to-tr from-primary-start to-primary-stop border-none">
+        <div key={index} className="border-none bg-gradient-to-tr from-primary-start to-primary-stop">
           <a
             onClick={(e) => {
               e.preventDefault();

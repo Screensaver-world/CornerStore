@@ -13,12 +13,12 @@ const ProductCard: FC<Props> = ({ item }) => {
   return (
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold hover:bg-gray-900">
-        <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
+        <div className="flex flex-col justify-between h-full px-4 py-3 border border-gray-600 space-y-4 rounded-md">
           <div className="flex items-center space-x-4 lg:space-x-6">
             <Link to={`/profile/${item.ownerUsername}`}>
               <Avatar imageSrc={item.ownerProfileImageUrl} username={item.ownerUsername} />
             </Link>
-            <div className="space-y-1 text-lg font-medium leading-6">
+            <div className="text-lg font-medium space-y-1 leading-6">
               <Link to={`/profile/${item.ownerUsername}`}>
                 <h3 className="text-gray-500 hover:text-white">{`@ ${item.ownerUsername}`}</h3>
               </Link>

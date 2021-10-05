@@ -14,7 +14,7 @@ type Props = {
 const ProductList: FC<Props> = ({ items, hideLoadMoreButton = false, onLoadMore }) => {
   return (
     <div>
-      <div className="mx-auto py-3 px-4 max-w-screen-2xl sm:px-6 lg:px-6 lg:py-6">
+      <div className="px-4 py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-6 lg:py-6">
         <div className="space-y-12">
           <ul
             role="list"
@@ -26,7 +26,7 @@ const ProductList: FC<Props> = ({ items, hideLoadMoreButton = false, onLoadMore 
           </ul>
         </div>
       </div>
-      <div className="flex w-full mx-auto justify-center my-4">
+      <div className="flex justify-center w-full mx-auto my-4">
         {!hideLoadMoreButton && (
           <Button
             type={ButtonType.Main}

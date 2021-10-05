@@ -21,12 +21,12 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           }}
           id="search"
           name="search"
-          className="block w-full pl-10 pr-3 py-2 border border-transparent rounded-md leading-5 bg-gray-700 text-gray-300 placeholder-gray-400 focus:outline-none focus:text-white sm:text-sm bg-main borer border-gray-600"
+          className="block w-full py-2 pl-10 pr-3 text-gray-300 placeholder-gray-400 bg-gray-700 border border-transparent border-gray-600 rounded-md leading-5 focus:outline-none focus:text-white sm:text-sm bg-main borer"
           placeholder="Collection, item or user"
           type="search"
         />
         {!displaySearchOverlay && displayResults && (
-          <div className="z-10 flex absolute justify-center items-center absoulte w-full bg-main h-40  text-white border border-gray-600">
+          <div className="absolute z-10 flex items-center justify-center w-full h-40 text-white border border-gray-600 absoulte bg-main ">
             Search results will go here
           </div>
         )}
@@ -36,16 +36,16 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
 
   const renderMobileSearch = useCallback(
     () => (
-      <div className=" h-screen w-screen fixed bg-main top-0 left-0 z-10 md:hidden px-4 py-4 ">
-        <span className="flex gap-x-3 items-center">
+      <div className="fixed top-0 left-0 z-10 w-screen h-screen px-4 py-4  bg-main md:hidden">
+        <span className="flex items-center gap-x-3">
           {renderInput()}
           <XIcon
             onClick={() => setDisplaySearchOverlay(false)}
-            className="block h-7 w-7 text-white"
+            className="block text-white h-7 w-7"
             aria-hidden="true"
           />
         </span>
-        <div className="flex  justify-center items-center h-full w-full text-white">Search results will go here</div>
+        <div className="flex items-center justify-center w-full h-full text-white ">Search results will go here</div>
       </div>
     ),
     [renderInput, setDisplaySearchOverlay]
@@ -53,15 +53,15 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
 
   return hidden ? null : (
     <>
-      <div className="flex-1 justify-center px-2 lg:ml-6 lg:justify-end hidden md:block">
+      <div className="justify-center flex-1 hidden px-2 lg:ml-6 lg:justify-end md:block">
         <div className="relative w-full">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <SearchIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <SearchIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
           </div>
           {renderInput()}
         </div>
       </div>
-      <div className="flex w-full block md:hidden right-0 justify-end">
+      <div className="right-0 flex justify-end block w-full md:hidden">
         <Button icon={SVGSearchIcon} type={ButtonType.Main} onClick={() => setDisplaySearchOverlay(true)} />
       </div>
       {displaySearchOverlay && renderMobileSearch()}

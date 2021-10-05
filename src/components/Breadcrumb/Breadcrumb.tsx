@@ -17,7 +17,7 @@ const Breadcrumb: FC<Props> = ({ path }) => {
       className={`${styles.breadcrumb} text-white relative flex w-max bg-green bg-secondary py-2`}
       aria-label="Breadcrumb"
     >
-      <ol role="list" className="rounded-md px-6 flex space-x-4">
+      <ol role="list" className="flex px-6 rounded-md space-x-4">
         {path.map((item, idx) => (
           <li key={idx} className="flex">
             <div className="flex items-center">
@@ -30,7 +30,7 @@ const Breadcrumb: FC<Props> = ({ path }) => {
                 <span>{item.label}</span>
               </a>
             </div>
-            {pathLength !== idx + 1 && <img className="ml-4 flex-shrink-0 w-4" src={Arrow} />}
+            {pathLength !== idx + 1 && <img className="flex-shrink-0 w-4 ml-4" src={Arrow} />}
           </li>
         ))}
       </ol>

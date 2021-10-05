@@ -38,7 +38,7 @@ const ActivityCard: FC<Props> = ({ profileImage, date, actionType, owner, seller
       title={<span className={'text-white text-xl'}>{title}</span>}
       subtitle={
         <div>
-          {activity} by <span className="text-white text-lg">{username}</span>
+          {activity} by <span className="text-lg text-white">{username}</span>
           <div>{formatDate(date)}</div>
         </div>
       }

@@ -30,12 +30,12 @@ const NumberInput: FC<Props> = ({
         {...form.register(name, options)}
         type="text"
         name={name}
-        className="shadow-sm bg-secondary text-white focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-600 rounded-md"
+        className="block w-full text-white border-gray-600 shadow-sm bg-secondary focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
       />
       {type === 'percent' && (
-        <div className="absolute inset-y-0 top-2 right-0 pr-3 pointer-events-none">
+        <div className="absolute inset-y-0 right-0 pr-3 pointer-events-none top-2">
           <div
-            className="inline-flex items-center rounded px-2 text-sm font-sans font-medium text-gray-400"
+            className="inline-flex items-center px-2 font-sans text-sm font-medium text-gray-400 rounded"
             aria-hidden="true"
           >
             %
@@ -43,8 +43,8 @@ const NumberInput: FC<Props> = ({
         </div>
       )}
       {type === 'currency' && currencies && (
-        <div className="absolute inset-y-0 top-px right-2 items-center">
-          <select className="inline-flex bg-secondary border-0 items-center rounded text-sm font-sans font-medium text-gray-400 border-none">
+        <div className="absolute inset-y-0 items-center top-px right-2">
+          <select className="inline-flex items-center font-sans text-sm font-medium text-gray-400 border-0 border-none rounded bg-secondary">
             {currencies.map((currency) => (
               <option key={currency}>{currency}</option>
             ))}
