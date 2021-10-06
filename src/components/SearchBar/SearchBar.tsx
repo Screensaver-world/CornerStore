@@ -21,7 +21,7 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           }}
           id="search"
           name="search"
-          className="block w-full py-2 pl-10 pr-3 text-gray-300 placeholder-gray-400 bg-gray-700 border border-transparent border-gray-600 rounded-md leading-5 focus:outline-none focus:text-white sm:text-sm bg-main borer"
+          className="block w-full py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 border border-transparent border-gray-600 rounded-md focus:outline-none focus:text-white sm:text-sm bg-main borer"
           placeholder="Collection, item or user"
           type="search"
         />
@@ -36,7 +36,7 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
 
   const renderMobileSearch = useCallback(
     () => (
-      <div className="fixed top-0 left-0 z-10 w-screen h-screen px-4 py-4  bg-main md:hidden">
+      <div className="fixed top-0 left-0 z-10 w-screen h-screen px-4 py-4 bg-main md:hidden">
         <span className="flex items-center gap-x-3">
           {renderInput()}
           <XIcon
@@ -61,8 +61,13 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           {renderInput()}
         </div>
       </div>
-      <div className="right-0 flex justify-end block w-full md:hidden">
-        <Button icon={SVGSearchIcon} type={ButtonType.Main} onClick={() => setDisplaySearchOverlay(true)} />
+      <div className="right-0 flex justify-end w-full md:hidden">
+        <Button
+          icon={SVGSearchIcon}
+          equalPadding
+          type={ButtonType.Main}
+          onClick={() => setDisplaySearchOverlay(true)}
+        />
       </div>
       {displaySearchOverlay && renderMobileSearch()}
     </>
