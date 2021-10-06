@@ -1,7 +1,7 @@
-import React from 'react'
-import { BidItem } from 'types'
-import HorizontalCard from 'components/HorizontalCard'
-import { formatDate } from 'utils/dateTimeUtils'
+import React from 'react';
+import { BidItem } from 'types';
+import HorizontalCard from 'components/HorizontalCard';
+import { formatDate } from 'utils/dateTimeUtils';
 
 type Props = {
   data: BidItem;
