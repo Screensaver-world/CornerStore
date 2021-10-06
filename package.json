@@ -19,6 +19,7 @@
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9.8.6",
+    "bnc-onboard": "^1.35.1",
     "date-fns": "^2.24.0",
     "ethereum-blockies-base64": "^1.0.2",
     "next": "10.0.6",
@@ -31,7 +32,9 @@
     "react-dom": "17.0.1",
     "react-hook-form": "^7.16.1",
     "react-query": "^3.25.0",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "web3": "^1.6.0",
+    "wrtc": "^0.4.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
