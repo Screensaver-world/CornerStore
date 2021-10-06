@@ -20,6 +20,7 @@
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9.8.6",
     "date-fns": "^2.24.0",
+    "ethereum-blockies-base64": "^1.0.2",
     "next": "10.0.6",
     "next-images": "^1.8.1",
     "postcss": "^7.0.35",

@@ -11,7 +11,7 @@ type Props = {
 
 const Dropdown: FC<Props> = ({ displayText, dropDownContent, displayDropOnly }) => {
   return (
-    <Menu as="div" className="relative inline-block py-px text-lef" aria-expanded>
+    <Menu as="div" className="relative inline-block py-px text-left" aria-expanded>
       {!displayDropOnly && (
         <div>
           <Menu.Button className="inline-flex items-center justify-center w-full px-4 py-4 font-medium text-white border border-gray-600 rounded-md shadow-sm bg-main sm:text-md">
