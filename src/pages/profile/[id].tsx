@@ -169,7 +169,7 @@ const Home: React.FunctionComponent<null> = () => {
 
         {/*TODO update these to use real data*/}
         {activeTab === 1 && renderProductList(null)}
-        {activeTab === 1 && renderProductList(null)}
+        {activeTab === 2 && renderProductList(null)}
 
         {activeTab === 3 && (
           <div>
