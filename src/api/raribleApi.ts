@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types'
+import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
 
 export function useGetNftItemOrderActivity() {
   return useQuery<NFTItemOrder[]>('nft-item-order-activity', () => {

@@ -10,7 +10,7 @@ import OwnersTab from 'features/home/details/components/OwnersTab';
 import Button, { ButtonType } from 'components/Button';
 import CheckoutModal from '../../features/home/details/components/CheckoutModal';
 import { useToggle } from '../../hooks/useToggle';
-import { DotsIcon, DotsVerticalIcon } from 'assets';
+import { DotsIcon } from 'assets';
 import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
 import { Popover } from '@headlessui/react';
 
