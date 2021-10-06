@@ -40,6 +40,7 @@ const ProductCard: FC<Props> = ({ item }) => {
               <Button
                 customClasses="text-lg text-gray-600 py-0"
                 icon={FavouriteIcon}
+                equalPadding
                 type={ButtonType.Secondary}
                 title={item.likes.toString()}
                 onClick={(e) => {
