@@ -51,7 +51,7 @@ const Navbar: FC<unknown> = () => {
               <img onClick={goToHome} className="hidden w-auto h-8 lg:block" src={Logo} alt="Rarible" />
               <span
                 onClick={goToHome}
-                className="flex hidden h-8 h-auto pl-3 text-xl font-bold text-white lg:block align-center"
+                className="hidden h-auto pl-3 text-xl font-bold text-white lg:block align-center"
               >
                 Rarible
               </span>
