@@ -70,8 +70,8 @@ const Home: React.FunctionComponent<HomeProps> = () => {
 
   return (
     <>
-      <div className="flex justify-between px-6 py-6 pt-10 mx-auto max-w-screen-2xl">
-        <h1 className="text-4xl font-bold text-white">Explore</h1>
+      <div className="flex items-center justify-between px-6 py-10 mx-auto max-w-screen-2xl">
+        <h1 className="py-0.5 text-2xl font-bold text-white">Explore</h1>
         <Dropdown
           displayText="Recently added"
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}

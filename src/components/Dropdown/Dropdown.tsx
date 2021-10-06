@@ -11,10 +11,10 @@ type Props = {
 
 const Dropdown: FC<Props> = ({ displayText, dropDownContent, displayDropOnly }) => {
   return (
-    <Menu as="div" className="relative inline-block text-left" aria-expanded>
+    <Menu as="div" className="relative inline-block py-px text-lef" aria-expanded>
       {!displayDropOnly && (
         <div>
-          <Menu.Button className="inline-flex items-center justify-center w-full px-4 py-2 text-sm text-lg font-medium text-white bg-white border border-gray-300 border-gray-600 bg-main rounded-md sm:text-md shadow-sm">
+          <Menu.Button className="inline-flex items-center justify-center w-full px-4 py-4 font-medium text-white border border-gray-600 rounded-md shadow-sm bg-main sm:text-md">
             {displayText}
             <ChevronDownIcon className="w-5 h-5 ml-2 -mr-1" aria-hidden="true" />
           </Menu.Button>
@@ -29,7 +29,7 @@ const Dropdown: FC<Props> = ({ displayText, dropDownContent, displayDropOnly }) 
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <div className="absolute right-0 w-56 mt-2 bg-white shadow-lg origin-top-right rounded-md ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="absolute right-0 w-56 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           {dropDownContent}
         </div>
       </Transition>
