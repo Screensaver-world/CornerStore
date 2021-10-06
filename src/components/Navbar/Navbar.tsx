@@ -43,7 +43,7 @@ const Navbar: FC<unknown> = () => {
   }, [router]);
   return (
     <nav className="bg-secondary">
-      <div className="flex h-24 px-2 mx-auto max-w-screen-2xl sm:px-4 lg:px-8">
+      <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
         <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
           <div className="flex-shrink-0">
             <img className="block w-auto h-8 lg:hidden" src={Logo} alt="Rarible" />
