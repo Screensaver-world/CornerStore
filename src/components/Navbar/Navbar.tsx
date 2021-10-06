@@ -1,13 +1,13 @@
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Logo, SunIcon, TwitterIcon, TelegramIcon, DiscordIcon, InstagramIcon } from 'assets';
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import Link, { LinkType } from 'components/Link/Link';
 import HamburgerMenu from './HamburgerMenu';
 import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
-
+import { useWallet } from 'wallet/state';
 //TODO update links
 const socialButtons = [
   {
@@ -41,6 +41,8 @@ const Navbar: FC<unknown> = () => {
   const goToHome = useCallback(() => {
     router.push('/');
   }, [router]);
+  const [state, dispatch] = useWallet();
+
   return (
     <nav className="bg-secondary">
       <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
