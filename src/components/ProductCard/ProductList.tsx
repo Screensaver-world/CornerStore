@@ -13,18 +13,16 @@ type Props = {
 
 const ProductList: FC<Props> = ({ items, hideLoadMoreButton = false, onLoadMore }) => {
   return (
-    <div>
-      <div className="px-4 py-3 mx-auto max-w-screen-2xl sm:px-6 lg:px-6 lg:py-6">
-        <div className="space-y-12">
-          <ul
-            role="list"
-            className="space-y-12 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 sm:space-y-0 lg:grid-cols-4 lg:gap-x-4 xl:grid-cols-5 "
-          >
-            {items.map((item) => (
-              <ProductCard key={item.id} item={item} />
-            ))}
-          </ul>
-        </div>
+    <>
+      <div className="px-6 mx-auto b-6 max-w-screen-2xl ">
+        <ul
+          role="list"
+          className="grid sm:grid-cols-2 sm:gap-x-6 gap-y-6 sm:space-y-0 lg:grid-cols-4 lg:gap-x-6 xl:grid-cols-5 "
+        >
+          {items.map((item) => (
+            <ProductCard key={item.id} item={item} />
+          ))}
+        </ul>
       </div>
       <div className="flex justify-center w-full mx-auto my-4">
         {!hideLoadMoreButton && (
@@ -37,7 +35,7 @@ const ProductList: FC<Props> = ({ items, hideLoadMoreButton = false, onLoadMore 
           />
         )}
       </div>
-    </div>
+    </>
   );
 };
 export default ProductList;

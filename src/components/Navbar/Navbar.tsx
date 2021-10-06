@@ -43,7 +43,7 @@ const Navbar: FC<unknown> = () => {
   }, [router]);
   return (
     <nav className="bg-secondary">
-      <div className="flex h-16 px-2 mx-auto max-w-screen-2xl sm:px-4 lg:px-8">
+      <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
         <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
           <div className="flex-shrink-0">
             <img className="block w-auto h-8 lg:hidden" src={Logo} alt="Rarible" />
@@ -51,7 +51,7 @@ const Navbar: FC<unknown> = () => {
               <img onClick={goToHome} className="hidden w-auto h-8 lg:block" src={Logo} alt="Rarible" />
               <span
                 onClick={goToHome}
-                className="flex hidden h-8 h-auto pl-3 text-xl font-bold text-white lg:block align-center"
+                className="hidden h-auto pl-3 text-xl font-bold text-white lg:block align-center"
               >
                 Rarible
               </span>
