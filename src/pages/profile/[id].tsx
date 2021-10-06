@@ -114,6 +114,21 @@ const Home: React.FunctionComponent<null> = () => {
     [id]
   );
 
+  const renderProductList = useCallback(
+    (items) => (
+      <div className="pt-6">
+        <ProductList
+          items={new Array(4)
+            .fill(dummyItems)
+            .flat()
+            .map((item) => ({ ...item, id: Math.random() }))}
+          hideLoadMoreButton
+        />
+      </div>
+    ),
+    []
+  );
+
   return (
     <>
       <div className="flex flex-col items-center m-auto text-2xl text-white max-w-screen-2xl">
@@ -150,34 +165,12 @@ const Home: React.FunctionComponent<null> = () => {
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="bg-secondary">
-        {activeTab === 0 && (
-          <ProductList
-            items={new Array(4)
-              .fill(dummyItems)
-              .flat()
-              .map((item) => ({ ...item, id: Math.random() }))}
-            hideLoadMoreButton
-          />
-        )}
+        {activeTab === 0 && renderProductList(null)}
+
         {/*TODO update these to use real data*/}
-        {activeTab === 1 && (
-          <ProductList
-            items={new Array(4)
-              .fill(dummyItems)
-              .flat()
-              .map((item) => ({ ...item, id: Math.random() }))}
-            hideLoadMoreButton
-          />
-        )}
-        {activeTab === 2 && (
-          <ProductList
-            items={new Array(4)
-              .fill(dummyItems)
-              .flat()
-              .map((item) => ({ ...item, id: Math.random() }))}
-            hideLoadMoreButton
-          />
-        )}
+        {activeTab === 1 && renderProductList(null)}
+        {activeTab === 1 && renderProductList(null)}
+
         {activeTab === 3 && (
           <div>
             <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
