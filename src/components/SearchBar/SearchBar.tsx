@@ -21,7 +21,7 @@ const SearchBar: FC<Props> = ({ hidden = false }) => {
           }}
           id="search"
           name="search"
-          className="block w-full py-2 pl-10 pr-3 leading-5 text-gray-300 placeholder-gray-400 border border-transparent border-gray-600 rounded-md focus:outline-none focus:text-white sm:text-sm bg-main borer"
+          className="block w-full py-2 pl-10 pr-3 text-gray-300 placeholder-gray-400 border border-transparent border-gray-600 leading-5 rounded-md focus:outline-none focus:text-white sm:text-sm bg-main borer"
           placeholder="Collection, item or user"
           type="search"
         />

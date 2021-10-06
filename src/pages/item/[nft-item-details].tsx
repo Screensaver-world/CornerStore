@@ -69,13 +69,13 @@ function ItemDetailsPage({}: Props) {
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
             <div className="flex flex-row justify-between">
-              <h1 className="text-2xl text-white font-bold">{item.name}</h1>
+              <h1 className="text-2xl font-bold text-white">{item.name}</h1>
               <Popover className="relative text-white">
                 <Popover.Button>
                   <Button icon={DotsIcon} type={ButtonType.Secondary} />
                 </Popover.Button>
-                <Popover.Panel className="absolute z-10 right-0 text-white">
-                  <div className="flex absolute right-0">
+                <Popover.Panel className="absolute right-0 z-10 text-white">
+                  <div className="absolute right-0 flex">
                     <PurchaseDropdown />
                   </div>
                 </Popover.Panel>
