@@ -1,5 +1,9 @@
 import { useQuery } from 'react-query';
 import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
+import { QueryTypes } from './queryTypes';
+import { GetNftItemsRequest, GetNftItemsResponse, NftItemsRequestType } from './raribleRequestTypes';
+
+const BASE_URL = 'https://ethereum-api.rarible.org';
 
 export function useGetNftItemOrderActivity() {
   return useQuery<NFTItemOrder[]>('nft-item-order-activity', () => {
@@ -80,3 +84,16 @@ const mockWithTimeout = <T>(data: T) =>
       res(data);
     }, 1000);
   });
+
+export function useGetNftItems(searchParams: GetNftItemsRequest = {}) {
+  return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ITEMS, searchParams], async () => getNftItems(searchParams), {
+    enabled: false,
+  });
+}
+
+export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
+  const query = Object.keys(searchParams)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
+    .join('&');
+  return (await fetch(`${BASE_URL}/v0.1/nft/items/${searchParams.type ?? NftItemsRequestType.ALL}?${query}`)).json();
+}
