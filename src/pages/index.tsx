@@ -41,7 +41,6 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
 };
 export async function getServerSideProps(context) {
   const itemsData = await getNftItems({ size: 25, showDeleted: false, includeMeta: true });
-
   return {
     props: { itemsData }, // will be passed to the page component as props
   };

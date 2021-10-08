@@ -22,9 +22,9 @@ const getImage = (meta: NftItemMeta) => {
 };
 
 const ProductCard: FC<Props> = ({ item }) => {
-  const shortAddress = `${item.owners[0].slice(0, 5)}...${item.owners[0].slice(
-    item.owners[0].length - 4,
-    item.owners[0].length
+  const shortAddress = `${item.creators[0].account.slice(0, 5)}...${item.creators[0].account.slice(
+    item.creators[0].account.length - 4,
+    item.creators[0].account.length
   )}`;
 
   const image = getImage(item.meta);
@@ -39,20 +39,20 @@ const ProductCard: FC<Props> = ({ item }) => {
       <li className="text-white bold hover:bg-gray-900">
         <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
           <div className="flex items-center space-x-4 lg:space-x-6">
-            <Link to={`/profile/${item.owners[0]}`}>
+            <Link to={`/profile/${item.creators[0].account}`}>
               <Avatar
                 username={shortAddress}
                 // verified={item.userVerified}
               />
             </Link>
             <div className="space-y-1 text-lg font-medium leading-6">
-              <Link to={`/profile/${item.owners[0]}`}>
+              <Link to={`/profile/${item.creators[0].account}`}>
                 <h3 className="text-gray-500 hover:text-white">{`${shortAddress}`}</h3>
               </Link>
             </div>
           </div>
 
-          <div className="aspect-w-3 aspect-h-2">
+          <div className="flex justify-center aspect-w-3 aspect-h-2">
             <img className="object-cover rounded-lg shadow-lg" src={image} alt="" />
           </div>
 

@@ -35,7 +35,7 @@ const ProductList: FC<Props> = ({ itemsData, hideLoadMoreButton = false, onLoadM
           role="list"
           className="grid sm:grid-cols-2 sm:gap-x-6 gap-y-6 sm:space-y-0 lg:grid-cols-4 lg:gap-x-6 xl:grid-cols-5 "
         >
-          {items.map((item) => (
+          {items?.map((item) => (
             <ProductCard key={item.id} item={item} />
           ))}
         </ul>

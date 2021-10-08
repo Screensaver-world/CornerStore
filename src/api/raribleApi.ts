@@ -91,7 +91,17 @@ export function useGetNftItems(searchParams: GetNftItemsRequest = {}) {
   });
 }
 
+const searchTypesMapping = {
+  [NftItemsRequestType.BY_CREATOR]: 'creator',
+  [NftItemsRequestType.BY_OWNER]: 'owner',
+};
+
 export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
+  const ownerOrCreator = searchTypesMapping[searchParams.type];
+
+  if (ownerOrCreator) {
+    searchParams[ownerOrCreator] = searchParams.address;
+  }
   const query = Object.keys(searchParams)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
     .join('&');

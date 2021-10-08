@@ -9,10 +9,7 @@ import { useWallet } from 'wallet/state';
 
 const renderProfileImage = () => (
   <div className="flex-shrink-0">
-    <Avatar
-      username="USERNAME"
-      imageSrc="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-    />
+    <Avatar username="USERNAME" />
   </div>
 );
 const ConnectWalletPage: FC<unknown> = () => {
@@ -20,7 +17,7 @@ const ConnectWalletPage: FC<unknown> = () => {
   const handleWallet = useCallback(async () => {
     const onboard = getOnboard(dispatch);
 
-    const selected = await onboard.walletSelect();
+    const selected = await onboard.walletSelect(localStorage.getItem('walletName'));
     if (selected) {
       await onboard.walletCheck();
     }

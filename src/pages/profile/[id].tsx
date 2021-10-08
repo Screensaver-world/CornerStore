@@ -5,9 +5,10 @@ import Button, { ButtonType } from 'components/Button';
 import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
 import { ProductList } from 'components/ProductCard';
-import { dummyItems } from 'pages';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
+import { getNftItems } from 'api/raribleApi';
+import { GetNftItemsResponse, NftItemsRequestType } from 'api/raribleRequestTypes';
 
 //MOCKED DATA
 const dummyData = {
@@ -67,16 +68,18 @@ const dummyHistory = [
 
 const tabs = ['On sale', 'Owned', 'Created', 'Activity'];
 
+const tabItemsTypeMapping = {
+  [tabs[0]]: NftItemsRequestType.ALL,
+  [tabs[1]]: NftItemsRequestType.BY_CREATOR,
+  [tabs[2]]: NftItemsRequestType.BY_OWNER,
+};
+
 export interface ProfileProps {
-  name: string;
-  twitterUsername: string;
-  address: string;
-  about: string;
-  links?: { twitter?: string; instagram?: string };
-  site: string;
+  itemsData: GetNftItemsResponse;
+  tabDataType: NftItemsRequestType;
 }
 
-const Home: React.FunctionComponent<null> = () => {
+const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType }) => {
   const router = useRouter();
   const { id } = router.query; //user id will be here
   const [activeTab, setActiveTab] = useState(0);
@@ -114,21 +117,6 @@ const Home: React.FunctionComponent<null> = () => {
     [id]
   );
 
-  const renderProductList = useCallback(
-    (items) => (
-      <div className="pt-6">
-        <ProductList
-          items={new Array(4)
-            .fill(dummyItems)
-            .flat()
-            .map((item) => ({ ...item, id: Math.random() }))}
-          hideLoadMoreButton
-        />
-      </div>
-    ),
-    []
-  );
-
   return (
     <>
       <div className="flex flex-col items-center m-auto text-2xl text-white max-w-screen-2xl">
@@ -140,7 +128,6 @@ const Home: React.FunctionComponent<null> = () => {
               sizeClasses="w-20 h-20 lg:w-40 lg:h-40"
               verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
               username="USERNAME"
-              imageSrc="https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg"
             />
           </div>
           <h1 className="relative text-2xl lg:text-5xl md:text-4xl -top-4 ">{user.name}</h1>
@@ -165,15 +152,15 @@ const Home: React.FunctionComponent<null> = () => {
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="bg-secondary">
-        {activeTab === 0 && renderProductList(null)}
-
-        {/*TODO update these to use real data*/}
-        {activeTab === 1 && renderProductList(null)}
-        {activeTab === 2 && renderProductList(null)}
+        {
+          activeTab === 0 && 'on sale'
+          // renderProductList(null)
+        }
+        {activeTab === 1 || (activeTab === 2 && <ProductList itemsData={itemsData} viewType={tabDataType} />)}
 
         {activeTab === 3 && (
           <div>
-            <div className="px-4 py-3 mx-auto max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
+            <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
               <div className="space-y-12">
                 <ul role="list">
                   {dummyHistory.map((item) => (
@@ -188,5 +175,15 @@ const Home: React.FunctionComponent<null> = () => {
     </>
   );
 };
+export async function getServerSideProps(context) {
+  const address = context.query.id;
+  const tab = context.query.tab ?? tabs[0];
 
-export default Home;
+  const tabDataType = tabItemsTypeMapping[tab];
+  const itemsData = await getNftItems({ size: 10, showDeleted: false, includeMeta: true, type: tabDataType, address });
+  return {
+    props: { itemsData, tabDataType }, // will be passed to the page component as props
+  };
+}
+
+export default Profile;
