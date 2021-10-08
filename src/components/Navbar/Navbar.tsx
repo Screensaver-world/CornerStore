@@ -8,6 +8,7 @@ import HamburgerMenu from './HamburgerMenu';
 import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
 import { useWallet } from 'wallet/state';
+import { getOnboard } from 'utils/walletUtils';
 //TODO update links
 const socialButtons = [
   {
@@ -43,6 +44,19 @@ const Navbar: FC<unknown> = () => {
   }, [router]);
   const [state, dispatch] = useWallet();
 
+  const reconnectWallet = useCallback(async (walletName: string) => {
+    const onboard = getOnboard(dispatch);
+    if (await onboard.walletSelect(walletName)) {
+      await onboard.walletCheck();
+    }
+  }, []);
+
+  useEffect(() => {
+    const previousWallet = localStorage.getItem('walletName');
+    if (previousWallet) {
+      reconnectWallet(previousWallet);
+    }
+  }, []);
   return (
     <nav className="bg-secondary">
       <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
