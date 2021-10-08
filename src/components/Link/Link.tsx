@@ -20,7 +20,7 @@ const Link: FC<Props> = ({ to, title = '', type = LinkType.Primary, children, on
     return children ?? <a className={`${type}`}> {title}</a>;
   }, [children, type, title]);
   if (onClick) {
-    return children;
+    return children ?? renderComponent();
   }
   return <NextLink href={to}>{renderComponent()}</NextLink>;
 };
