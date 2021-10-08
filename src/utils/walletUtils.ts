@@ -49,7 +49,9 @@ export function getOnboard(dispatch: React.Dispatch<WalletAction>): ReturnType<t
       },
       wallet: (wallet) => {
         const web3 = new Web3(wallet.provider);
-        localStorage.setItem('walletName', wallet.name);
+        if (wallet && wallet.name) {
+          localStorage.setItem('walletName', wallet.name);
+        }
         dispatch({
           type: 'SET_WALLET',
           payload: wallet,

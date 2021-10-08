@@ -9,6 +9,8 @@ import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
 import { useWallet } from 'wallet/state';
 import { getOnboard } from 'utils/walletUtils';
+import makeBlockie from 'ethereum-blockies-base64';
+import ProfileDropdown from './ProfileDropdown';
 //TODO update links
 const socialButtons = [
   {
@@ -87,11 +89,15 @@ const Navbar: FC<unknown> = () => {
           <div className="hidden lg:block lg:ml-6">
             <div className="flex items-center space-x-4 lg:space-12">
               <Button type={ButtonType.Primary} title="Create" onClick={() => router.push('/mint')} />
-              <Button
-                type={ButtonType.Secondary}
-                title="Connect wallet"
-                onClick={() => router.push('/wallet/connect')}
-              />
+              {!state.address ? (
+                <Button
+                  type={ButtonType.Secondary}
+                  title="Connect wallet"
+                  onClick={() => router.push('/wallet/connect')}
+                />
+              ) : (
+                <ProfileDropdown />
+              )}
               {/* <Button type={ButtonType.Main} icon={SunIcon} equalPadding /> */}
             </div>
           </div>
