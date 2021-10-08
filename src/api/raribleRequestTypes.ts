@@ -6,6 +6,8 @@ export type GetNftItemsRequest = {
   lastUpdatedTo?: number;
   includeMeta?: boolean;
   type?: NftItemsRequestType;
+  //used when fetching byCreator/byOwner
+  address?: string;
 };
 
 export enum NftItemsRequestType {
