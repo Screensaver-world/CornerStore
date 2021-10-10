@@ -2,17 +2,29 @@ import { WalletImage, WalletPageCover } from 'assets';
 import Avatar from 'components/Avatar/Avatar';
 import Breadcrumb from 'components/Breadcrumb';
 import { routes } from 'pages/routes';
-import React, { FC } from 'react';
+import React, { FC, useEffect, useCallback } from 'react';
+import { getOnboard } from 'utils/walletUtils';
+
+import { useWallet } from 'wallet/state';
 
 const renderProfileImage = () => (
   <div className="flex-shrink-0">
-    <Avatar
-      username="USERNAME"
-      imageSrc="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-    />
+    <Avatar username="USERNAME" />
   </div>
 );
 const ConnectWalletPage: FC<unknown> = () => {
+  const [state, dispatch] = useWallet();
+  const handleWallet = useCallback(async () => {
+    const onboard = getOnboard(dispatch);
+
+    const selected = await onboard.walletSelect(localStorage.getItem('walletName'));
+    if (selected) {
+      await onboard.walletCheck();
+    }
+  }, []);
+  useEffect(() => {
+    handleWallet();
+  }, []);
   return (
     <div className="flex items-center h-full px-8 py-6 mx-auto text-white gap-x-8 max-w-screen-2xl">
       <div className="relative hidden w-full h-full lg:block">

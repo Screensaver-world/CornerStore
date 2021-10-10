@@ -1,13 +1,16 @@
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { Logo, SunIcon, TwitterIcon, TelegramIcon, DiscordIcon, InstagramIcon } from 'assets';
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import Link, { LinkType } from 'components/Link/Link';
 import HamburgerMenu from './HamburgerMenu';
 import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
-
+import { useWallet } from 'wallet/state';
+import { getOnboard } from 'utils/walletUtils';
+import makeBlockie from 'ethereum-blockies-base64';
+import ProfileDropdown from './ProfileDropdown';
 //TODO update links
 const socialButtons = [
   {
@@ -41,12 +44,27 @@ const Navbar: FC<unknown> = () => {
   const goToHome = useCallback(() => {
     router.push('/');
   }, [router]);
+  const [state, dispatch] = useWallet();
+
+  const reconnectWallet = useCallback(async (walletName: string) => {
+    const onboard = getOnboard(dispatch);
+    if (await onboard.walletSelect(walletName)) {
+      await onboard.walletCheck();
+    }
+  }, []);
+
+  useEffect(() => {
+    const previousWallet = localStorage.getItem('walletName');
+    if (previousWallet) {
+      reconnectWallet(previousWallet);
+    }
+  }, []);
   return (
     <nav className="bg-secondary">
       <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
         <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
           <div className="flex-shrink-0">
-            <img className="block w-auto h-8 lg:hidden" src={Logo} alt="Rarible" />
+            <img onClick={goToHome} className="block w-auto h-8 lg:hidden" src={Logo} alt="Rarible" />
             <div className="flex items-center">
               <img onClick={goToHome} className="hidden w-auto h-8 lg:block" src={Logo} alt="Rarible" />
               <span
@@ -71,12 +89,16 @@ const Navbar: FC<unknown> = () => {
           <div className="hidden lg:block lg:ml-6">
             <div className="flex items-center space-x-4 lg:space-12">
               <Button type={ButtonType.Primary} title="Create" onClick={() => router.push('/mint')} />
-              <Button
-                type={ButtonType.Secondary}
-                title="Connect wallet"
-                onClick={() => router.push('/wallet/connect')}
-              />
-              <Button type={ButtonType.Main} icon={SunIcon} equalPadding />
+              {!state.address ? (
+                <Button
+                  type={ButtonType.Secondary}
+                  title="Connect wallet"
+                  onClick={() => router.push('/wallet/connect')}
+                />
+              ) : (
+                <ProfileDropdown />
+              )}
+              {/* <Button type={ButtonType.Main} icon={SunIcon} equalPadding /> */}
             </div>
           </div>
         </div>
