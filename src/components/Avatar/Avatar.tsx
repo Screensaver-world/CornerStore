@@ -28,7 +28,7 @@ const Avatar: FC<Props> = ({
       <div className="relative flex">
         <img
           className={`${additionalClasses} ${
-            sizeClasses ?? 'w-16 h-16'
+            sizeClasses ?? 'w-10 h-10'
           } flex-shrink-0 border-2 border-gray-700 rounded-full`}
           src={imgSrc}
           alt="avatar"

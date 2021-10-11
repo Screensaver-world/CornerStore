@@ -38,16 +38,16 @@ const ProductCard: FC<Props> = ({ item }) => {
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold hover:bg-gray-900">
         <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
-          <div className="flex items-center space-x-4 lg:space-x-6">
+          <div className="flex items-center space-x-4">
             <Link to={`/profile/${item.creators[0].account}`}>
               <Avatar
                 username={shortAddress}
                 // verified={item.userVerified}
               />
             </Link>
-            <div className="space-y-1 text-lg font-medium leading-6">
+            <div className="space-y-1 text-small font-medium leading-6">
               <Link to={`/profile/${item.creators[0].account}`}>
-                <h3 className="text-gray-500 hover:text-white">{`${shortAddress}`}</h3>
+                <h3 className="text-gray-700 hover:text-white">{`${shortAddress}`}</h3>
               </Link>
             </div>
           </div>
@@ -57,25 +57,25 @@ const ProductCard: FC<Props> = ({ item }) => {
           </div>
 
           <div>
-            <div className="px-4 text-lg font-medium leading-6 ">
-              <h3>{item.meta.name}</h3>
-              <span>
+            <div className="font-bold leading-6">
+              <h3 className={'text-lg'}>{item.meta.name}</h3>
+              <span className={'text-sm'}>
                 {/* {item.price}  */}
                 ETH
               </span>
-              <span className="px-1 text-gray-600 normal ">
+              <span className="px-1 text-gray-600 normal">
                 {/* {`${item.availableQuantity}/${item.createdQuantity}`} */}
                 1/1
               </span>
             </div>
-            <div className="flex items-end justify-between pl-4 text-lg font-medium leading-6">
+            <div className="flex items-end justify-between font-bold leading-6">
               <Link to="#" title="Buy Now" />
               {renderFavButton && (
                 <Button
-                  customClasses="text-lg text-gray-600 py-0"
+                  customClasses="text-gray-600 py-0"
                   icon={FavouriteIcon}
                   equalPadding
-                  type={ButtonType.Secondary}
+                  type={ButtonType.Main}
                   // title={item.likes.toString()}
                   onClick={(e) => {
                     e.stopPropagation();

@@ -119,26 +119,26 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
 
   return (
     <>
-      <div className="flex flex-col items-center m-auto text-2xl text-white max-w-screen-2xl">
+      <div className="flex flex-col items-center m-auto text-lg text-white max-w-screen-2xl">
         <img className="overflow-hidden " src={CoverPhoto} />
         <div className="relative flex flex-col items-center w-11/12 bg-secondary lg:w-2/3 sm:w-10/12 md:-top-16 -top-4">
           <div className="transform -translate-y-1/2">
             <Avatar
               verified
-              sizeClasses="w-20 h-20 lg:w-40 lg:h-40"
+              sizeClasses="w-20 h-20 lg:w-48 lg:h-48"
               verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
               username="USERNAME"
             />
           </div>
-          <h1 className="relative text-2xl lg:text-5xl md:text-4xl -top-4 ">{user.name}</h1>
-          <div className="flex flex-col items-center text-lg gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:text-2xl md:pt-4">
+          <h1 className="relative text-lg lg:text-2xl font-bold md:text-4xl -top-4 ">{user.name}</h1>
+          <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
             <Link title={`@${user.twitterUsername}`} to="#" />
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddress}</div>
               <Button type={ButtonType.Secondary} icon={CopyIcon} equalPadding />
             </div>
           </div>
-          <p className="px-5 py-10 text-lg text-center md:w-9/12 sm:px-4">{user.about}</p>
+          <p className="px-5 py-10 text-base text-center font-semibold md:w-9/12 sm:px-4">{user.about}</p>
           <div className="flex items-center justify-center w-full px-4 pb-9 sm:justify-between md:w-9/12 md:px-0">
             <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
               <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />

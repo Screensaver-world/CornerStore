@@ -40,7 +40,7 @@ const ProductList: FC<Props> = ({ itemsData, hideLoadMoreButton = false, onLoadM
           ))}
         </ul>
       </div>
-      <div className="flex justify-center w-full mx-auto my-4">
+      <div className="flex justify-center w-full mx-auto my-12">
         {!hideLoadMoreButton && continuation && (
           <Button
             type={ButtonType.Main}
