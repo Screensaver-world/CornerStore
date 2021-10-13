@@ -1,16 +1,27 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { UploadIcon } from 'assets';
 import Link from '../Link';
 
-type Props = {};
+type Props = { form: any };
 
 const borderGradient = 'bg-gradient-to-tr from-primary-start to-primary-stop hover:from-primary-stop';
 
-function UploadArea({}: Props) {
-  const ref = useRef<HTMLInputElement>();
+function UploadArea({ form }: Props) {
+  const [ref, setRef] = useState<HTMLInputElement>(null);
   const onClick = useCallback(() => {
-    ref?.current.click();
-  }, []);
+    ref?.click();
+  }, [ref]);
+  const [formsData, setFormsData] = useState(form.register('upload'));
+  useEffect(() => {
+    setFormsData({
+      ...formsData,
+      ref: (ref) => {
+        setRef(ref);
+        formsData.ref(ref);
+      },
+    });
+  }, [form]);
+
   return (
     <>
       <div className="flex flex-1" onClick={onClick}>
@@ -21,7 +32,7 @@ function UploadArea({}: Props) {
               <div className="flex text-xs text-white align-center">
                 <span className={'pr-1'}>Drop your files here. PNG, GIF, WEBP, MP4 or MP3 Max 100mb.</span>
                 <label className="relative font-medium text-white bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                  <input ref={ref} id="file-upload" name="file-upload" type="file" className="sr-only" />
+                  <input {...formsData} id="file-upload" name="file-upload" type="file" className="sr-only" />
                 </label>
                 <Link title={'Browse'} onClick={onClick} />
               </div>
