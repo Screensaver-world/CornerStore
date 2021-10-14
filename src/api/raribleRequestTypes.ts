@@ -14,7 +14,27 @@ export enum NftItemsRequestType {
   ALL = 'all',
   BY_CREATOR = 'byCreator',
   BY_OWNER = 'byOwner',
+  BY_COLLECTION = 'byCollection',
 }
+
+export enum SellOrderTypes {
+  ALL = 'all',
+  BY_MAKER = 'byMaker',
+  BY_ITEM = 'byItem',
+}
+
+export type SellOrdersRequest = {
+  continuation?: string;
+  size?: number;
+  origin?: number;
+  maker: string;
+  type?: SellOrderTypes;
+};
+
+export type GenerateNftTokenIdRequest = {
+  collection: string;
+  minter: string;
+};
 
 export type GetNftItemsResponse = {
   continuation?: string;
@@ -55,4 +75,18 @@ export type NftMedia = {
     ORIGINAL?: string;
     PREVIEW?: string;
   };
+};
+
+export type LazyMintRequestBodyForSignature = {
+  '@type': 'ERC1155';
+  contract: string;
+  tokenId: string;
+  uri: string;
+  supply: number;
+  creators: { account: string; value: number }[];
+  royalties: { account: string; value: number }[];
+};
+
+export type LazyMintRequestBody = LazyMintRequestBodyForSignature & {
+  signatures: string[];
 };

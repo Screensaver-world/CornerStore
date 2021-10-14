@@ -3,29 +3,15 @@ import Button, { ButtonType } from '../Button';
 import React, { FC, useState, useEffect } from 'react';
 import Link from 'components/Link';
 import Avatar from 'components/Avatar/Avatar';
-import { NftItemMeta, NtfItem } from 'api/raribleRequestTypes';
+import { NtfItem } from 'api/raribleRequestTypes';
+import { getImage, shortAddress } from 'utils/itemUtils';
 
 type Props = {
   item: NtfItem;
 };
 
-//const pickBestImage = (url: NftMedia}): string => url?.PREVIEW ?? url?.ORIGINAL ?? url?.BIG;
-
-const getImage = (meta: NftItemMeta) => {
-  if (!meta?.image) {
-    return null;
-  }
-  const { url } = meta?.image ?? {};
-
-  const img = url?.PREVIEW ?? url?.ORIGINAL ?? url?.BIG;
-  return img?.startsWith('ipfs') ? img.replace('ipfs://', 'https://ipfs.io/') : img;
-};
-
 const ProductCard: FC<Props> = ({ item }) => {
-  const shortAddress = `${item.creators[0].account.slice(0, 5)}...${item.creators[0].account.slice(
-    item.creators[0].account.length - 4,
-    item.creators[0].account.length
-  )}`;
+  const address = shortAddress(item.creators[0].account, 5, 4);
 
   const image = getImage(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
@@ -41,13 +27,13 @@ const ProductCard: FC<Props> = ({ item }) => {
           <div className="flex items-center space-x-4">
             <Link to={`/profile/${item.creators[0].account}`}>
               <Avatar
-                username={shortAddress}
+                username={address}
                 // verified={item.userVerified}
               />
             </Link>
-            <div className="space-y-1 text-small font-medium leading-6">
+            <div className="space-y-1 font-medium leading-6 text-small">
               <Link to={`/profile/${item.creators[0].account}`}>
-                <h3 className="text-gray-700 hover:text-white">{`${shortAddress}`}</h3>
+                <h3 className="text-gray-700 hover:text-white">{`${address}`}</h3>
               </Link>
             </div>
           </div>

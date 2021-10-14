@@ -1,19 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import HorizontalCard from 'components/HorizontalCard';
 import { NFTOwner } from 'types';
+import makeBlockie from 'ethereum-blockies-base64';
+import { shortAddress } from 'utils/itemUtils';
 
 type Props = {
-  owner: NFTOwner;
+  owner: string;
   // todo -
   categories: { name: string; imageUrl: string }[];
 };
 
 function DetailsTab({ owner, categories }: Props) {
+  const [imgSrc, setImgSrc] = useState(null);
+  useEffect(() => {
+    setImgSrc(makeBlockie(owner));
+  }, []);
+
   return (
     <div>
       <div className={'w-1/2 pb-5'}>
         <div className={'font-semibold pb-2'}>Owner</div>
-        <HorizontalCard imageUrl={owner.avatarUrl} title={owner.name} />
+        <HorizontalCard imageUrl={imgSrc} title={shortAddress(owner, 8, 5)} />
       </div>
       <div>
         <div className={'font-semibold pb-2'}>Categories</div>

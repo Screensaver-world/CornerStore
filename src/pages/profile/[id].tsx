@@ -9,6 +9,7 @@ import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
 import { getNftItems } from 'api/raribleApi';
 import { GetNftItemsResponse, NftItemsRequestType } from 'api/raribleRequestTypes';
+import { shortAddress } from 'utils/itemUtils';
 
 //MOCKED DATA
 const dummyData = {
@@ -87,7 +88,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
 
   const user = dummyData;
   const { address } = dummyData;
-  const shortAddress = `${address.slice(0, 10)}...${address.slice(address.length - 4, address.length)}`;
+  const shortAddr = shortAddress(address, 10, 4);
   useEffect(() => {
     if (router && router.query) {
       setActiveTab(
@@ -130,15 +131,15 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
               username="USERNAME"
             />
           </div>
-          <h1 className="relative text-lg lg:text-2xl font-bold md:text-4xl -top-4 ">{user.name}</h1>
+          <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{user.name}</h1>
           <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
             <Link title={`@${user.twitterUsername}`} to="#" />
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
-              <div>{shortAddress}</div>
+              <div>{shortAddr}</div>
               <Button type={ButtonType.Secondary} icon={CopyIcon} equalPadding />
             </div>
           </div>
-          <p className="px-5 py-10 text-base text-center font-semibold md:w-9/12 sm:px-4">{user.about}</p>
+          <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">{user.about}</p>
           <div className="flex items-center justify-center w-full px-4 pb-9 sm:justify-between md:w-9/12 md:px-0">
             <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
               <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />
