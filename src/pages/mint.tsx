@@ -10,44 +10,59 @@ import { generateNftTokenId, mint } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
 import { ethers } from 'ethers';
-import { getMintStructure } from 'api/mintStructure';
+import { CreateNftMetadata, getMintStructure } from 'api/mintStructure';
 
-const ERC1155 = 'ERC1155';
+const ERC721 = 'ERC721';
 
 const MintPage = () => {
   const form = useForm();
   const [ipfs, setIpfs] = useState(null);
   useEffect(() => {
     (async () => {
-      // const ip = await IPFS.create({ repoAutoMigrate: true });
-      // setIpfs(ip);
+      const ip = await IPFS.create({ repoAutoMigrate: true });
+      setIpfs(ip);
     })();
   }, []);
   const [{ address, web3 }] = useWallet();
   const submit = useCallback(
     async (data) => {
       const { tokenId } = await generateNftTokenId({ collection: CONTRACT_ID, minter: address });
-      //const { path } = await ipfs.add('Hello world');
-      const body = {
-        '@type': 'ERC1155' as typeof ERC1155,
-        contract: CONTRACT_ID,
-        tokenId: tokenId,
-        uri: '/ipfs/QmWLsBu6nS4ovaHbGAXprD1qEssJu4r5taQfB74sCG51tp',
-        supply: 20,
-        creators: [{ account: address, value: 10000 }],
-        royalties: [{ account: address, value: 2000 }],
+
+      const { path: image } = await ipfs.add(data['file-upload'][0]);
+
+      const metadata: CreateNftMetadata = {
+        name: data.title,
+        image: `ipfs://ipfs/${image}`,
+        description: data.description,
+        external_url: `localhost:3000/0x6ede7f3c26975aad32a475e1021d8f6f39c89d82:${tokenId}`,
       };
+      const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
+      const tokenURI = `ipfs://ipfs/${metadataHash}`;
+      const body = {
+        '@type': 'ERC721' as typeof ERC721,
+        contract: '0x6ede7f3c26975aad32a475e1021d8f6f39c89d82',
+        tokenId: tokenId,
+        tokenURI,
+        uri: tokenURI,
+        creators: [
+          {
+            account: address,
+            value: 10000,
+          },
+        ],
+        royalties: [
+          {
+            account: address,
+            value: 2000,
+          },
+        ],
+      };
+
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const provider = new ethers.providers.Web3Provider(web3.currentProvider);
-      const signature = await provider.send('eth_sign', [address, JSON.stringify(body)]);
-      console.log('data provided to sign (typed structure with message): ', JSON.stringify(getMintStructure(body)));
-      console.log(JSON.stringify(body));
-      console.log('signature:', signature);
+      const signature = await provider.send('eth_signTypedData_v4', [address, JSON.stringify(getMintStructure(body))]);
       const signed = { ...body, signatures: [signature] };
-      console.log('request body:', signed);
-
-      //THIS RETURNS 400
       await mint(signed);
     },
     [ipfs, web3, address]

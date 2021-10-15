@@ -76,7 +76,7 @@ function ItemDetailsPage({ item }: Props) {
             <div className={'flex flex-col xl:flex-row'}>
               <div className={'flex-1 xl:pr-8'}>
                 <div className={'pb-5'}>
-                  Creator <span className={'text-gray-700'}>{item?.royalties?.[0] || 0}% Royalties </span>
+                  Creator <span className={'text-gray-700'}>{item?.royalties?.[0].value / 100 || 0}% Royalties </span>
                 </div>
                 <HorizontalCard title={shortAddress(item.creators[0].account, 6, 4)} imageUrl={creatorAvatar} />
               </div>
@@ -118,7 +118,6 @@ export async function getServerSideProps(context) {
   const id = context.query['nft-item-details'];
   const tab = context.query.tab ?? 'Owners';
   const item = await getNftItemById(id);
-
   return {
     props: { item }, // will be passed to the page component as props
   };

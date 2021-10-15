@@ -21,10 +21,9 @@ const mintData = {
         name: 'verifyingContract',
       },
     ],
-    Mint1155: [
+    Mint721: [
       { name: 'tokenId', type: 'uint256' },
-      { name: 'supply', type: 'uint256' },
-      { name: 'uri', type: 'string' },
+      { name: 'tokenURI', type: 'string' },
       { name: 'creators', type: 'Part[]' },
       { name: 'royalties', type: 'Part[]' },
     ],
@@ -34,12 +33,12 @@ const mintData = {
     ],
   },
   domain: {
-    name: 'Mint1155',
+    name: 'Mint721',
     version: '1',
-    chainId: NETWORK_ID,
-    verifyingContract: CONTRACT_ID,
+    chainId: 4,
+    verifyingContract: '0x6ede7f3c26975aad32a475e1021d8f6f39c89d82',
   },
-  primaryType: 'Mint1155',
+  primaryType: 'Mint721',
 };
 
 export function getMintStructure(message: LazyMintRequestBodyForSignature): {
@@ -50,3 +49,14 @@ export function getMintStructure(message: LazyMintRequestBodyForSignature): {
 } {
   return { ...mintData, message };
 }
+
+export type CreateNftMetadata = {
+  name: string;
+  description?: string;
+  //this must be prefixed with "ipfs://ipfs/{{ IPFS_HASH ))
+  image?: string;
+  // This is the link to Rarible
+  external_url: string;
+  animation_url?: string;
+  //TODO there is also attributes section if we need ti
+};

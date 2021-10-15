@@ -11,7 +11,7 @@ function UploadArea({ form }: Props) {
   const onClick = useCallback(() => {
     ref?.click();
   }, [ref]);
-  const [formsData, setFormsData] = useState(form.register('upload'));
+  const [formsData, setFormsData] = useState(form.register('file-upload'));
   useEffect(() => {
     setFormsData({
       ...formsData,

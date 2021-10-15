@@ -106,11 +106,10 @@ export type NftMedia = {
 };
 
 export type LazyMintRequestBodyForSignature = {
-  '@type': 'ERC1155';
+  '@type': 'ERC721';
   contract: string;
   tokenId: string;
   uri: string;
-  supply: number;
   creators: { account: string; value: number }[];
   royalties: { account: string; value: number }[];
 };
