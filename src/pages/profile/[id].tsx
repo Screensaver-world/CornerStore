@@ -7,9 +7,11 @@ import Tabs from 'components/Tabs/Tabs';
 import { ProductList } from 'components/ProductCard';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
-import { getNftItems } from 'api/raribleApi';
-import { GetNftItemsResponse, NftItemsRequestType } from 'api/raribleRequestTypes';
+import { getNftItems, useGetNftItems } from 'api/raribleApi';
+import { GetNftItemsResponse, NftItemsRequestType, NtfItem, OrderRequestTypes } from 'api/raribleRequestTypes';
 import { shortAddress } from 'utils/itemUtils';
+import CreatedTab from 'features/profile/components/CreatedTab';
+import OwnedTab from 'features/profile/components/OwnedTab';
 
 //MOCKED DATA
 const dummyData = {
@@ -70,20 +72,21 @@ const dummyHistory = [
 const tabs = ['On sale', 'Owned', 'Created', 'Activity'];
 
 const tabItemsTypeMapping = {
-  [tabs[0]]: NftItemsRequestType.ALL,
-  [tabs[1]]: NftItemsRequestType.BY_CREATOR,
-  [tabs[2]]: NftItemsRequestType.BY_OWNER,
+  [tabs[0]]: OrderRequestTypes.SELL,
+  [tabs[1]]: NftItemsRequestType.BY_OWNER,
+  [tabs[2]]: NftItemsRequestType.BY_CREATOR,
 };
 
 export interface ProfileProps {
-  itemsData: GetNftItemsResponse;
-  tabDataType: NftItemsRequestType;
+  onSaleData?: GetNftItemsResponse;
+  createdData?: GetNftItemsResponse;
+  ownedData?: GetNftItemsResponse;
+  tab: number;
 }
 
-const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType }) => {
+const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData, createdData, tab }) => {
   const router = useRouter();
-  const { id } = router.query; //user id will be here
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState(tab);
   const [userId, setUserId] = useState<string | null>(null);
 
   const user = dummyData;
@@ -101,6 +104,27 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
     }
   }, [router]);
 
+  const commonQueryData = { size: 1, includeMeta: true, address: userId };
+
+  //------
+  const [onSaleContinuation, setOnSaleContinuation] = useState(onSaleData?.continuation);
+  const {
+    data: onSale,
+    refetch: refetchOnSale,
+    isIdle: isIdleOOnSale,
+  } = useGetNftItems({
+    type: NftItemsRequestType.BY_OWNER,
+    continuation: onSaleContinuation,
+    ...commonQueryData,
+  });
+  const [onSaleItems, setOnSaleItems] = useState<NtfItem[]>(onSaleData?.items ?? []);
+  useEffect(() => {
+    if (onSale) {
+      setOnSaleItems([...onSaleItems, ...onSale.items]);
+      setOnSaleContinuation(onSale.continuation);
+    }
+  }, [onSale]);
+
   const onTabChange = useCallback(
     (index) => {
       router.push(
@@ -111,11 +135,12 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
             tab: tabs[index],
           },
         },
-        `/profile/${id}?tab=${tabs[index]}`,
+        `/profile/${userId}?tab=${tabs[index]}`,
         { scroll: false, shallow: true }
       );
+      setActiveTab(index);
     },
-    [id]
+    [userId]
   );
 
   return (
@@ -131,7 +156,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
               username="USERNAME"
             />
           </div>
-          <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{user.name}</h1>
+          <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{userId}</h1>
           <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
             <Link title={`@${user.twitterUsername}`} to="#" />
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
@@ -152,13 +177,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
         </div>
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
-      <div className="bg-secondary">
-        {
-          activeTab === 0 && 'on sale'
-          // renderProductList(null)
-        }
-        {activeTab === 1 || (activeTab === 2 && <ProductList itemsData={itemsData} viewType={tabDataType} />)}
-
+      <div className="py-4 bg-secondary">
         {activeTab === 3 && (
           <div>
             <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
@@ -172,18 +191,42 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ itemsData, tabDataType
             </div>
           </div>
         )}
+        {activeTab === 1 && <OwnedTab initialData={ownedData} address={userId} />}
+        {activeTab === 2 && <CreatedTab initialData={createdData} address={userId} />}
+
+        {/* <ProductList itemsData={activeItems ?? []} onLoadMore={continuation ? refetch : null} />){' '} */}
       </div>
     </>
   );
 };
 export async function getServerSideProps(context) {
   const address = context.query.id;
-  const tab = context.query.tab ?? tabs[0];
+  const tabName = context.query.tab ?? tabs[0];
+  const props: ProfileProps = { tab: tabs.indexOf(tabName) };
+  const commonQueryData = { size: 1, showDeleted: false, includeMeta: true, address };
+  switch (tabName) {
+    case tabs[0]:
+      props.ownedData = await getNftItems({
+        ...commonQueryData,
+        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      });
+      break;
+    case tabs[1]:
+      props.ownedData = await getNftItems({
+        ...commonQueryData,
+        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      });
+      break;
+    case tabs[2]:
+      props.createdData = await getNftItems({
+        ...commonQueryData,
+        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      });
+      break;
+  }
 
-  const tabDataType = tabItemsTypeMapping[tab];
-  const itemsData = await getNftItems({ size: 10, showDeleted: false, includeMeta: true, type: tabDataType, address });
   return {
-    props: { itemsData, tabDataType }, // will be passed to the page component as props
+    props, // will be passed to the page component as props
   };
 }
 

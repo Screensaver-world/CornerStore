@@ -17,18 +17,46 @@ export enum NftItemsRequestType {
   BY_COLLECTION = 'byCollection',
 }
 
-export enum SellOrderTypes {
+export enum OrderFilter {
   ALL = 'all',
   BY_MAKER = 'byMaker',
   BY_ITEM = 'byItem',
 }
 
-export type SellOrdersRequest = {
+export enum OrderRequestTypes {
+  ALL = 'all',
+  SELL = 'sell',
+  BIDS = 'bids',
+}
+
+export type GetOrdersRequest = {
   continuation?: string;
   size?: number;
   origin?: number;
-  maker: string;
-  type?: SellOrderTypes;
+  // maker/item
+  address?: string;
+  type?: OrderRequestTypes;
+  filerBy?: OrderFilter;
+};
+
+export type GetOrdersResponse = {
+  continuation?: string;
+  orders?: NftOrder[];
+};
+
+export type NftOrder = {
+  id: string;
+  contract: string;
+  tokenId: string;
+  creators: { account: string; value: number }[];
+  supply: number;
+  lazySupply: number;
+  owners: string[];
+  royalties: { account: string; value: number }[];
+  date?: string;
+  pending?: { type: 'TRANSFER'; from: string };
+  delete?: boolean;
+  meta?: NftItemMeta;
 };
 
 export type GenerateNftTokenIdRequest = {

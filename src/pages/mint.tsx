@@ -9,6 +9,7 @@ import * as IPFS from 'ipfs-core';
 import { generateNftTokenId, mint } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
+import { ethers } from 'ethers';
 import { getMintStructure } from 'api/mintStructure';
 
 const ERC1155 = 'ERC1155';
@@ -39,7 +40,7 @@ const MintPage = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-ignore
       const provider = new ethers.providers.Web3Provider(web3.currentProvider);
-      const signature = await provider.send('eth_signTypedData_v4', [address, JSON.stringify(getMintStructure(body))]);
+      const signature = await provider.send('eth_sign', [address, JSON.stringify(body)]);
       console.log('data provided to sign (typed structure with message): ', JSON.stringify(getMintStructure(body)));
       console.log(JSON.stringify(body));
       console.log('signature:', signature);

@@ -5,9 +5,11 @@ import {
   GenerateNftTokenIdRequest,
   GetNftItemsRequest,
   GetNftItemsResponse,
+  GetOrdersRequest,
   LazyMintRequestBody,
   NftItemsRequestType,
-  SellOrdersRequest,
+  OrderFilter,
+  OrderRequestTypes,
 } from './raribleRequestTypes';
 
 const BASE_URL = 'https://ethereum-api-staging.rarible.org/v0.1';
@@ -118,15 +120,31 @@ export async function getNftItemById(id: string) {
   return (await fetch(`${BASE_URL}/nft/items/${id}?includeMeta=true`)).json();
 }
 
-export async function getSellOrders(searchParams: SellOrdersRequest) {
-  const query = encodeQuery(searchParams);
-  return (await fetch(`${BASE_URL}/orders/sell/${searchParams.type ?? NftItemsRequestType.ALL}?${query}`)).json();
-}
-
 export async function generateNftTokenId(params: GenerateNftTokenIdRequest) {
   return (
     await fetch(`${BASE_URL}/nft/collections/${params.collection}/generate_token_id?minter=${params.minter}`)
   ).json();
+}
+
+const orderTypeMapping = {
+  [OrderFilter.BY_MAKER]: 'maker',
+  [OrderFilter.BY_ITEM]: 'tokenId',
+};
+
+export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
+  const queryParam = orderTypeMapping[searchParams.filerBy];
+
+  if (queryParam) {
+    searchParams[queryParam] = searchParams.address;
+  }
+  const query = encodeQuery(searchParams);
+  return (await fetch(`${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}?${query}`)).json();
+}
+
+export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
+  return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
+    enabled: false,
+  });
 }
 
 export async function mint(params: LazyMintRequestBody) {
