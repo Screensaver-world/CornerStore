@@ -13,8 +13,10 @@ type Props = {
 function DetailsTab({ owner, categories }: Props) {
   const [imgSrc, setImgSrc] = useState(null);
   useEffect(() => {
-    setImgSrc(makeBlockie(owner));
-  }, []);
+    if (owner) {
+      setImgSrc(makeBlockie(owner));
+    }
+  }, [owner]);
 
   return (
     <div>

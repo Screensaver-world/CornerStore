@@ -11,4 +11,4 @@ export const getImage = (meta: NftItemMeta, reverseOrder = false) => {
 };
 
 export const shortAddress = (address: string, before: number, after: number): string =>
-  `${address.slice(0, before)}...${address.slice(address.length - after, address.length)}`;
+  address ? `${address.slice(0, before)}...${address.slice(address.length - after, address.length)}` : '';

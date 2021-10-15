@@ -31,7 +31,7 @@ function ItemDetailsPage({ item }: Props) {
   const [creatorAvatar, setCreatorAvatar] = useState(null);
 
   useEffect(() => {
-    setCreatorAvatar(makeBlockie(item.creators[0].account));
+    setCreatorAvatar(makeBlockie(item.creators[0].account ?? ''));
   }, []);
 
   return (

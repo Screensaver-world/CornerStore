@@ -4,11 +4,16 @@ import { useRouter } from 'next/router';
 import Button, { ButtonType } from 'components/Button';
 import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
-import { ProductList } from 'components/ProductCard';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
-import { getNftItems, useGetNftItems } from 'api/raribleApi';
-import { GetNftItemsResponse, NftItemsRequestType, NtfItem, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { getNftItems, getNftOrders, useGetNftItems } from 'api/raribleApi';
+import {
+  GetNftItemsResponse,
+  NftItemsRequestType,
+  NtfItem,
+  OrderFilter,
+  OrderRequestTypes,
+} from 'api/raribleRequestTypes';
 import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
@@ -88,10 +93,8 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(tab);
   const [userId, setUserId] = useState<string | null>(null);
-
   const user = dummyData;
-  const { address } = dummyData;
-  const shortAddr = shortAddress(address, 10, 4);
+  const shortAddr = shortAddress(userId, 10, 4);
   useEffect(() => {
     if (router && router.query) {
       setActiveTab(
@@ -150,10 +153,9 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
         <div className="relative flex flex-col items-center w-11/12 bg-secondary lg:w-2/3 sm:w-10/12 md:-top-16 -top-4">
           <div className="transform -translate-y-1/2">
             <Avatar
-              verified
               sizeClasses="w-20 h-20 lg:w-48 lg:h-48"
               verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
-              username="USERNAME"
+              username={userId}
             />
           </div>
           <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{userId}</h1>
@@ -193,8 +195,6 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
         )}
         {activeTab === 1 && <OwnedTab initialData={ownedData} address={userId} />}
         {activeTab === 2 && <CreatedTab initialData={createdData} address={userId} />}
-
-        {/* <ProductList itemsData={activeItems ?? []} onLoadMore={continuation ? refetch : null} />){' '} */}
       </div>
     </>
   );
@@ -224,6 +224,9 @@ export async function getServerSideProps(context) {
       });
       break;
   }
+  console.log(
+    (await getNftOrders({ size: 1, address, filerBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
+  );
 
   return {
     props, // will be passed to the page component as props

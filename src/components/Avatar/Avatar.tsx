@@ -20,8 +20,10 @@ const Avatar: FC<Props> = ({
 }) => {
   const [imgSrc, setImgSrc] = useState(null);
   useEffect(() => {
-    setImgSrc(makeBlockie(username));
-  }, []);
+    if (username) {
+      setImgSrc(makeBlockie(username));
+    }
+  }, [username]);
 
   return (
     <Link to={`/profile/${username}`}>
