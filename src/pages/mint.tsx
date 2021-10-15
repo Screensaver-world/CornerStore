@@ -50,12 +50,14 @@ const MintPage = () => {
             value: 10000,
           },
         ],
-        royalties: [
-          {
-            account: address,
-            value: 2000,
-          },
-        ],
+        royalties: data.royalties
+          ? [
+              {
+                account: address,
+                value: data.royalties,
+              },
+            ]
+          : [],
       };
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
