@@ -17,10 +17,19 @@ const ERC721 = 'ERC721';
 const MintPage = () => {
   const form = useForm();
   const [ipfs, setIpfs] = useState(null);
+  const [data, dispatch] = useWallet();
   useEffect(() => {
     (async () => {
-      const ip = await IPFS.create({ repoAutoMigrate: true });
-      setIpfs(ip);
+      if (data.ipfs) {
+        setIpfs(data.ipfs);
+      } else {
+        const ipfs = await IPFS.create({ repoAutoMigrate: true });
+        dispatch({
+          type: 'SET_IPFS',
+          payload: ipfs,
+        });
+        setIpfs(ipfs);
+      }
     })();
   }, []);
   const [{ address, web3 }] = useWallet();

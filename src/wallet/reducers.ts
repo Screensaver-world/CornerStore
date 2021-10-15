@@ -16,6 +16,8 @@ export default function walletReducer(state: WalletState, action: WalletAction):
       return { ...state, ...{ web3: action.payload } };
     case 'SET_ENS':
       return { ...state, ...{ ens: action.payload } };
+    case 'SET_IPFS':
+      return { ...state, ...{ ipfs: action.payload } };
     default:
       return state;
   }

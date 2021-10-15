@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import HorizontalCard from 'components/HorizontalCard';
-import { Currency, NFTItem, NFTOwner } from 'types';
 import Tabs from 'components/Tabs';
 import { useItemDetailsData } from 'features/home/details/useItemDetailsData';
 import HistoryTab from 'features/home/details/components/HistoryTab';
@@ -76,7 +75,7 @@ function ItemDetailsPage({ item }: Props) {
             <div className={'flex flex-col xl:flex-row'}>
               <div className={'flex-1 xl:pr-8'}>
                 <div className={'pb-5'}>
-                  Creator <span className={'text-gray-700'}>{item?.royalties?.[0].value / 100 || 0}% Royalties </span>
+                  Creator <span className={'text-gray-700'}>{item?.royalties?.[0]?.value / 100 || 0}% Royalties </span>
                 </div>
                 <HorizontalCard title={shortAddress(item.creators[0].account, 6, 4)} imageUrl={creatorAvatar} />
               </div>
