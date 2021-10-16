@@ -6,11 +6,12 @@ import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
 import { useCallback, useEffect, useState } from 'react';
 import * as IPFS from 'ipfs-core';
-import { generateNftTokenId, mint } from 'api/raribleApi';
+import { encodeOrder, generateNftTokenId, makeSellOrder, mint } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
 import { ethers } from 'ethers';
 import { CreateNftMetadata, getMintStructure } from 'api/mintStructure';
+import { createOrder, getOrderStructure } from 'api/orderStructure';
 
 const ERC721 = 'ERC721';
 
@@ -75,6 +76,16 @@ const MintPage = () => {
       const signature = await provider.send('eth_signTypedData_v4', [address, JSON.stringify(getMintStructure(body))]);
       const signed = { ...body, signatures: [signature] };
       await mint(signed);
+      const order = createOrder(address, tokenId, 'ETH', web3.utils.toWei('1'));
+      const encodedOrder = await encodeOrder(order);
+      console.log(encodedOrder);
+      const orderSignature = await provider.send('eth_signTypedData_v4', [
+        address,
+        JSON.stringify(getOrderStructure(encodedOrder.signMessage.struct)),
+      ]);
+      console.log({ ...order, signature: orderSignature });
+      const ret = await makeSellOrder({ ...order, signature: orderSignature });
+      console.log(ret);
     },
     [ipfs, web3, address]
   );
