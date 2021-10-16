@@ -6,19 +6,21 @@ import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
 import { useCallback, useEffect, useState } from 'react';
 import * as IPFS from 'ipfs-core';
-import { generateNftTokenId } from 'api/raribleApi';
+import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
 import { CreateNftMetadata } from 'api/mintStructure';
-import { Web3Ethereum } from "@rarible/web3-ethereum"
-import { createRaribleSdk } from "@rarible/protocol-ethereum-sdk"
-import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell"
-import { toAddress, toBigNumber } from "@rarible/types"
+import { Web3Ethereum } from '@rarible/web3-ethereum';
+import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
+import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
+import { toAddress, toBigNumber } from '@rarible/types';
+import { useRouter } from 'next/router';
 
 const MintPage = () => {
   const form = useForm();
   const [ipfs, setIpfs] = useState(null);
   const [data, dispatch] = useWallet();
+  const router = useRouter();
   useEffect(() => {
     (async () => {
       if (data.ipfs) {
@@ -36,32 +38,43 @@ const MintPage = () => {
   const [{ address, web3 }] = useWallet();
   const submit = useCallback(
     async (data) => {
-      const { tokenId } = await generateNftTokenId({ collection: CONTRACT_ID, minter: address });
+      const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
+
       const { path: image } = await ipfs.add(data['file-upload'][0]);
       const metadata: CreateNftMetadata = {
         name: data.title,
         image: `ipfs://ipfs/${image}`,
         description: data.description,
-        external_url: `localhost:3000/${CONTRACT_ID}:${tokenId}`,
+        external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
       };
-      //TODO chage to use env var 
-      const raribleSdk = createRaribleSdk(new Web3Ethereum({ web3 }), 'rinkeby')
+      //TODO chage to use env var
+      const raribleSdk = createRaribleSdk(new Web3Ethereum({ web3 }), 'rinkeby');
       const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
       const tokenURI = `ipfs://ipfs/${metadataHash}`;
-      const nftCollection = await raribleSdk.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID })
-      const resp = await raribleSdk.nft.mint({
+      const nftCollection = await raribleSdk.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
+      await raribleSdk.nft.mint({
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         collection: nftCollection,
         uri: tokenURI,
+        nftTokenId: token,
         creators: [{ account: toAddress(address), value: 10000 }],
-        royalties: [],
+        royalties: data.royalties
+          ? [
+              {
+                account: toAddress(address),
+                value: data.royalties,
+              },
+            ]
+          : [],
         lazy: true,
-      })
+      });
+
       const request: SellRequest = {
         makeAssetType: {
           assetClass: 'ERC721',
           contract: toAddress(CONTRACT_ID),
-          tokenId: toBigNumber(tokenId),
+          tokenId: toBigNumber(token.tokenId),
         },
         amount: 1,
         maker: toAddress(address),
@@ -69,8 +82,10 @@ const MintPage = () => {
         payouts: [],
         price: web3.utils.toWei(data.price).toString(),
         takeAssetType: { assetClass: data['price-currency'] },
-      }
-      const order = await raribleSdk.order.sell(request)
+      };
+      await raribleSdk.order.sell(request);
+
+      router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },
     [ipfs, web3, address]
   );
@@ -95,7 +110,7 @@ const MintPage = () => {
                   placeholder={'5.0 ETH'}
                   type={'currency'}
                   helperText={'Services Fee : 2.5%'}
-                  currencies={['BTC', 'ETH', 'RARI']}
+                  currencies={['ETH', 'RARI', 'wETH']}
                 />
               </div>
             </FormStep>

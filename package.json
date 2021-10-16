@@ -38,8 +38,7 @@
     "react-hook-form": "^7.16.1",
     "react-query": "^3.25.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
-    "web3": "^1.6.0",
-    "wrtc": "^0.4.7"
+    "web3": "^1.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",

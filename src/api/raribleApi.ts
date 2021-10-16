@@ -121,7 +121,7 @@ export async function getNftItemById(id: string) {
   return (await fetch(`${BASE_URL}/nft/items/${id}?includeMeta=true`)).json();
 }
 
-export async function generateNftTokenId(params: GenerateNftTokenIdRequest) {
+export async function generateNftToken(params: GenerateNftTokenIdRequest) {
   return (
     await fetch(`${BASE_URL}/nft/collections/${params.collection}/generate_token_id?minter=${params.minter}`)
   ).json();
