@@ -6,14 +6,14 @@ import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
 import { useCallback, useEffect, useState } from 'react';
 import * as IPFS from 'ipfs-core';
-import { encodeOrder, generateNftTokenId, makeSellOrder, mint } from 'api/raribleApi';
+import { generateNftTokenId } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
-import { ethers } from 'ethers';
-import { CreateNftMetadata, getMintStructure } from 'api/mintStructure';
-import { createOrder, getOrderStructure } from 'api/orderStructure';
-
-const ERC721 = 'ERC721';
+import { CreateNftMetadata } from 'api/mintStructure';
+import { Web3Ethereum } from "@rarible/web3-ethereum"
+import { createRaribleSdk } from "@rarible/protocol-ethereum-sdk"
+import { SellRequest } from "@rarible/protocol-ethereum-sdk/build/order/sell"
+import { toAddress, toBigNumber } from "@rarible/types"
 
 const MintPage = () => {
   const form = useForm();
@@ -37,55 +37,40 @@ const MintPage = () => {
   const submit = useCallback(
     async (data) => {
       const { tokenId } = await generateNftTokenId({ collection: CONTRACT_ID, minter: address });
-
       const { path: image } = await ipfs.add(data['file-upload'][0]);
-
       const metadata: CreateNftMetadata = {
         name: data.title,
         image: `ipfs://ipfs/${image}`,
         description: data.description,
-        external_url: `localhost:3000/0x6ede7f3c26975aad32a475e1021d8f6f39c89d82:${tokenId}`,
+        external_url: `localhost:3000/${CONTRACT_ID}:${tokenId}`,
       };
+      //TODO chage to use env var 
+      const raribleSdk = createRaribleSdk(new Web3Ethereum({ web3 }), 'rinkeby')
       const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
       const tokenURI = `ipfs://ipfs/${metadataHash}`;
-      const body = {
-        '@type': 'ERC721' as typeof ERC721,
-        contract: '0x6ede7f3c26975aad32a475e1021d8f6f39c89d82',
-        tokenId: tokenId,
-        tokenURI,
+      const nftCollection = await raribleSdk.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID })
+      const resp = await raribleSdk.nft.mint({
+        //@ts-ignore
+        collection: nftCollection,
         uri: tokenURI,
-        creators: [
-          {
-            account: address,
-            value: 10000,
-          },
-        ],
-        royalties: data.royalties
-          ? [
-              {
-                account: address,
-                value: data.royalties,
-              },
-            ]
-          : [],
-      };
-
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      //@ts-ignore
-      const provider = new ethers.providers.Web3Provider(web3.currentProvider);
-      const signature = await provider.send('eth_signTypedData_v4', [address, JSON.stringify(getMintStructure(body))]);
-      const signed = { ...body, signatures: [signature] };
-      await mint(signed);
-      const order = createOrder(address, tokenId, 'ETH', web3.utils.toWei('1'));
-      const encodedOrder = await encodeOrder(order);
-      console.log(encodedOrder);
-      const orderSignature = await provider.send('eth_signTypedData_v4', [
-        address,
-        JSON.stringify(getOrderStructure(encodedOrder.signMessage.struct)),
-      ]);
-      console.log({ ...order, signature: orderSignature });
-      const ret = await makeSellOrder({ ...order, signature: orderSignature });
-      console.log(ret);
+        creators: [{ account: toAddress(address), value: 10000 }],
+        royalties: [],
+        lazy: true,
+      })
+      const request: SellRequest = {
+        makeAssetType: {
+          assetClass: 'ERC721',
+          contract: toAddress(CONTRACT_ID),
+          tokenId: toBigNumber(tokenId),
+        },
+        amount: 1,
+        maker: toAddress(address),
+        originFees: [],
+        payouts: [],
+        price: web3.utils.toWei(data.price).toString(),
+        takeAssetType: { assetClass: data['price-currency'] },
+      }
+      const order = await raribleSdk.order.sell(request)
     },
     [ipfs, web3, address]
   );
