@@ -1,6 +1,5 @@
 import { useQuery } from 'react-query';
 import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
-import { EncodeOrderRequest, EncodeOrderResponse, SignedOrder } from './orderStructure';
 import { QueryTypes } from './queryTypes';
 import {
   GenerateNftTokenIdRequest,
@@ -146,38 +145,6 @@ export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
   return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
     enabled: false,
   });
-}
-
-export async function mint(params: LazyMintRequestBody) {
-  return (
-    await fetch(`${BASE_URL}/nft/mints`, {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: { 'content-type': 'application/json' },
-    })
-  ).json();
-}
-
-export async function encodeOrder(
-  params: EncodeOrderRequest
-): Promise<{ signMessage: { struct: EncodeOrderResponse } }> {
-  return (
-    await fetch(`${BASE_URL}/order/encoder/order`, {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: { 'content-type': 'application/json' },
-    })
-  ).json();
-}
-
-export async function makeSellOrder(params: SignedOrder): Promise<any> {
-  return (
-    await fetch(`${BASE_URL}/order/orders`, {
-      method: 'POST',
-      body: JSON.stringify(params),
-      headers: { 'content-type': 'application/json' },
-    })
-  ).json();
 }
 
 const encodeQuery = (searchParams) =>

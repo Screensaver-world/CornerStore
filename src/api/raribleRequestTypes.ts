@@ -117,3 +117,14 @@ export type LazyMintRequestBodyForSignature = {
 export type LazyMintRequestBody = LazyMintRequestBodyForSignature & {
   signatures: string[];
 };
+
+export type CreateNftMetadata = {
+  name: string;
+  description?: string;
+  //this must be prefixed with "ipfs://ipfs/{{ IPFS_HASH ))
+  image?: string;
+  // This is the link to Rarible
+  external_url: string;
+  animation_url?: string;
+  //TODO there is also attributes section if we need ti
+};
