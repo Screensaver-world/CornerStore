@@ -6,23 +6,16 @@ import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
-import { getNftItems, getNftOrders, useGetNftItems } from 'api/raribleApi';
-import {
-  GetNftItemsResponse,
-  NftItemsRequestType,
-  NtfItem,
-  OrderFilter,
-  OrderRequestTypes,
-} from 'api/raribleRequestTypes';
+import { getNftItems, useGetNftItems } from 'api/raribleApi';
+import { GetNftItemsResponse, NftItemsRequestType, NtfItem, OrderRequestTypes } from 'api/raribleRequestTypes';
 import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
+import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
 
 //MOCKED DATA
 const dummyData = {
-  name: 'Katherine Moss',
   twitterUsername: 'twuser',
-  address: '0X1243567853467352466U7I546786457890',
   about:
     'When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset too good.',
   links: { twitter: 'asds', instagram: 'hgk' },
@@ -86,6 +79,7 @@ export interface ProfileProps {
   onSaleData?: GetNftItemsResponse;
   createdData?: GetNftItemsResponse;
   ownedData?: GetNftItemsResponse;
+  activityHistory?: GetNftItemsResponse;
   tab: number;
 }
 
@@ -180,21 +174,9 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="py-4 bg-secondary">
-        {activeTab === 3 && (
-          <div>
-            <div className="px-4 py-3 mx-auto max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
-              <div className="space-y-12">
-                <ul role="list">
-                  {dummyHistory.map((item) => (
-                    <ActivityCard {...item} username="Katherine Moss" userId="0X1243567853467352466U7I546786457890" />
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
         {activeTab === 1 && <OwnedTab initialData={ownedData} address={userId} />}
         {activeTab === 2 && <CreatedTab initialData={createdData} address={userId} />}
+        {activeTab === 3 && <ActivityHistoryTab address={userId} />}
       </div>
     </>
   );
@@ -224,9 +206,9 @@ export async function getServerSideProps(context) {
       });
       break;
   }
-  console.log(
-    (await getNftOrders({ size: 1, address, filterBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
-  );
+  // console.log(
+  //   (await getNftOrders({ size: 1, address, filterBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
+  // );
 
   return {
     props, // will be passed to the page component as props

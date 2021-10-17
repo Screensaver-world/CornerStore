@@ -99,7 +99,7 @@ function ItemDetailsPage({ item, sellOrder }: Props) {
             </div>
             <Button
               fullWidth
-              title={`Buy for ${sellOrder.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`}
+              title={`Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`}
               onClick={setCheckoutVisible}
               customClasses="sticky bottom-4 lg:static"
             />
@@ -127,7 +127,7 @@ export async function getServerSideProps(context) {
   ]);
   //TODO check if it is possible to have multiple sell orders, what happens after buy order is executed
   return {
-    props: { item, sellOrder: orders?.orders?.[0] }, // will be passed to the page component as props
+    props: { item, sellOrder: orders?.orders?.[0] ?? null }, // will be passed to the page component as props
   };
 }
 

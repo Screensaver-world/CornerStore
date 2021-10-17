@@ -1,5 +1,5 @@
 import type { WalletAction } from './actions';
-import type { WalletState } from './state';
+import { initialState, WalletState } from './state';
 
 export default function walletReducer(state: WalletState, action: WalletAction): WalletState {
   console.log(state, action);
@@ -18,6 +18,10 @@ export default function walletReducer(state: WalletState, action: WalletAction):
       return { ...state, ...{ ens: action.payload } };
     case 'SET_IPFS':
       return { ...state, ...{ ipfs: action.payload } };
+    case 'SET_SDK':
+      return { ...state, ...{ raribleSDK: action.payload } };
+    case 'RESET':
+      return initialState;
     default:
       return state;
   }

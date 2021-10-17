@@ -9,7 +9,6 @@ export interface ProfileProps {
 }
 
 const CreatedTab: React.FunctionComponent<ProfileProps> = ({ initialData, address }) => {
-  console.log(initialData);
   const [continuation, setContinuation] = useState(initialData?.continuation);
   const { data, refetch, isIdle } = useGetNftItems({
     type: NftItemsRequestType.BY_CREATOR,

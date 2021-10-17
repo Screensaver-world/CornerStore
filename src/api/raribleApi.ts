@@ -2,7 +2,9 @@ import { useQuery } from 'react-query';
 import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
 import { QueryTypes } from './queryTypes';
 import {
+  ActivityHistoryFilter,
   GenerateNftTokenIdRequest,
+  GetActivityHistoryRequest,
   GetNftItemsRequest,
   GetNftItemsResponse,
   GetOrdersRequest,
@@ -146,6 +148,35 @@ export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
   return (
     await fetch(`${BASE_URL}/order/orders/${type ?? OrderRequestTypes.ALL}/${filterBy ?? OrderFilter.ALL}?${query}`)
   ).json();
+}
+
+//TODO create enum for history item types if needed
+//TODO check which types are needed
+//TODO add by_collection if needed
+const GetActiviryHistoryypeMapping = {
+  [ActivityHistoryFilter.BY_ITEM]: 'MINT,LIST,TRANSFER',
+  [ActivityHistoryFilter.BY_USER]: 'MINT,LIST,BUY,SELL',
+};
+
+//TODO move to helpers,utils,...
+function getActivityHistoryParams(address: string, filterBy: ActivityHistoryFilter) {
+  if (filterBy === ActivityHistoryFilter.BY_USER) {
+    return { user: address };
+  }
+  //TODO add collection if needed
+  const [contract, tokenId] = address.split(':');
+  return { contract, tokenId };
+}
+
+export async function getActivityHistory(params: GetActivityHistoryRequest) {
+  const { address, filterBy } = params;
+  const queryParams = {
+    ...getActivityHistoryParams(address, filterBy),
+    ...params,
+    type: GetActiviryHistoryypeMapping[filterBy],
+    address: undefined,
+  };
+  return (await fetch(`${BASE_URL}/nft-order/activities/${params.filterBy}?${encodeQuery(queryParams)}`)).json();
 }
 
 export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {

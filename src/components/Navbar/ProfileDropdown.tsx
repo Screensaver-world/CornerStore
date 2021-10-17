@@ -37,6 +37,7 @@ const ProfileDropdown: FC<unknown> = () => {
       handler: () => {
         getOnboard(dispatch).walletReset();
         localStorage.removeItem('walletName');
+        dispatch({ type: 'RESET' });
       },
     },
   ];

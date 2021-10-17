@@ -128,3 +128,27 @@ export type CreateNftMetadata = {
   animation_url?: string;
   //TODO there is also attributes section if we need ti
 };
+
+export enum ActivityHistoryFilter {
+  BY_USER = 'byUser',
+  BY_COLLECTION = 'byCollection',
+  BY_ITEM = 'byItem',
+}
+
+export type GetActivityHistoryRequest = {
+  filterBy: ActivityHistoryFilter;
+  //user's address or contract:tokenId
+  address: string;
+  size?: number;
+  continuation?: string;
+  sort?: 'LATEST_FIRST' | 'EARLIEST_FIRST';
+};
+
+export type GetActivityHistoryResponse = {
+  filterBy: ActivityHistoryFilter;
+  //user's address or contract:tokenId
+  address: string;
+  size?: number;
+  continuation?: string;
+  sort?: 'LATEST_FIRST' | 'EARLIEST_FIRST';
+};

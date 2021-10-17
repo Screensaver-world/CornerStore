@@ -35,7 +35,8 @@ const MintPage = () => {
       }
     })();
   }, []);
-  const [{ address, web3 }] = useWallet();
+  const [{ address, web3, raribleSDK }] = useWallet();
+
   const submit = useCallback(
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
@@ -48,11 +49,10 @@ const MintPage = () => {
         external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
       };
       //TODO chage to use env var
-      const raribleSdk = createRaribleSdk(new Web3Ethereum({ web3 }), 'rinkeby');
       const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
       const tokenURI = `ipfs://ipfs/${metadataHash}`;
-      const nftCollection = await raribleSdk.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
-      await raribleSdk.nft.mint({
+      const nftCollection = await raribleSDK.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
+      await raribleSDK.nft.mint({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         collection: nftCollection,
@@ -83,7 +83,7 @@ const MintPage = () => {
         price: web3.utils.toWei(data.price).toString(),
         takeAssetType: { assetClass: data['price-currency'] },
       };
-      await raribleSdk.order.sell(request);
+      await raribleSDK.order.sell(request);
 
       router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },
@@ -91,7 +91,7 @@ const MintPage = () => {
   );
   return (
     <>
-      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
+      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <form onSubmit={form.handleSubmit(submit)}>
