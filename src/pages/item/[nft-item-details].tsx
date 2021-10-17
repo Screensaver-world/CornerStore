@@ -125,7 +125,7 @@ export async function getServerSideProps(context) {
     await getNftItemById(id),
     await getNftOrders({ address: id, filerBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
   ]);
-
+  //TODO check if it is possible to have multiple sell orders, what happens after buy order is executed
   return {
     props: { item, sellOrder: orders?.orders?.[0] }, // will be passed to the page component as props
   };
