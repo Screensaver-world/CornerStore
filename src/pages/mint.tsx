@@ -63,7 +63,7 @@ const MintPage = () => {
           ? [
               {
                 account: toAddress(address),
-                value: data.royalties,
+                value: data.royalties * 100,
               },
             ]
           : [],
