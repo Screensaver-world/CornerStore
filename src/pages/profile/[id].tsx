@@ -182,7 +182,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       <div className="py-4 bg-secondary">
         {activeTab === 3 && (
           <div>
-            <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
+            <div className="px-4 py-3 mx-auto max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
               <div className="space-y-12">
                 <ul role="list">
                   {dummyHistory.map((item) => (
