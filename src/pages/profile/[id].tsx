@@ -225,7 +225,7 @@ export async function getServerSideProps(context) {
       break;
   }
   console.log(
-    (await getNftOrders({ size: 1, address, filerBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
+    (await getNftOrders({ size: 1, address, filterBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
   );
 
   return {

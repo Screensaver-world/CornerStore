@@ -36,7 +36,7 @@ export type GetOrdersRequest = {
   // maker/item
   address?: string;
   type?: OrderRequestTypes;
-  filerBy?: OrderFilter;
+  filterBy?: OrderFilter;
 };
 
 export type GetOrdersResponse = {

@@ -127,10 +127,10 @@ export async function generateNftToken(params: GenerateNftTokenIdRequest) {
 }
 
 export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
-  const { type, filerBy } = searchParams;
+  const { type, filterBy } = searchParams;
 
-  let queryParams: any = { ...searchParams, type: undefined, address: undefined, filerBy: undefined };
-  switch (searchParams.filerBy) {
+  let queryParams: any = { ...searchParams, type: undefined, address: undefined, filterBy: undefined };
+  switch (searchParams.filterBy) {
     case OrderFilter.BY_MAKER:
       queryParams.maker = searchParams.address;
       break;
@@ -142,13 +142,9 @@ export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
   }
 
   const query = encodeQuery(queryParams);
-  console.log(
-    `${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}/${filerBy ?? OrderFilter.ALL}?${query}`
-  );
+
   return (
-    await fetch(
-      `${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}/${filerBy ?? OrderFilter.ALL}?${query}`
-    )
+    await fetch(`${BASE_URL}/order/orders/${type ?? OrderRequestTypes.ALL}/${filterBy ?? OrderFilter.ALL}?${query}`)
   ).json();
 }
 

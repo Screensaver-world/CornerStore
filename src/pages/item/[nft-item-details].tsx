@@ -123,7 +123,7 @@ export async function getServerSideProps(context) {
   const tab = context.query.tab ?? 'Owners';
   const [item, orders] = await Promise.all([
     await getNftItemById(id),
-    await getNftOrders({ address: id, filerBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
+    await getNftOrders({ address: id, filterBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
   ]);
   //TODO check if it is possible to have multiple sell orders, what happens after buy order is executed
   return {
