@@ -12,14 +12,16 @@ import { useToggle } from '../../hooks/useToggle';
 import { DotsIcon } from 'assets';
 import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
 import { Popover } from '@headlessui/react';
-import { getNftItemById } from 'api/raribleApi';
+import { getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
-import { NtfItem } from 'api/raribleRequestTypes';
+import { NtfItem, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 
-type Props = { item: NtfItem };
+//TODO fix types.. here and in queries :)
+type Props = { item: any; sellOrder: any };
 
-function ItemDetailsPage({ item }: Props) {
+function ItemDetailsPage({ item, sellOrder }: Props) {
+  console.log(sellOrder);
   const collection = {
     imageUrl:
       'https://lh3.googleusercontent.com/1rLhxHFIebBPBtCFeXCxiwdbIE2f2idunmGyU1RvgU7qk1TGiFHCORMepdQLt6b7uRYyn5FtlnLkTkO8kdTMsnvbHbTwpHEytcbz',
@@ -64,10 +66,12 @@ function ItemDetailsPage({ item }: Props) {
           {/*RIGHT SIDE CONTENT*/}
           <div className="mt-4 font-bold text-white lg:col-span-5">
             <p className="pb-5">
-              On sale for {item.price} {item.currency}{' '}
+              On sale for {sellOrder?.take.valueDecimal} {sellOrder?.take.assetType.assetClass}{' '}
+              {/*
+              TODO: check if it is ok to delete this since we'll be using erc721
               <span className={'pl-5 text-gray-700'}>
                 {item.availableQuantity} of {item.totalQuantity} Available
-              </span>
+              </span> */}
             </p>
 
             <p className="pb-10 font-semibold text-white">{item.meta.description}</p>
@@ -95,7 +99,7 @@ function ItemDetailsPage({ item }: Props) {
             </div>
             <Button
               fullWidth
-              title={`Buy for ${item.price} ${item.currency}`}
+              title={`Buy for ${sellOrder.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`}
               onClick={setCheckoutVisible}
               customClasses="sticky bottom-4 lg:static"
             />
@@ -103,6 +107,7 @@ function ItemDetailsPage({ item }: Props) {
               <CheckoutModal
                 isOpen={isCheckoutVisible}
                 onClose={setCheckoutVisible}
+                //TODO should we hide avail. quan. since we use erc721
                 availableQuantity={item.availableQuantity}
               />
             )}
@@ -116,9 +121,13 @@ function ItemDetailsPage({ item }: Props) {
 export async function getServerSideProps(context) {
   const id = context.query['nft-item-details'];
   const tab = context.query.tab ?? 'Owners';
-  const item = await getNftItemById(id);
+  const [item, orders] = await Promise.all([
+    await getNftItemById(id),
+    await getNftOrders({ address: id, filerBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
+  ]);
+
   return {
-    props: { item }, // will be passed to the page component as props
+    props: { item, sellOrder: orders?.orders?.[0] }, // will be passed to the page component as props
   };
 }
 
