@@ -126,19 +126,30 @@ export async function generateNftToken(params: GenerateNftTokenIdRequest) {
   ).json();
 }
 
-const orderTypeMapping = {
-  [OrderFilter.BY_MAKER]: 'maker',
-  [OrderFilter.BY_ITEM]: 'tokenId',
-};
-
 export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
-  const queryParam = orderTypeMapping[searchParams.filerBy];
+  const { type, filerBy } = searchParams;
 
-  if (queryParam) {
-    searchParams[queryParam] = searchParams.address;
+  let queryParams: any = { ...searchParams, type: undefined, address: undefined, filerBy: undefined };
+  switch (searchParams.filerBy) {
+    case OrderFilter.BY_MAKER:
+      queryParams.maker = searchParams.address;
+      break;
+    case OrderFilter.BY_ITEM: {
+      const [contract, tokenId] = searchParams.address.split(':');
+      queryParams = { ...queryParams, contract, tokenId };
+      break;
+    }
   }
-  const query = encodeQuery(searchParams);
-  return (await fetch(`${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}?${query}`)).json();
+
+  const query = encodeQuery(queryParams);
+  console.log(
+    `${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}/${filerBy ?? OrderFilter.ALL}?${query}`
+  );
+  return (
+    await fetch(
+      `${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}/${filerBy ?? OrderFilter.ALL}?${query}`
+    )
+  ).json();
 }
 
 export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
@@ -149,5 +160,6 @@ export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
 
 const encodeQuery = (searchParams) =>
   Object.keys(searchParams)
+    .filter((key) => searchParams[key] !== undefined)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
     .join('&');
