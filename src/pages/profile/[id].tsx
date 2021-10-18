@@ -4,10 +4,16 @@ import { useRouter } from 'next/router';
 import Button, { ButtonType } from 'components/Button';
 import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
-import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
-import { getNftItems, useGetNftItems } from 'api/raribleApi';
-import { GetNftItemsResponse, NftItemsRequestType, NtfItem, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { getNftItemById, getNftItems, getNftOrders, useGetNftItems } from 'api/raribleApi';
+import {
+  GetNftItemsResponse,
+  NftItemsRequestType,
+  NtfItem,
+  OrderFilter,
+  OrderRequestTypes,
+  SellOrderTake,
+} from 'api/raribleRequestTypes';
 import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
@@ -76,10 +82,11 @@ const tabItemsTypeMapping = {
 };
 
 export interface ProfileProps {
-  onSaleData?: GetNftItemsResponse;
-  createdData?: GetNftItemsResponse;
-  ownedData?: GetNftItemsResponse;
-  activityHistory?: GetNftItemsResponse;
+  //TODO fix type
+  onSaleData?: { items: any; orders: any };
+  createdData?: { items: GetNftItemsResponse; orders: { take: SellOrderTake }[] };
+  ownedData?: { items: GetNftItemsResponse; orders: { take: SellOrderTake }[] };
+  // activityHistory is always fetched on front
   tab: number;
 }
 
@@ -104,7 +111,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
   const commonQueryData = { size: 1, includeMeta: true, address: userId };
 
   //------
-  const [onSaleContinuation, setOnSaleContinuation] = useState(onSaleData?.continuation);
+  const [onSaleContinuation, setOnSaleContinuation] = useState(onSaleData?.items.continuation);
   const {
     data: onSale,
     refetch: refetchOnSale,
@@ -181,30 +188,52 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
     </>
   );
 };
+
 export async function getServerSideProps(context) {
   const address = context.query.id;
   const tabName = context.query.tab ?? tabs[0];
   const props: ProfileProps = { tab: tabs.indexOf(tabName) };
   const commonQueryData = { size: 1, showDeleted: false, includeMeta: true, address };
   switch (tabName) {
-    case tabs[0]:
-      // props.ownedData = await getNftItems({
-      //   ...commonQueryData,
-      //   type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
-      // });
+    case tabs[0]: {
+      const orderData = await getNftOrders({
+        size: 1,
+        address,
+        filterBy: OrderFilter.BY_MAKER,
+        type: OrderRequestTypes.SELL,
+      });
+
+      const items = await Promise.all(
+        orderData.orders.map(
+          ({
+            make: {
+              assetType: { contract, tokenId },
+            },
+          }) => getNftItemById(`${contract}:${tokenId}`)
+        )
+      );
+      props.onSaleData = { orders: orderData, items: items.map((item) => item?.[0] ?? {}) };
+
       break;
-    case tabs[1]:
-      props.ownedData = await getNftItems({
+    }
+    case tabs[1]: {
+      const items = await getNftItems({
         ...commonQueryData,
         type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
       });
+      const orders = await getSellOrdersForItems(items.items);
+      props.ownedData = { orders, items };
       break;
-    case tabs[2]:
-      props.createdData = await getNftItems({
+    }
+    case tabs[2]: {
+      const items = await getNftItems({
         ...commonQueryData,
         type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
       });
+      const orders = await getSellOrdersForItems(items.items);
+      props.createdData = { orders, items };
       break;
+    }
   }
   // console.log(
   //   (await getNftOrders({ size: 1, address, filterBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
@@ -214,5 +243,22 @@ export async function getServerSideProps(context) {
     props, // will be passed to the page component as props
   };
 }
+
+export const getSellOrdersForItems = async (items: NtfItem[]) => {
+  const orders = await Promise.all(
+    items.map(({ id }) =>
+      getNftOrders({ size: 1, address: id, filterBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL })
+    )
+  );
+
+  return orders.map(({ orders }) => {
+    const order = orders?.[0];
+    if (!order) {
+      return { take: {} };
+    }
+    const { take } = order;
+    return { take };
+  });
+};
 
 export default Profile;

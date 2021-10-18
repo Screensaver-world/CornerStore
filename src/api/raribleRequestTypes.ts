@@ -152,3 +152,8 @@ export type GetActivityHistoryResponse = {
   continuation?: string;
   sort?: 'LATEST_FIRST' | 'EARLIEST_FIRST';
 };
+
+export type SellOrderTake = {
+  valueDecimal: number;
+  assetType: { assetClass: string };
+};

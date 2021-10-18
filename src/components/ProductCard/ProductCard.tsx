@@ -3,16 +3,17 @@ import Button, { ButtonType } from '../Button';
 import React, { FC, useState, useEffect } from 'react';
 import Link from 'components/Link';
 import Avatar from 'components/Avatar/Avatar';
-import { NtfItem } from 'api/raribleRequestTypes';
+import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
 import { getImage, shortAddress } from 'utils/itemUtils';
 
 type Props = {
   item: NtfItem;
+  sellOrder: { take?: SellOrderTake };
 };
 
-const ProductCard: FC<Props> = ({ item }) => {
+const ProductCard: FC<Props> = ({ item, sellOrder }) => {
   const address = shortAddress(item.creators[0].account, 5, 4);
-
+  console.log(sellOrder);
   const image = getImage(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
 
@@ -45,17 +46,21 @@ const ProductCard: FC<Props> = ({ item }) => {
           <div>
             <div className="font-bold leading-6">
               <h3 className={'text-lg'}>{item.meta.name}</h3>
-              <span className={'text-sm'}>
-                {/* {item.price}  */}
-                ETH
-              </span>
+              {sellOrder && (
+                <span className={'text-sm'}>
+                  {sellOrder?.take?.valueDecimal} {sellOrder?.take?.assetType?.assetClass}
+                </span>
+              )}
               <span className="px-1 text-gray-600 normal">
                 {/* {`${item.availableQuantity}/${item.createdQuantity}`} */}
+                {/* //TODO hide this? */}
                 1/1
               </span>
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
-              <Link to="#" title="Buy Now" />
+              <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
+                <Link to="#" title="Buy Now" />
+              </div>
               {renderFavButton && (
                 <Button
                   customClasses="text-gray-600 py-0"
