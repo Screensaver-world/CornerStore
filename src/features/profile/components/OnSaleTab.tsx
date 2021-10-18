@@ -20,7 +20,6 @@ const OnSaleTab: React.FunctionComponent<ProfileProps> = ({ initialData, address
   const [orders, setOrders] = useState<any[]>(initialData?.orders?.orders ?? []);
 
   const [items, setItems] = useState<NtfItem[]>(initialData?.items ?? []);
-  console.log(continuation);
   useEffect(() => {
     if (isIdle && !initialData && orders.length === 0) {
       refetch();
