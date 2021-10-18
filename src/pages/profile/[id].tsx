@@ -18,7 +18,8 @@ import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
 import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
-import { getSellOrdersForItems } from 'utils/raribleApiUtils';
+import { getItemsForSellOrders, getSellOrdersForItems } from 'utils/raribleApiUtils';
+import OnSaleTab from 'features/profile/components/OnSaleTab';
 
 //MOCKED DATA
 const dummyData = {
@@ -28,51 +29,6 @@ const dummyData = {
   links: { twitter: 'asds', instagram: 'hgk' },
   site: 'www.google.com',
 };
-
-const dummyHistory = [
-  {
-    title: 'Some Random NFT',
-    date: new Date(),
-    actionType: 'mint' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 2',
-    date: new Date(),
-    actionType: 'transfer' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    seller: '687687678678678686868768768768686',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 3',
-    date: new Date(),
-    actionType: 'transfer' as 'mint' | 'transfer' | 'burn',
-    owner: '687687678678678686868768768768686',
-    seller: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 4',
-    date: new Date(),
-    actionType: 'burn' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-];
 
 const tabs = ['On sale', 'Owned', 'Created', 'Activity'];
 
@@ -108,27 +64,6 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       setUserId(router.query.id as string);
     }
   }, [router]);
-
-  const commonQueryData = { size: 1, includeMeta: true, address: userId };
-
-  //------
-  const [onSaleContinuation, setOnSaleContinuation] = useState(onSaleData?.items.continuation);
-  const {
-    data: onSale,
-    refetch: refetchOnSale,
-    isIdle: isIdleOOnSale,
-  } = useGetNftItems({
-    type: NftItemsRequestType.BY_OWNER,
-    continuation: onSaleContinuation,
-    ...commonQueryData,
-  });
-  const [onSaleItems, setOnSaleItems] = useState<NtfItem[]>(onSaleData?.items ?? []);
-  useEffect(() => {
-    if (onSale) {
-      setOnSaleItems([...onSaleItems, ...onSale.items]);
-      setOnSaleContinuation(onSale.continuation);
-    }
-  }, [onSale]);
 
   const onTabChange = useCallback(
     (index) => {
@@ -182,6 +117,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="py-4 bg-secondary">
+        {activeTab === 0 && <OnSaleTab initialData={onSaleData} address={userId} />}
         {activeTab === 1 && <OwnedTab initialData={ownedData} address={userId} />}
         {activeTab === 2 && <CreatedTab initialData={createdData} address={userId} />}
         {activeTab === 3 && <ActivityHistoryTab address={userId} />}
@@ -190,7 +126,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
   );
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps(context): Promise<{ props: ProfileProps }> {
   const address = context.query.id;
   const tabName = context.query.tab ?? tabs[0];
   const props: ProfileProps = { tab: tabs.indexOf(tabName) };
@@ -204,17 +140,8 @@ export async function getServerSideProps(context) {
         type: OrderRequestTypes.SELL,
       });
 
-      const items = await Promise.all(
-        orderData.orders.map(
-          ({
-            make: {
-              assetType: { contract, tokenId },
-            },
-          }) => getNftItemById(`${contract}:${tokenId}`)
-        )
-      );
-      props.onSaleData = { orders: orderData, items: items.map((item) => item?.[0] ?? {}) };
-
+      const items = await getItemsForSellOrders(orderData.orders);
+      props.onSaleData = { orders: orderData, items };
       break;
     }
     case tabs[1]: {
@@ -236,10 +163,6 @@ export async function getServerSideProps(context) {
       break;
     }
   }
-  // console.log(
-  //   (await getNftOrders({ size: 1, address, filterBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
-  // );
-
   return {
     props, // will be passed to the page component as props
   };

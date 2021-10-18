@@ -15,13 +15,12 @@ import { Popover } from '@headlessui/react';
 import { getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
-import { NtfItem, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 
 //TODO fix types.. here and in queries :)
 type Props = { item: any; sellOrder: any };
 
 function ItemDetailsPage({ item, sellOrder }: Props) {
-  console.log(sellOrder);
   const collection = {
     imageUrl:
       'https://lh3.googleusercontent.com/1rLhxHFIebBPBtCFeXCxiwdbIE2f2idunmGyU1RvgU7qk1TGiFHCORMepdQLt6b7uRYyn5FtlnLkTkO8kdTMsnvbHbTwpHEytcbz',

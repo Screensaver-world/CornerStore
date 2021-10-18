@@ -25,13 +25,11 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
     });
 
     const mappedItems = newItems.items.map((item) => {
-      console.log(item);
       if (item['@type'] === 'mint') {
         return { type: 'mint', date: item.date, itemId: `${item.contract}:${item.tokenId}` };
       }
       if (item['@type'] === 'list') {
         const { contract, tokenId } = item.make.assetType;
-        console.log(tokenId);
 
         return {
           type: 'list',
@@ -55,7 +53,6 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
       }
     });
     setItems([...items, ...mappedItems]);
-    console.log(mappedItems);
     setContinuation(newItems.continuation);
   }, [address, continuation]);
   useEffect(() => {

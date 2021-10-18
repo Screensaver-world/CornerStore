@@ -180,7 +180,7 @@ export async function getActivityHistory(params: GetActivityHistoryRequest) {
 }
 
 export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
-  return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
+  return useQuery<any>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
     enabled: false,
   });
 }

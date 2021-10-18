@@ -13,7 +13,7 @@ type Props = {
 
 const ProductCard: FC<Props> = ({ item, sellOrder }) => {
   const address = shortAddress(item.creators[0].account, 5, 4);
-  console.log(sellOrder);
+
   const image = getImage(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
 

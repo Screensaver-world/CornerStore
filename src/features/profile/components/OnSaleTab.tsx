@@ -1,37 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { ProductList } from 'components/ProductCard';
-import { useGetNftItems } from 'api/raribleApi';
-import { GetNftItemsResponse, NftItemsRequestType, NtfItem } from 'api/raribleRequestTypes';
+import { useGetNftOrders } from 'api/raribleApi';
+import { NtfItem, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { getItemsForSellOrders } from 'utils/raribleApiUtils';
 
 export interface ProfileProps {
-  initialData?: GetNftItemsResponse;
+  initialData?: { items: any; orders: any };
   address: string;
 }
 
 const OnSaleTab: React.FunctionComponent<ProfileProps> = ({ initialData, address }) => {
-  const [continuation, setContinuation] = useState(initialData?.continuation);
-  const { data, refetch, isIdle } = useGetNftItems({
-    type: NftItemsRequestType.BY_OWNER,
-    continuation,
+  const [continuation, setContinuation] = useState(initialData?.orders.continuation);
+  const { data, refetch, isIdle } = useGetNftOrders({
     size: 1,
-    includeMeta: true,
     address,
+    filterBy: OrderFilter.BY_MAKER,
+    type: OrderRequestTypes.SELL,
   });
-  const [items, setItems] = useState<NtfItem[]>(initialData?.items ?? []);
+  const [orders, setOrders] = useState<any[]>(initialData?.orders?.orders ?? []);
 
+  const [items, setItems] = useState<NtfItem[]>(initialData?.items ?? []);
+  console.log(continuation);
   useEffect(() => {
-    if (isIdle && !initialData && items.length === 0) {
+    if (isIdle && !initialData && orders.length === 0) {
       refetch();
     }
   }, []);
 
   useEffect(() => {
     if (data) {
-      setItems([...items, ...data.items]);
-      setContinuation(data.continuation);
+      if (continuation !== data.continuation) {
+        setOrders([...orders, ...data.orders]);
+        getItemsForSellOrders(data.orders).then((newItems) => setItems([...items, ...newItems]));
+        setContinuation(data.continuation);
+      } else {
+        setContinuation(null);
+      }
     }
   }, [data]);
 
-  return <ProductList itemsData={items ?? []} onLoadMore={continuation ? refetch : null} />;
+  return <ProductList itemsData={items ?? []} onLoadMore={continuation ? refetch : null} ordersData={orders} />;
 };
 export default OnSaleTab;
