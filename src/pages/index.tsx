@@ -31,8 +31,12 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
 
   useEffect(() => {
     if (data) {
-      setItems([...items, ...data.items]);
-      setContinuation(data.continuation);
+      if (continuation === undefined || continuation !== data.continuation) {
+        setItems([...items, ...data.items]);
+        setContinuation(data.continuation);
+      } else {
+        setContinuation(null);
+      }
     }
   }, [data]);
   const loadMore = useCallback(() => {

@@ -30,11 +30,15 @@ const OwnedTab: React.FunctionComponent<ProfileProps> = ({ initialData, address 
 
   useEffect(() => {
     if (data) {
-      setItems([...items, ...data.items]);
-      setContinuation(data.continuation);
-      getSellOrdersForItems(data.items).then((data) => {
-        setOrders([...orders, ...data]);
-      });
+      if (continuation === undefined || continuation !== data.continuation) {
+        setItems([...items, ...data.items]);
+        setContinuation(data.continuation);
+        getSellOrdersForItems(data.items).then((data) => {
+          setOrders([...orders, ...data]);
+        });
+      } else {
+        setContinuation(null);
+      }
     }
   }, [data]);
 

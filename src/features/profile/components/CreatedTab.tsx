@@ -29,11 +29,15 @@ const CreatedTab: React.FunctionComponent<ProfileProps> = ({ initialData, addres
 
   useEffect(() => {
     if (data) {
-      setItems([...items, ...data.items]);
-      setContinuation(data.continuation);
-      getSellOrdersForItems(data.items).then((data) => {
-        setOrders([...orders, ...data]);
-      });
+      if (continuation === undefined || continuation !== data.continuation) {
+        setItems([...items, ...data.items]);
+        setContinuation(data.continuation);
+        getSellOrdersForItems(data.items).then((data) => {
+          setOrders([...orders, ...data]);
+        });
+      } else {
+        setContinuation(null);
+      }
     }
   }, [data]);
   return <ProductList itemsData={items ?? []} onLoadMore={continuation ? refetch : null} ordersData={orders} />;

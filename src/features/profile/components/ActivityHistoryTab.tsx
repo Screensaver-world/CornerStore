@@ -24,6 +24,10 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
       continuation,
     });
 
+    if (continuation !== undefined && continuation === newItems.continuation) {
+      setContinuation(null);
+      return;
+    }
     const mappedItems = newItems.items.map((item) => {
       if (item['@type'] === 'mint') {
         return { type: 'mint', date: item.date, itemId: `${item.contract}:${item.tokenId}` };
