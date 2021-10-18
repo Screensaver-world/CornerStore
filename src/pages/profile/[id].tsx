@@ -188,10 +188,10 @@ export async function getServerSideProps(context) {
   const commonQueryData = { size: 1, showDeleted: false, includeMeta: true, address };
   switch (tabName) {
     case tabs[0]:
-      props.ownedData = await getNftItems({
-        ...commonQueryData,
-        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
-      });
+      // props.ownedData = await getNftItems({
+      //   ...commonQueryData,
+      //   type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      // });
       break;
     case tabs[1]:
       props.ownedData = await getNftItems({

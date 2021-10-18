@@ -23,15 +23,15 @@ const ProductCard: FC<Props> = ({ item }) => {
   return (
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold hover:bg-gray-900">
-        <div className="flex flex-col justify-between h-full px-4 py-3 border border-gray-600 space-y-4 rounded-md">
+        <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
           <div className="flex items-center space-x-4">
             <Link to={`/profile/${item.creators[0].account}`}>
               <Avatar
-                username={address}
+                username={item.creators[0].account}
                 // verified={item.userVerified}
               />
             </Link>
-            <div className="font-medium space-y-1 leading-6 text-small">
+            <div className="space-y-1 font-medium leading-6 text-small">
               <Link to={`/profile/${item.creators[0].account}`}>
                 <h3 className="text-gray-700 hover:text-white">{`${address}`}</h3>
               </Link>

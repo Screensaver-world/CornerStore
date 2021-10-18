@@ -1,7 +1,9 @@
+import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
+import { Web3Ethereum } from '@rarible/web3-ethereum';
 import Onboard from 'bnc-onboard';
 import { WalletAction } from 'wallet/actions';
 import Web3 from 'web3';
-import { NETWORK_ID } from './constants';
+import { NETWORK_ID, NETWORK_NAME } from './constants';
 
 let onboard: ReturnType<typeof Onboard>;
 
@@ -59,6 +61,10 @@ export function getOnboard(dispatch: React.Dispatch<WalletAction>): ReturnType<t
         dispatch({
           type: 'SET_WEB3',
           payload: web3,
+        });
+        dispatch({
+          type: 'SET_SDK',
+          payload: createRaribleSdk(new Web3Ethereum({ web3 }), NETWORK_NAME),
         });
       },
     } as Pick<Parameters<typeof Onboard>[0], 'subscriptions'>);
