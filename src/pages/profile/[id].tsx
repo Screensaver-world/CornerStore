@@ -244,3 +244,5 @@ export async function getServerSideProps(context) {
     props, // will be passed to the page component as props
   };
 }
+
+export default Profile;
