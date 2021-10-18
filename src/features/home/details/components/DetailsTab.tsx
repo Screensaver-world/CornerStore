@@ -28,8 +28,8 @@ function DetailsTab({ owner, categories }: Props) {
         <div className={'font-semibold pb-2'}>Categories</div>
         <div className={'flex flex-wrap'}>
           {categories.map((c, index) => (
-            <div className={'w-1/3'}>
-              <HorizontalCard key={index} title={c.name} imageUrl={c.imageUrl} />
+            <div key={index} className={'w-1/3'}>
+              <HorizontalCard title={c.name} imageUrl={c.imageUrl} />
             </div>
           ))}
         </div>
