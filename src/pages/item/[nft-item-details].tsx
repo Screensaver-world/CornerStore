@@ -66,7 +66,9 @@ function ItemDetailsPage({ item, sellOrder }: Props) {
           {/*RIGHT SIDE CONTENT*/}
           <div className="mt-4 font-bold text-white lg:col-span-5">
             <p className="pb-5">
-              On sale for {sellOrder?.take.valueDecimal} {sellOrder?.take.assetType.assetClass}{' '}
+              {sellOrder
+                ? `On sale for ${sellOrder.take.valueDecimal} ${sellOrder.take.assetType.assetClass} `
+                : 'Not for sale'}
               {/*
               TODO: check if it is ok to delete this since we'll be using erc721
               <span className={'pl-5 text-gray-700'}>
@@ -99,8 +101,12 @@ function ItemDetailsPage({ item, sellOrder }: Props) {
             </div>
             <Button
               fullWidth
-              title={`Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`}
-              onClick={setCheckoutVisible}
+              title={
+                sellOrder
+                  ? `Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`
+                  : 'Not for sale'
+              }
+              onClick={sellOrder ? setCheckoutVisible : null}
               customClasses="sticky bottom-4 lg:static"
             />
             {isCheckoutVisible && (

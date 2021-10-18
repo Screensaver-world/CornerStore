@@ -9,8 +9,6 @@ import * as IPFS from 'ipfs-core';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
-import { Web3Ethereum } from '@rarible/web3-ethereum';
-import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
 import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { useRouter } from 'next/router';
