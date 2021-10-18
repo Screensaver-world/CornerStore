@@ -16,6 +16,7 @@ const OnSaleTab: React.FunctionComponent<ProfileProps> = ({ initialData, address
     address,
     filterBy: OrderFilter.BY_MAKER,
     type: OrderRequestTypes.SELL,
+    continuation,
   });
   const [orders, setOrders] = useState<any[]>(initialData?.orders?.orders ?? []);
 
