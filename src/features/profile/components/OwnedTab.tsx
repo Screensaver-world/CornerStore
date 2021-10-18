@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ProductList } from 'components/ProductCard';
 import { useGetNftItems } from 'api/raribleApi';
 import { GetNftItemsResponse, NftItemsRequestType, NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
-import { getSellOrdersForItems } from 'pages/profile/[id]';
+import { getSellOrdersForItems } from 'utils/raribleApiUtils';
 
 export interface ProfileProps {
   initialData?: { items: GetNftItemsResponse; orders: { take: SellOrderTake }[] };

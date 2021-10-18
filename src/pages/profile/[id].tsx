@@ -18,6 +18,7 @@ import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
 import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
+import { getSellOrdersForItems } from 'utils/raribleApiUtils';
 
 //MOCKED DATA
 const dummyData = {
@@ -243,22 +244,3 @@ export async function getServerSideProps(context) {
     props, // will be passed to the page component as props
   };
 }
-
-export const getSellOrdersForItems = async (items: NtfItem[]) => {
-  const orders = await Promise.all(
-    items.map(({ id }) =>
-      getNftOrders({ size: 1, address: id, filterBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL })
-    )
-  );
-
-  return orders.map(({ orders }) => {
-    const order = orders?.[0];
-    if (!order) {
-      return { take: {} };
-    }
-    const { take } = order;
-    return { take };
-  });
-};
-
-export default Profile;
