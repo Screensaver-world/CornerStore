@@ -4,7 +4,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import React, { FC, useEffect, useState } from 'react';
 import { formatDate } from 'utils/dateTimeUtils';
 
-const getActivityString = (actionType, seller, userId) => {
+export const getActivityString = (actionType, seller, userId) => {
   if (actionType === 'mint') {
     return 'Minted';
   }
@@ -14,7 +14,7 @@ const getActivityString = (actionType, seller, userId) => {
   if (seller === userId) {
     return 'Sold';
   }
-  return 'Bought';
+  return 'Purchased';
 };
 
 type Props = {

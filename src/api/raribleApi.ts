@@ -8,42 +8,12 @@ import {
   GetNftItemsRequest,
   GetNftItemsResponse,
   GetOrdersRequest,
-  LazyMintRequestBody,
   NftItemsRequestType,
   OrderFilter,
   OrderRequestTypes,
 } from './raribleRequestTypes';
 
 const BASE_URL = 'https://ethereum-api-staging.rarible.org/v0.1';
-
-export function useGetNftItemOrderActivity() {
-  return useQuery<NFTItemOrder[]>('nft-item-order-activity', () => {
-    return mockWithTimeout<NFTItemOrder[]>([
-      {
-        '@type': 'transfer',
-        createdAt: new Date(),
-        price: '10,02',
-        currency: Currency.ETH,
-        createdBy: {
-          name: 'mladibejn',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        },
-        quantity: 2,
-      },
-      {
-        '@type': 'mint',
-        createdAt: new Date(),
-        price: '10,02',
-        currency: Currency.ETH,
-        createdBy: {
-          name: 'mladibejn2',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        },
-        quantity: 2,
-      },
-    ]);
-  });
-}
 
 export function useGetNftBids() {
   return useQuery<BidItem[]>('nft-item-bids', () => {
@@ -154,7 +124,7 @@ export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
 //TODO check which types are needed
 //TODO add by_collection if needed
 const GetActiviryHistoryypeMapping = {
-  [ActivityHistoryFilter.BY_ITEM]: 'MINT,LIST,TRANSFER',
+  [ActivityHistoryFilter.BY_ITEM]: 'MINT,LIST,MATCH',
   [ActivityHistoryFilter.BY_USER]: 'MINT,LIST,BUY,SELL',
 };
 
@@ -177,6 +147,12 @@ export async function getActivityHistory(params: GetActivityHistoryRequest) {
     address: undefined,
   };
   return (await fetch(`${BASE_URL}/nft-order/activities/${params.filterBy}?${encodeQuery(queryParams)}`)).json();
+}
+
+export function useGetActivityHistory(params: GetActivityHistoryRequest) {
+  return useQuery<any>([QueryTypes.NFT_ORDERS, params], async () => getActivityHistory(params), {
+    enabled: false,
+  });
 }
 
 export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {

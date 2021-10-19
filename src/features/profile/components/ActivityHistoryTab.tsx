@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { ProductList } from 'components/ProductCard';
-import { getActivityHistory, useGetNftItems } from 'api/raribleApi';
+import { getActivityHistory } from 'api/raribleApi';
 import { ActivityHistoryFilter } from 'api/raribleRequestTypes';
-import { useWallet } from 'wallet/state';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Button, { ButtonType } from 'components/Button';
 import { ReloadIcon } from 'assets';
+import { mapActivityHistory } from 'utils/raribleApiUtils';
 
 export interface Props {
   address: string;
@@ -28,34 +27,8 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
       setContinuation(null);
       return;
     }
-    const mappedItems = newItems.items.map((item) => {
-      if (item['@type'] === 'mint') {
-        return { type: 'mint', date: item.date, itemId: `${item.contract}:${item.tokenId}` };
-      }
-      if (item['@type'] === 'list') {
-        const { contract, tokenId } = item.make.assetType;
+    const mappedItems = mapActivityHistory(newItems.items);
 
-        return {
-          type: 'list',
-          date: item.date,
-          itemId: `${contract}:${tokenId}`,
-          price: item.take.valueDecimal,
-          currency: item.take.assetType.assetClass,
-        };
-      }
-      if (item['@type'] === 'match') {
-        const { contract, tokenId } = item.make.assetType;
-        return {
-          type: 'match',
-          date: item.date,
-          itemId: `${contract}:${tokenId}`,
-          price: item.price,
-          seller: item.left.maker,
-          buyer: item.right.maker,
-          currency: item.right.asset.assetType.assetClass,
-        };
-      }
-    });
     setItems([...items, ...mappedItems]);
     setContinuation(newItems.continuation);
   }, [address, continuation]);

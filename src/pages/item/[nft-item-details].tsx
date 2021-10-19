@@ -12,15 +12,15 @@ import { useToggle } from '../../hooks/useToggle';
 import { DotsIcon } from 'assets';
 import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
 import { Popover } from '@headlessui/react';
-import { getNftItemById, getNftOrders } from 'api/raribleApi';
+import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
-import { OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 
 //TODO fix types.. here and in queries :)
-type Props = { item: any; sellOrder: any };
+type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
 
-function ItemDetailsPage({ item, sellOrder }: Props) {
+function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   const collection = {
     imageUrl:
       'https://lh3.googleusercontent.com/1rLhxHFIebBPBtCFeXCxiwdbIE2f2idunmGyU1RvgU7qk1TGiFHCORMepdQLt6b7uRYyn5FtlnLkTkO8kdTMsnvbHbTwpHEytcbz',
@@ -96,7 +96,7 @@ function ItemDetailsPage({ item, sellOrder }: Props) {
               {isOwnersTab && <OwnersTab total={item.totalQuantity} />}
               {isBidsTab && <BidsTab />}
               {isDetailsTab && <DetailsTab owner={item.owners[0]} categories={[collection]} />}
-              {isHistoryTab && <HistoryTab />}
+              {isHistoryTab && <HistoryTab initialHistory={initialHistory} address={id} />}
             </div>
             <Button
               fullWidth
@@ -131,8 +131,17 @@ export async function getServerSideProps(context) {
     await getNftOrders({ address: id, filterBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
   ]);
   //TODO check if it is possible to have multiple sell orders, what happens after buy order is executed
+  const props: Props = { item, sellOrder: orders?.orders?.[0] ?? null, id };
+  if (tab === 'History') {
+    props.initialHistory = await getActivityHistory({
+      address: id,
+      filterBy: ActivityHistoryFilter.BY_ITEM,
+      size: 5,
+      sort: 'EARLIEST_FIRST',
+    });
+  }
   return {
-    props: { item, sellOrder: orders?.orders?.[0] ?? null }, // will be passed to the page component as props
+    props, // will be passed to the page component as props
   };
 }
 
