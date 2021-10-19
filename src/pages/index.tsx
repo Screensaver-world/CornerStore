@@ -4,6 +4,7 @@ import Dropdown from 'components/Dropdown/Dropdown';
 
 import { getNftItems, useGetNftItems } from 'api/raribleApi';
 import { GetNftItemsResponse, NtfItem } from 'api/raribleRequestTypes';
+import { getSellOrdersForItems } from 'utils/raribleApiUtils';
 
 enum OrderBy {
   RecentlyAdded = 'Recently added',
@@ -13,9 +14,11 @@ enum OrderBy {
 }
 export interface HomeProps {
   itemsData: GetNftItemsResponse;
+  //TODO fix type
+  ordersData: any;
 }
 
-const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
+const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => {
   const renderDropDownContent = useCallback(
     () =>
       Object.keys(OrderBy).map((key) => (
@@ -52,15 +55,15 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}
         />
       </div>
-      <ProductList itemsData={items || []} onLoadMore={loadMore} />
+      <ProductList itemsData={items || []} onLoadMore={loadMore} ordersData={ordersData} />
     </>
   );
 };
 export async function getServerSideProps(context) {
   const itemsData = await getNftItems({ size: 25, showDeleted: false, includeMeta: true });
-
+  const ordersData = await getSellOrdersForItems(itemsData.items);
   return {
-    props: { itemsData }, // will be passed to the page component as props
+    props: { itemsData, ordersData }, // will be passed to the page component as props
   };
 }
 
