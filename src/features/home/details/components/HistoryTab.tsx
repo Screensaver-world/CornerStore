@@ -1,5 +1,7 @@
 import { useGetActivityHistory } from 'api/raribleApi';
 import { ActivityHistoryFilter } from 'api/raribleRequestTypes';
+import { ReloadIcon } from 'assets';
+import Button, { ButtonType } from 'components/Button';
 import React, { useEffect, useState } from 'react';
 import { getItemsForSellOrders, mapActivityHistory } from 'utils/raribleApiUtils';
 import HistoryCard from './HistoryCard';
@@ -15,7 +17,7 @@ function HistoryTab({ initialHistory, address }: Props) {
     sort: 'EARLIEST_FIRST',
     continuation,
   });
-  console.log(initialHistory);
+
   const [items, setItems] = useState(initialHistory.items ?? []);
 
   useEffect(() => {
@@ -41,6 +43,17 @@ function HistoryTab({ initialHistory, address }: Props) {
       {items.map((d, index) => (
         <HistoryCard key={index} data={d} />
       ))}
+      {continuation && (
+        <div className="flex justify-center">
+          <Button
+            type={ButtonType.Main}
+            title="Load more"
+            customClasses="px-7 py-3"
+            icon={ReloadIcon}
+            onClick={() => refetch}
+          />
+        </div>
+      )}
     </>
   );
 }
