@@ -36,8 +36,7 @@ const ActivityCard: FC<Props> = ({ item, address }) => {
       subtitle={
         <div>
           {activity} by <span className="text-lg text-white">{address}</span>
-          {/* //TODO formatDate */}
-          <div>{item.date}</div>
+          <div>{formatDate(new Date(Date.parse(item.date)))}</div>
         </div>
       }
     />

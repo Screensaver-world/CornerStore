@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import HorizontalCard from 'components/HorizontalCard';
-import { NFTOwner } from 'types';
 import makeBlockie from 'ethereum-blockies-base64';
 import { shortAddress } from 'utils/itemUtils';
 
