@@ -18,7 +18,7 @@ function HistoryTab({ initialHistory, address }: Props) {
     continuation,
   });
 
-  const [items, setItems] = useState(initialHistory.items ?? []);
+  const [items, setItems] = useState(initialHistory?.items ?? []);
 
   useEffect(() => {
     if (isIdle && !initialHistory && items.length === 0) {
@@ -30,7 +30,7 @@ function HistoryTab({ initialHistory, address }: Props) {
     if (data) {
       if (continuation === undefined || continuation !== data.continuation) {
         setItems([...items, ...mapActivityHistory(data.orders)]);
-        getItemsForSellOrders(data.orders).then((newItems) => setItems([...items, ...newItems]));
+        getItemsForSellOrders(data.orders ?? []).then((newItems) => setItems([...items, ...newItems]));
         setContinuation(data.continuation);
       } else {
         setContinuation(null);

@@ -140,7 +140,7 @@ export async function getServerSideProps(context): Promise<{ props: ProfileProps
         type: OrderRequestTypes.SELL,
       });
 
-      const items = await getItemsForSellOrders(orderData.orders);
+      const items = await getItemsForSellOrders(orderData.orders ?? []);
       props.onSaleData = { orders: orderData, items };
       break;
     }

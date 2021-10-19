@@ -157,3 +157,10 @@ export type SellOrderTake = {
   valueDecimal: number;
   assetType: { assetClass: string };
 };
+
+export type PrepareTransactionRequest = {
+  maker: string;
+  amount: number;
+  payouts: { account: string; value: string }[];
+  originFees: { account: string; value: string }[];
+};

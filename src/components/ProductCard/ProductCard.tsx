@@ -12,7 +12,7 @@ type Props = {
 };
 
 const ProductCard: FC<Props> = ({ item, sellOrder }) => {
-  const address = shortAddress(item.creators[0].account, 5, 4);
+  const address = shortAddress(item?.creators?.[0]?.account ?? '0x000', 5, 4);
 
   const image = getImage(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
@@ -26,14 +26,14 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
       <li className="text-white bold hover:bg-gray-900">
         <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
           <div className="flex items-center space-x-4">
-            <Link to={`/profile/${item.creators[0].account}`}>
+            <Link to={`/profile/${item?.creators?.[0].account}`}>
               <Avatar
                 username={item.creators[0].account}
                 // verified={item.userVerified}
               />
             </Link>
             <div className="space-y-1 font-medium leading-6 text-small">
-              <Link to={`/profile/${item.creators[0].account}`}>
+              <Link to={`/profile/${item?.creators?.[0].account}`}>
                 <h3 className="text-gray-700 hover:text-white">{`${address}`}</h3>
               </Link>
             </div>
@@ -51,11 +51,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                   {sellOrder?.take?.valueDecimal} {sellOrder?.take?.assetType?.assetClass}
                 </span>
               )}
-              <span className="px-1 text-gray-600 normal">
-                {/* {`${item.availableQuantity}/${item.createdQuantity}`} */}
-                {/* //TODO hide this? */}
-                1/1
-              </span>
+              <span className="px-1 text-gray-600 normal">1/1</span>
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>

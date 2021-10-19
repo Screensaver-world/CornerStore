@@ -1,4 +1,4 @@
-import { getNftItemById, getNftOrders } from 'api/raribleApi';
+import { getNftItemById, getNftOrders, prepareTransaction } from 'api/raribleApi';
 import { NtfItem, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 
 export const getSellOrdersForItems = async (items: NtfItem[]) => {
@@ -32,31 +32,53 @@ export const getItemsForSellOrders = async (orders: any[]) => {
 };
 
 export const mapActivityHistory = (items) =>
-  items.map((item) => {
-    if (item['@type'] === 'mint') {
-      return { type: 'mint', date: item.date, itemId: `${item.contract}:${item.tokenId}` };
-    }
-    if (item['@type'] === 'list') {
-      const { contract, tokenId } = item.make.assetType;
+  !items
+    ? []
+    : items.map((item) => {
+        if (item['@type'] === 'mint') {
+          return { type: 'mint', date: item.date, itemId: `${item.contract}:${item.tokenId}` };
+        }
+        if (item['@type'] === 'list') {
+          const { contract, tokenId } = item.make.assetType;
 
-      return {
-        type: 'list',
-        date: item.date,
-        itemId: `${contract}:${tokenId}`,
-        price: item.take.valueDecimal,
-        currency: item.take.assetType.assetClass,
-      };
-    }
-    if (item['@type'] === 'match') {
-      const { contract, tokenId } = item.make.assetType;
-      return {
-        type: 'match',
-        date: item.date,
-        itemId: `${contract}:${tokenId}`,
-        price: item.price,
-        seller: item.left.maker,
-        buyer: item.right.maker,
-        currency: item.right.asset.assetType.assetClass,
-      };
-    }
+          return {
+            type: 'list',
+            date: item.date,
+            itemId: `${contract}:${tokenId}`,
+            price: item.take.valueDecimal,
+            currency: item.take.assetType.assetClass,
+          };
+        }
+        if (item['@type'] === 'match') {
+          const { contract, tokenId } = item.make.assetType;
+          return {
+            type: 'match',
+            date: item.date,
+            itemId: `${contract}:${tokenId}`,
+            price: item.price,
+            seller: item.left.maker,
+            buyer: item.right.maker,
+            currency: item.right.asset.assetType.assetClass,
+          };
+        }
+      });
+
+export async function matchOrder(maker: string, hash: string, amount: number): Promise<any> {
+  const preparedTx = await prepareTransaction(hash, {
+    maker,
+    amount,
+    payouts: [],
+    originFees: [],
   });
+  const {
+    transaction: { data, to },
+    asset: { value },
+  } = preparedTx;
+  const tx = {
+    from: maker,
+    data,
+    to,
+    value,
+  };
+  return tx;
+}

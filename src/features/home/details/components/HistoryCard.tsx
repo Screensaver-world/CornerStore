@@ -19,7 +19,7 @@ function getCardBody(data) {
     case 'mint':
       return generateBody('Minted');
     case 'match':
-      return generateBody('Purchased for', `${data.price} ${data.take.assetType.assetClass}`);
+      return generateBody('Purchased for', `${data.price} ${data?.right?.asset.assetType?.assetClass}`);
   }
 }
 
@@ -31,8 +31,7 @@ type Props = {
 // todo handle all cases
 // todo handle 5 minutes ago for recent transactions..
 function HistoryCard({ data }: Props) {
-  console.log(data);
-  const address = data['@type'] === 'match' ? data.taker : data.maker;
+  const address = data['@type'] === 'match' ? data.right.maker : data['@type'] === 'mint' ? data.owner : data.maker;
   return (
     <HorizontalCard
       imageUrl={makeBlockie(address ?? '0x000')}

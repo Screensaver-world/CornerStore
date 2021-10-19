@@ -1,4 +1,4 @@
-export const CONTRACT_ID = '0x6ede7f3c26975aad32a475e1021d8f6f39c89d82';
+export const CONTRACT_ID = '0x2Dd0b6f2312bCa69b93e9524147004425eE9b40a';
 export const NETWORK_ID = 4;
 export const NETWORK_NAME = 'rinkeby';
 

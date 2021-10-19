@@ -11,6 +11,7 @@ import {
   NftItemsRequestType,
   OrderFilter,
   OrderRequestTypes,
+  PrepareTransactionRequest,
 } from './raribleRequestTypes';
 
 const BASE_URL = 'https://ethereum-api-staging.rarible.org/v0.1';
@@ -75,7 +76,7 @@ export function useGetNftItems(searchParams: GetNftItemsRequest = {}) {
 const searchTypesMapping = {
   [NftItemsRequestType.BY_CREATOR]: 'creator',
   [NftItemsRequestType.BY_OWNER]: 'owner',
-  [NftItemsRequestType.BY_COLLECTION]: 'collections',
+  [NftItemsRequestType.BY_COLLECTION]: 'collection',
 };
 
 export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
@@ -159,6 +160,16 @@ export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
   return useQuery<any>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
     enabled: false,
   });
+}
+
+export async function prepareTransaction(hash: string, params: PrepareTransactionRequest) {
+  return (
+    await fetch(`${BASE_URL}/order/orders/${hash}/prepareTx`, {
+      method: 'post',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(params),
+    })
+  ).json();
 }
 
 const encodeQuery = (searchParams) =>

@@ -16,6 +16,9 @@ import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { useWallet } from 'wallet/state';
+import { CONTRACT_ID } from 'utils/constants';
+import { matchOrder } from 'utils/raribleApiUtils';
 
 //TODO fix types.. here and in queries :)
 type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
@@ -29,9 +32,10 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   const [creatorAvatar, setCreatorAvatar] = useState(null);
+  const [{ address, web3, raribleSDK }] = useWallet();
 
   useEffect(() => {
-    setCreatorAvatar(makeBlockie(item.creators[0].account ?? ''));
+    setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
   }, []);
 
   return (
@@ -82,7 +86,10 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
                 <div className={'pb-5'}>
                   Creator <span className={'text-gray-700'}>{item?.royalties?.[0]?.value / 100 || 0}% Royalties </span>
                 </div>
-                <HorizontalCard title={shortAddress(item.creators[0].account, 6, 4)} imageUrl={creatorAvatar} />
+                <HorizontalCard
+                  title={shortAddress(item?.creators?.[0].account ?? '0x000', 6, 4)}
+                  imageUrl={creatorAvatar}
+                />
               </div>
               <div className={'flex-1 mt-4 xl:mt-0 xl:pl-8'}>
                 <div className={'pb-5'}>Collection</div>
@@ -105,7 +112,21 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
                   ? `Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`
                   : 'Not for sale'
               }
-              onClick={sellOrder ? setCheckoutVisible : null}
+              onClick={
+                sellOrder
+                  ? async () => {
+                      const order = await raribleSDK.apis.order.getSellOrdersByItem({
+                        contract: CONTRACT_ID,
+                        tokenId: id.split(':')[1],
+                      });
+                      const a = await matchOrder(address, order.orders[0].hash, 1);
+                      web3.eth.getGasPrice((a, b) => console.log(a, b));
+
+                      web3.eth.sendTransaction(a);
+                      // raribleSDK.order.fill({ order: order.orders[0], amount: 0.0000000000001 });
+                    }
+                  : null
+              }
               customClasses="sticky bottom-4 lg:static"
             />
             {isCheckoutVisible && (
