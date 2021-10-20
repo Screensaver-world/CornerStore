@@ -39,27 +39,6 @@ export function useGetNftBids() {
   });
 }
 
-export function useGetNFTItemOwnerships() {
-  return useQuery<NFTOwner[]>('nft-item-owners', () => {
-    return mockWithTimeout<NFTOwner[]>([
-      {
-        avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        price: '10,02',
-        currency: Currency.ETH,
-        name: 'mladibejn',
-        quantity: 2,
-      },
-      {
-        avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        price: '10,02',
-        currency: Currency.ETH,
-        name: 'mladibejn',
-        quantity: 2,
-      },
-    ]);
-  });
-}
-
 const mockWithTimeout = <T>(data: T) =>
   new Promise<T>((res) => {
     setTimeout(() => {

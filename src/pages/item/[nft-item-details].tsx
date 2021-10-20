@@ -96,7 +96,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <Tabs titles={tabs} active={activeTab} onChange={setActiveTab} />
             </div>
             <div className={'pt-5'}>
-              {isOwnersTab && <OwnersTab total={item.totalQuantity} />}
+              {isOwnersTab && <OwnersTab owners={item.owners} sellOrders={[sellOrder]} />}
               {isBidsTab && <BidsTab />}
               {isDetailsTab && <DetailsTab owner={item.owners[0]} categories={[collection]} />}
               {isHistoryTab && <HistoryTab initialHistory={initialHistory} address={id} />}
