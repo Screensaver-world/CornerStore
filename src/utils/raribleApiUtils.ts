@@ -31,8 +31,9 @@ export const getItemsForSellOrders = async (orders: any[]) => {
   );
 };
 
-export const mapActivityHistory = (items) =>
-  !items
+export const mapActivityHistory = (items) => {
+  console.log(items);
+  return !items
     ? []
     : items.map((item) => {
         if (item['@type'] === 'mint') {
@@ -62,6 +63,7 @@ export const mapActivityHistory = (items) =>
           };
         }
       });
+};
 
 export async function matchOrder(maker: string, hash: string, amount: number): Promise<any> {
   const preparedTx = await prepareTransaction(hash, {

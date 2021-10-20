@@ -3,7 +3,6 @@ import { ActivityHistoryFilter } from 'api/raribleRequestTypes';
 import { ReloadIcon } from 'assets';
 import Button, { ButtonType } from 'components/Button';
 import React, { useEffect, useState } from 'react';
-import { getItemsForSellOrders, mapActivityHistory } from 'utils/raribleApiUtils';
 import HistoryCard from './HistoryCard';
 
 type Props = { initialHistory?: any; address: string };
@@ -29,8 +28,7 @@ function HistoryTab({ initialHistory, address }: Props) {
   useEffect(() => {
     if (data) {
       if (continuation === undefined || continuation !== data.continuation) {
-        setItems([...items, ...mapActivityHistory(data.orders)]);
-        getItemsForSellOrders(data.orders ?? []).then((newItems) => setItems([...items, ...newItems]));
+        setItems([...items, ...data.items]);
         setContinuation(data.continuation);
       } else {
         setContinuation(null);

@@ -16,9 +16,6 @@ import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
-import { useWallet } from 'wallet/state';
-import { CONTRACT_ID } from 'utils/constants';
-import { matchOrder } from 'utils/raribleApiUtils';
 
 //TODO fix types.. here and in queries :)
 type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
@@ -32,7 +29,6 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   const [creatorAvatar, setCreatorAvatar] = useState(null);
-  const [{ address, web3, raribleSDK }] = useWallet();
 
   useEffect(() => {
     setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
@@ -114,16 +110,8 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               }
               onClick={
                 sellOrder
-                  ? async () => {
-                      const order = await raribleSDK.apis.order.getSellOrdersByItem({
-                        contract: CONTRACT_ID,
-                        tokenId: id.split(':')[1],
-                      });
-                      const a = await matchOrder(address, order.orders[0].hash, 1);
-                      web3.eth.getGasPrice((a, b) => console.log(a, b));
-
-                      web3.eth.sendTransaction(a);
-                      // raribleSDK.order.fill({ order: order.orders[0], amount: 0.0000000000001 });
+                  ? () => {
+                      setCheckoutVisible(true);
                     }
                   : null
               }
@@ -133,8 +121,11 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <CheckoutModal
                 isOpen={isCheckoutVisible}
                 onClose={setCheckoutVisible}
+                currency={sellOrder?.take?.assetType?.assetClass}
+                orderHash={sellOrder.hash}
+                price={sellOrder?.take.value}
                 //TODO should we hide avail. quan. since we use erc721
-                availableQuantity={item.availableQuantity}
+                // availableQuantity={item.availableQuantity}
               />
             )}
           </div>
