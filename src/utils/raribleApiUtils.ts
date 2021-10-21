@@ -32,7 +32,6 @@ export const getItemsForSellOrders = async (orders: any[]) => {
 };
 
 export const mapActivityHistory = (items) => {
-  console.log(items);
   return !items
     ? []
     : items.map((item) => {

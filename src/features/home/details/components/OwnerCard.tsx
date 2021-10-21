@@ -1,7 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import HorizontalCard from 'components/HorizontalCard';
 import Button from 'components/Button';
-import { NFTOwner } from 'types';
+
 import makeBlockie from 'ethereum-blockies-base64';
 import { shortAddress } from 'utils/itemUtils';
 
@@ -11,7 +11,6 @@ type Props = {
 };
 
 function OwnerCard({ owner, sellOrder }: Props) {
-  console.log(sellOrder);
   return (
     <HorizontalCard
       imageUrl={makeBlockie(owner ?? '0x000')}

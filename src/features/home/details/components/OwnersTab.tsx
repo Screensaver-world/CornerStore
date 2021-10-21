@@ -9,7 +9,7 @@ type Props = {
 function OwnersTab({ owners, sellOrders }: Props) {
   return (
     <>
-      {owners.map((d, index) => (
+      {(owners ?? []).map((d, index) => (
         <OwnerCard key={index} owner={d} sellOrder={sellOrders.find((order) => order?.maker === d)} />
       ))}
     </>

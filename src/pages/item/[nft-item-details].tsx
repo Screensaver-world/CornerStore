@@ -16,6 +16,8 @@ import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { useWallet } from 'wallet/state';
+import { getOnboard } from 'utils/walletUtils';
 
 //TODO fix types.. here and in queries :)
 type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
@@ -33,14 +35,14 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   useEffect(() => {
     setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
   }, []);
-
+  const [{ address }, dispatch] = useWallet();
   return (
     <div>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
             <div className="flex flex-row justify-between">
-              <h1 className="text-2xl font-bold text-white">{item.meta.name}</h1>
+              <h1 className="text-2xl font-bold text-white">{item?.meta?.name}</h1>
               <Popover className="relative text-white">
                 <Popover.Button>
                   <Button icon={DotsIcon} type={ButtonType.Secondary} />
@@ -75,7 +77,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               </span> */}
             </p>
 
-            <p className="pb-10 font-semibold text-white">{item.meta.description}</p>
+            <p className="pb-10 font-semibold text-white">{item?.meta?.description}</p>
 
             <div className={'flex flex-col xl:flex-row'}>
               <div className={'flex-1 xl:pr-8'}>
@@ -110,8 +112,11 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               }
               onClick={
                 sellOrder
-                  ? () => {
-                      setCheckoutVisible(true);
+                  ? async () => {
+                      const onboard = getOnboard(dispatch);
+                      if (address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+                        setCheckoutVisible(true);
+                      }
                     }
                   : null
               }
