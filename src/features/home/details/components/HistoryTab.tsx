@@ -29,7 +29,7 @@ function HistoryTab({ initialHistory, address }: Props) {
     if (data) {
       if (continuation === undefined || continuation !== data.continuation) {
         setItems([...items, ...data.items]);
-        setContinuation(data.continuation);
+        setContinuation(data.continuation ?? null);
       } else {
         setContinuation(null);
       }
