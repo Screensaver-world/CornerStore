@@ -32,7 +32,7 @@ const OnSaleTab: React.FunctionComponent<ProfileProps> = ({ initialData, address
       if (continuation === undefined || continuation !== data.continuation) {
         setOrders([...orders, ...data.orders]);
         getItemsForSellOrders(data.orders ?? []).then((newItems) => setItems([...items, ...newItems]));
-        setContinuation(data.continuation);
+        setContinuation(data.continuation ?? null);
       } else {
         setContinuation(null);
       }

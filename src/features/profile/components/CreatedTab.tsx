@@ -29,9 +29,11 @@ const CreatedTab: React.FunctionComponent<ProfileProps> = ({ initialData, addres
 
   useEffect(() => {
     if (data) {
+      console.log(data);
       if (continuation === undefined || continuation !== data.continuation) {
+        console.log(continuation, data.continuation);
         setItems([...items, ...data.items]);
-        setContinuation(data.continuation);
+        setContinuation(data.continuation ?? null);
         getSellOrdersForItems(data.items).then((data) => {
           setOrders([...orders, ...data]);
         });

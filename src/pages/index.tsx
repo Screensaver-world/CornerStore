@@ -37,7 +37,7 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => 
     if (data) {
       if (continuation === undefined || continuation !== data.continuation) {
         setItems([...items, ...data.items]);
-        setContinuation(data.continuation);
+        setContinuation(data.continuation ?? null);
       } else {
         setContinuation(null);
       }
