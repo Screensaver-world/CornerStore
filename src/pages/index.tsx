@@ -34,7 +34,7 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => 
   const [items, setItems] = useState<NtfItem[]>(itemsData.items);
 
   useEffect(() => {
-    if (data) {
+    if (data?.items) {
       if (continuation === undefined || continuation !== data.continuation) {
         setItems([...items, ...data.items]);
         setContinuation(data.continuation ?? null);

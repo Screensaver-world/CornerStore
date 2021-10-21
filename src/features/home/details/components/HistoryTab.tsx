@@ -26,7 +26,7 @@ function HistoryTab({ initialHistory, address }: Props) {
   }, []);
 
   useEffect(() => {
-    if (data) {
+    if (data?.items) {
       if (continuation === undefined || continuation !== data.continuation) {
         setItems([...items, ...data.items]);
         setContinuation(data.continuation ?? null);
