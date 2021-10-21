@@ -100,7 +100,17 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
             <Link title={`@${user.twitterUsername}`} to="#" />
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddr}</div>
-              <Button type={ButtonType.Secondary} icon={CopyIcon} equalPadding />
+              <Button
+                type={ButtonType.Secondary}
+                onClick={() => {
+                  navigator.clipboard.writeText(userId).then(
+                    () => console.log('copied'),
+                    () => console.log('failed')
+                  );
+                }}
+                icon={CopyIcon}
+                equalPadding
+              />
             </div>
           </div>
           <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">{user.about}</p>
