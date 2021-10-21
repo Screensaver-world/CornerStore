@@ -51,7 +51,7 @@ export const mapActivityHistory = (items) => {
           };
         }
         if (item['@type'] === 'match') {
-          const { contract, tokenId } = item.make.assetType;
+          const { contract, tokenId } = item.left.asset.assetType;
           return {
             type: 'match',
             date: item.date,
