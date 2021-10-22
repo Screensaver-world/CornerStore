@@ -44,7 +44,9 @@ const NumberInput: FC<Props> = ({
       )}
       {type === 'currency' && currencies && (
         <div className="absolute inset-y-0 items-center top-px right-2">
-          <select className="inline-flex items-center font-sans text-sm font-medium text-gray-400 border-0 border-none rounded bg-secondary">
+          <select className="inline-flex items-center font-sans text-sm font-medium text-gray-400 border-0 border-none rounded bg-secondary"
+            {...form.register(`${name}-currency`, options)}
+          >
             {currencies.map((currency) => (
               <option key={currency}>{currency}</option>
             ))}

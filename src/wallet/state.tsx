@@ -2,6 +2,7 @@ import React, { createContext, Dispatch, useContext, useReducer } from 'react';
 import reducer from './reducers';
 import type { WalletAction } from './actions';
 import Web3 from 'web3';
+import * as IPFS from 'ipfs-core';
 
 export const initialState: WalletState = {
   balance: '-1',
@@ -19,6 +20,7 @@ type WalletState = {
   network: number;
   web3?: Web3;
   ens: string;
+  ipfs?: IPFS.IPFS;
 };
 
 const WalletContext = createContext<[WalletState, Dispatch<WalletAction>]>(null);

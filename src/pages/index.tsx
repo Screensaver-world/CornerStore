@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ProductList } from 'components/ProductCard';
 import Dropdown from 'components/Dropdown/Dropdown';
-import { useCallback, useEffect } from 'react';
-import { getNftItems } from 'api/raribleApi';
-import { GetNftItemsResponse, NftItemsRequestType } from 'api/raribleRequestTypes';
+
+import { getNftItems, useGetNftItems } from 'api/raribleApi';
+import { GetNftItemsResponse, NtfItem } from 'api/raribleRequestTypes';
 
 enum OrderBy {
   RecentlyAdded = 'Recently added',
@@ -25,6 +25,19 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
       )),
     []
   );
+  const [continuation, setContinuation] = useState(itemsData.continuation);
+  const { data, refetch } = useGetNftItems({ continuation, size: 20, includeMeta: true });
+  const [items, setItems] = useState<NtfItem[]>(itemsData.items);
+
+  useEffect(() => {
+    if (data) {
+      setItems([...items, ...data.items]);
+      setContinuation(data.continuation);
+    }
+  }, [data]);
+  const loadMore = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   return (
     <>
@@ -35,12 +48,13 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData }) => {
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}
         />
       </div>
-      <ProductList itemsData={itemsData} viewType={NftItemsRequestType.ALL} />
+      <ProductList itemsData={items || []} onLoadMore={loadMore} />
     </>
   );
 };
 export async function getServerSideProps(context) {
   const itemsData = await getNftItems({ size: 25, showDeleted: false, includeMeta: true });
+
   return {
     props: { itemsData }, // will be passed to the page component as props
   };

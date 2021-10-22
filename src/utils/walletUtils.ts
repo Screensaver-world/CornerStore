@@ -1,11 +1,11 @@
 import Onboard from 'bnc-onboard';
 import { WalletAction } from 'wallet/actions';
 import Web3 from 'web3';
+import { NETWORK_ID } from './constants';
 
 let onboard: ReturnType<typeof Onboard>;
 
 // the network id that your dapp runs on
-const NETWORK_ID = 3;
 const wallets = [
   { walletName: 'coinbase', preferred: true },
   { walletName: 'metamask', preferred: true },

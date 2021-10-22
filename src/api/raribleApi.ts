@@ -1,9 +1,18 @@
 import { useQuery } from 'react-query';
 import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
 import { QueryTypes } from './queryTypes';
-import { GetNftItemsRequest, GetNftItemsResponse, NftItemsRequestType } from './raribleRequestTypes';
+import {
+  GenerateNftTokenIdRequest,
+  GetNftItemsRequest,
+  GetNftItemsResponse,
+  GetOrdersRequest,
+  LazyMintRequestBody,
+  NftItemsRequestType,
+  OrderFilter,
+  OrderRequestTypes,
+} from './raribleRequestTypes';
 
-const BASE_URL = 'https://ethereum-api.rarible.org';
+const BASE_URL = 'https://ethereum-api-staging.rarible.org/v0.1';
 
 export function useGetNftItemOrderActivity() {
   return useQuery<NFTItemOrder[]>('nft-item-order-activity', () => {
@@ -94,6 +103,7 @@ export function useGetNftItems(searchParams: GetNftItemsRequest = {}) {
 const searchTypesMapping = {
   [NftItemsRequestType.BY_CREATOR]: 'creator',
   [NftItemsRequestType.BY_OWNER]: 'owner',
+  [NftItemsRequestType.BY_COLLECTION]: 'collections',
 };
 
 export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
@@ -102,8 +112,42 @@ export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
   if (ownerOrCreator) {
     searchParams[ownerOrCreator] = searchParams.address;
   }
-  const query = Object.keys(searchParams)
+  const query = encodeQuery(searchParams);
+  return (await fetch(`${BASE_URL}/nft/items/${searchParams.type ?? NftItemsRequestType.ALL}?${query}`)).json();
+}
+
+export async function getNftItemById(id: string) {
+  return (await fetch(`${BASE_URL}/nft/items/${id}?includeMeta=true`)).json();
+}
+
+export async function generateNftToken(params: GenerateNftTokenIdRequest) {
+  return (
+    await fetch(`${BASE_URL}/nft/collections/${params.collection}/generate_token_id?minter=${params.minter}`)
+  ).json();
+}
+
+const orderTypeMapping = {
+  [OrderFilter.BY_MAKER]: 'maker',
+  [OrderFilter.BY_ITEM]: 'tokenId',
+};
+
+export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
+  const queryParam = orderTypeMapping[searchParams.filerBy];
+
+  if (queryParam) {
+    searchParams[queryParam] = searchParams.address;
+  }
+  const query = encodeQuery(searchParams);
+  return (await fetch(`${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}?${query}`)).json();
+}
+
+export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
+  return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
+    enabled: false,
+  });
+}
+
+const encodeQuery = (searchParams) =>
+  Object.keys(searchParams)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
     .join('&');
-  return (await fetch(`${BASE_URL}/v0.1/nft/items/${searchParams.type ?? NftItemsRequestType.ALL}?${query}`)).json();
-}
