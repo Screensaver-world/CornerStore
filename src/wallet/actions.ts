@@ -2,16 +2,7 @@ import Web3 from 'web3';
 import * as IPFS from 'ipfs-core';
 import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
 
-export type WalletAction =
-  | SET_ADDRESS
-  | SET_NETWORK
-  | SET_BALANCE
-  | SET_WALLET
-  | SET_WEB3
-  | SET_ENS
-  | SET_IPFS
-  | SET_SDK
-  | RESET;
+export type WalletAction = SET_ADDRESS | SET_NETWORK | SET_BALANCE | SET_WALLET | SET_WEB3 | SET_ENS | SET_SDK | RESET;
 
 type SET_ADDRESS = {
   type: 'SET_ADDRESS';
@@ -43,11 +34,6 @@ type SET_WEB3 = {
 type SET_ENS = {
   type: 'SET_ENS';
   payload: string;
-};
-
-type SET_IPFS = {
-  type: 'SET_IPFS';
-  payload: IPFS.IPFS;
 };
 
 type SET_SDK = {

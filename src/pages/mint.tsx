@@ -4,57 +4,48 @@ import { routes } from './routes';
 import { useForm } from 'react-hook-form';
 import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
-import { useCallback, useEffect, useState } from 'react';
-import * as IPFS from 'ipfs-core';
+import { useCallback } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
 import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { useRouter } from 'next/router';
-import { CreateNftMetadata } from 'api/raribleRequestTypes';
+import { store } from 'api/nftStorageApi';
 
 const MintPage = () => {
   const form = useForm();
-  const [ipfs, setIpfs] = useState(null);
-  const [data, dispatch] = useWallet();
+
   const router = useRouter();
-  useEffect(() => {
-    (async () => {
-      if (data.ipfs) {
-        setIpfs(data.ipfs);
-      } else {
-        const ipfs = await IPFS.create({ repoAutoMigrate: true });
-        dispatch({
-          type: 'SET_IPFS',
-          payload: ipfs,
-        });
-        setIpfs(ipfs);
-      }
-    })();
-  }, []);
   const [{ address, web3, raribleSDK }] = useWallet();
 
   const submit = useCallback(
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
 
-      const { path: image } = await ipfs.add(data['file-upload'][0]);
-      const metadata: CreateNftMetadata = {
-        name: data.title,
-        image: `ipfs://ipfs/${image}`,
-        description: data.description,
-        external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
-      };
-      //TODO chage to use env var
-      const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
-      const tokenURI = `ipfs://ipfs/${metadataHash}`;
+      const {
+        value: { cid: image },
+      } = await store(data['file-upload'][0]);
+
+      const {
+        value: { cid: metadata },
+      } = await store(
+        JSON.stringify({
+          description: data.description,
+          name: data.title,
+          image: `ipfs://ipfs/${image}`,
+          creator: address,
+          creationDate: new Date(),
+          external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
+        })
+      );
+
       const nftCollection = await raribleSDK.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
       await raribleSDK.nft.mint({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         collection: nftCollection,
-        uri: tokenURI,
+        uri: `ipfs://ipfs/${metadata}`,
         nftTokenId: token,
         creators: [{ account: toAddress(address), value: 10000 }],
         royalties: data.royalties
@@ -85,11 +76,11 @@ const MintPage = () => {
 
       router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },
-    [ipfs, web3, address]
+    [web3, address]
   );
   return (
     <>
-      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
+      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <form onSubmit={form.handleSubmit(submit)}>
