@@ -4,66 +4,55 @@ import { routes } from './routes';
 import { useForm } from 'react-hook-form';
 import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
-import { useCallback, useEffect, useState } from 'react';
-import * as IPFS from 'ipfs-core';
+import { useCallback } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
-import { Web3Ethereum } from '@rarible/web3-ethereum';
-import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
 import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { useRouter } from 'next/router';
-import { CreateNftMetadata } from 'api/raribleRequestTypes';
+import { store } from 'api/nftStorageApi';
 
 const MintPage = () => {
   const form = useForm();
-  const [ipfs, setIpfs] = useState(null);
-  const [data, dispatch] = useWallet();
+
   const router = useRouter();
-  useEffect(() => {
-    (async () => {
-      if (data.ipfs) {
-        setIpfs(data.ipfs);
-      } else {
-        const ipfs = await IPFS.create({ repoAutoMigrate: true });
-        dispatch({
-          type: 'SET_IPFS',
-          payload: ipfs,
-        });
-        setIpfs(ipfs);
-      }
-    })();
-  }, []);
-  const [{ address, web3 }] = useWallet();
+  const [{ address, web3, raribleSDK }] = useWallet();
+
   const submit = useCallback(
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
 
-      const { path: image } = await ipfs.add(data['file-upload'][0]);
-      const metadata: CreateNftMetadata = {
-        name: data.title,
-        image: `ipfs://ipfs/${image}`,
-        description: data.description,
-        external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
-      };
-      //TODO chage to use env var
-      const raribleSdk = createRaribleSdk(new Web3Ethereum({ web3 }), 'rinkeby');
-      const { path: metadataHash } = await ipfs.add(JSON.stringify(metadata));
-      const tokenURI = `ipfs://ipfs/${metadataHash}`;
-      const nftCollection = await raribleSdk.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
-      await raribleSdk.nft.mint({
+      const {
+        value: { cid: image },
+      } = await store(data['file-upload'][0]);
+
+      const {
+        value: { cid: metadata },
+      } = await store(
+        JSON.stringify({
+          description: data.description,
+          name: data.title,
+          image: `ipfs://ipfs/${image}`,
+          creator: address,
+          creationDate: new Date(),
+          external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
+        })
+      );
+
+      const nftCollection = await raribleSDK.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
+      await raribleSDK.nft.mint({
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         //@ts-ignore
         collection: nftCollection,
-        uri: tokenURI,
+        uri: `ipfs://ipfs/${metadata}`,
         nftTokenId: token,
         creators: [{ account: toAddress(address), value: 10000 }],
         royalties: data.royalties
           ? [
               {
                 account: toAddress(address),
-                value: data.royalties,
+                value: data.royalties * 100,
               },
             ]
           : [],
@@ -83,11 +72,11 @@ const MintPage = () => {
         price: web3.utils.toWei(data.price).toString(),
         takeAssetType: { assetClass: data['price-currency'] },
       };
-      await raribleSdk.order.sell(request);
+      await raribleSDK.order.sell(request);
 
       router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },
-    [ipfs, web3, address]
+    [web3, address]
   );
   return (
     <>

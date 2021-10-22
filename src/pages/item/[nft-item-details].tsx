@@ -12,14 +12,17 @@ import { useToggle } from '../../hooks/useToggle';
 import { DotsIcon } from 'assets';
 import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
 import { Popover } from '@headlessui/react';
-import { getNftItemById } from 'api/raribleApi';
+import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
 import { getImage, shortAddress } from 'utils/itemUtils';
-import { NtfItem } from 'api/raribleRequestTypes';
+import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { useWallet } from 'wallet/state';
+import { getOnboard } from 'utils/walletUtils';
 
-type Props = { item: NtfItem };
+//TODO fix types.. here and in queries :)
+type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
 
-function ItemDetailsPage({ item }: Props) {
+function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   const collection = {
     imageUrl:
       'https://lh3.googleusercontent.com/1rLhxHFIebBPBtCFeXCxiwdbIE2f2idunmGyU1RvgU7qk1TGiFHCORMepdQLt6b7uRYyn5FtlnLkTkO8kdTMsnvbHbTwpHEytcbz',
@@ -30,16 +33,16 @@ function ItemDetailsPage({ item }: Props) {
   const [creatorAvatar, setCreatorAvatar] = useState(null);
 
   useEffect(() => {
-    setCreatorAvatar(makeBlockie(item.creators[0].account ?? ''));
+    setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
   }, []);
-
+  const [{ address }, dispatch] = useWallet();
   return (
     <div>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
             <div className="flex flex-row justify-between">
-              <h1 className="text-2xl font-bold text-white">{item.meta.name}</h1>
+              <h1 className="text-2xl font-bold text-white">{item?.meta?.name}</h1>
               <Popover className="relative text-white">
                 <Popover.Button>
                   <Button icon={DotsIcon} type={ButtonType.Secondary} />
@@ -64,20 +67,27 @@ function ItemDetailsPage({ item }: Props) {
           {/*RIGHT SIDE CONTENT*/}
           <div className="mt-4 font-bold text-white lg:col-span-5">
             <p className="pb-5">
-              On sale for {item.price} {item.currency}{' '}
+              {sellOrder
+                ? `On sale for ${sellOrder.take.valueDecimal} ${sellOrder.take.assetType.assetClass} `
+                : 'Not for sale'}
+              {/*
+              TODO: check if it is ok to delete this since we'll be using erc721
               <span className={'pl-5 text-gray-700'}>
                 {item.availableQuantity} of {item.totalQuantity} Available
-              </span>
+              </span> */}
             </p>
 
-            <p className="pb-10 font-semibold text-white">{item.meta.description}</p>
+            <p className="pb-10 font-semibold text-white">{item?.meta?.description}</p>
 
             <div className={'flex flex-col xl:flex-row'}>
               <div className={'flex-1 xl:pr-8'}>
                 <div className={'pb-5'}>
                   Creator <span className={'text-gray-700'}>{item?.royalties?.[0]?.value / 100 || 0}% Royalties </span>
                 </div>
-                <HorizontalCard title={shortAddress(item.creators[0].account, 6, 4)} imageUrl={creatorAvatar} />
+                <HorizontalCard
+                  title={shortAddress(item?.creators?.[0].account ?? '0x000', 6, 4)}
+                  imageUrl={creatorAvatar}
+                />
               </div>
               <div className={'flex-1 mt-4 xl:mt-0 xl:pl-8'}>
                 <div className={'pb-5'}>Collection</div>
@@ -88,22 +98,39 @@ function ItemDetailsPage({ item }: Props) {
               <Tabs titles={tabs} active={activeTab} onChange={setActiveTab} />
             </div>
             <div className={'pt-5'}>
-              {isOwnersTab && <OwnersTab total={item.totalQuantity} />}
+              {isOwnersTab && <OwnersTab owners={item.owners} sellOrders={[sellOrder]} />}
               {isBidsTab && <BidsTab />}
               {isDetailsTab && <DetailsTab owner={item.owners[0]} categories={[collection]} />}
-              {isHistoryTab && <HistoryTab />}
+              {isHistoryTab && <HistoryTab initialHistory={initialHistory} address={id} />}
             </div>
             <Button
               fullWidth
-              title={`Buy for ${item.price} ${item.currency}`}
-              onClick={setCheckoutVisible}
+              title={
+                sellOrder
+                  ? `Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`
+                  : 'Not for sale'
+              }
+              onClick={
+                sellOrder
+                  ? async () => {
+                      const onboard = getOnboard(dispatch);
+                      if (address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+                        setCheckoutVisible(true);
+                      }
+                    }
+                  : null
+              }
               customClasses="sticky bottom-4 lg:static"
             />
             {isCheckoutVisible && (
               <CheckoutModal
                 isOpen={isCheckoutVisible}
                 onClose={setCheckoutVisible}
-                availableQuantity={item.availableQuantity}
+                currency={sellOrder?.take?.assetType?.assetClass}
+                orderHash={sellOrder.hash}
+                price={sellOrder?.take.value}
+                //TODO should we hide avail. quan. since we use erc721
+                // availableQuantity={item.availableQuantity}
               />
             )}
           </div>
@@ -116,9 +143,22 @@ function ItemDetailsPage({ item }: Props) {
 export async function getServerSideProps(context) {
   const id = context.query['nft-item-details'];
   const tab = context.query.tab ?? 'Owners';
-  const item = await getNftItemById(id);
+  const [item, orders] = await Promise.all([
+    await getNftItemById(id),
+    await getNftOrders({ address: id, filterBy: OrderFilter.BY_ITEM, type: OrderRequestTypes.SELL }),
+  ]);
+  //TODO check if it is possible to have multiple sell orders, what happens after buy order is executed
+  const props: Props = { item, sellOrder: orders?.orders?.[0] ?? null, id };
+  if (tab === 'History') {
+    props.initialHistory = await getActivityHistory({
+      address: id,
+      filterBy: ActivityHistoryFilter.BY_ITEM,
+      size: 5,
+      sort: 'EARLIEST_FIRST',
+    });
+  }
   return {
-    props: { item }, // will be passed to the page component as props
+    props, // will be passed to the page component as props
   };
 }
 

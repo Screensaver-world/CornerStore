@@ -4,75 +4,31 @@ import { useRouter } from 'next/router';
 import Button, { ButtonType } from 'components/Button';
 import Link from 'components/Link';
 import Tabs from 'components/Tabs/Tabs';
-import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Avatar from 'components/Avatar/Avatar';
-import { getNftItems, getNftOrders, useGetNftItems } from 'api/raribleApi';
+import { getNftItemById, getNftItems, getNftOrders, useGetNftItems } from 'api/raribleApi';
 import {
   GetNftItemsResponse,
   NftItemsRequestType,
   NtfItem,
   OrderFilter,
   OrderRequestTypes,
+  SellOrderTake,
 } from 'api/raribleRequestTypes';
 import { shortAddress } from 'utils/itemUtils';
 import CreatedTab from 'features/profile/components/CreatedTab';
 import OwnedTab from 'features/profile/components/OwnedTab';
+import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
+import { getItemsForSellOrders, getSellOrdersForItems } from 'utils/raribleApiUtils';
+import OnSaleTab from 'features/profile/components/OnSaleTab';
 
 //MOCKED DATA
 const dummyData = {
-  name: 'Katherine Moss',
   twitterUsername: 'twuser',
-  address: '0X1243567853467352466U7I546786457890',
   about:
     'When an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset too good.',
   links: { twitter: 'asds', instagram: 'hgk' },
   site: 'www.google.com',
 };
-
-const dummyHistory = [
-  {
-    title: 'Some Random NFT',
-    date: new Date(),
-    actionType: 'mint' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 2',
-    date: new Date(),
-    actionType: 'transfer' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    seller: '687687678678678686868768768768686',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 3',
-    date: new Date(),
-    actionType: 'transfer' as 'mint' | 'transfer' | 'burn',
-    owner: '687687678678678686868768768768686',
-    seller: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-  {
-    title: 'Some Random NFT 4',
-    date: new Date(),
-    actionType: 'burn' as 'mint' | 'transfer' | 'burn',
-    owner: '0X1243567853467352466U7I546786457890',
-    links: { twitter: 'asds', instagram: 'hgk' },
-    site: 'www.google.com',
-    profileImage:
-      'https://previews.123rf.com/images/yupiramos/yupiramos1607/yupiramos160710209/60039275-young-male-cartoon-profile-vector-illustration-graphic-design-.jpg',
-  },
-];
 
 const tabs = ['On sale', 'Owned', 'Created', 'Activity'];
 
@@ -83,9 +39,11 @@ const tabItemsTypeMapping = {
 };
 
 export interface ProfileProps {
-  onSaleData?: GetNftItemsResponse;
-  createdData?: GetNftItemsResponse;
-  ownedData?: GetNftItemsResponse;
+  //TODO fix type
+  onSaleData?: { items: any; orders: any };
+  createdData?: { items: GetNftItemsResponse; orders: { take: SellOrderTake }[] };
+  ownedData?: { items: GetNftItemsResponse; orders: { take: SellOrderTake }[] };
+  // activityHistory is always fetched on front
   tab: number;
 }
 
@@ -106,27 +64,6 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       setUserId(router.query.id as string);
     }
   }, [router]);
-
-  const commonQueryData = { size: 1, includeMeta: true, address: userId };
-
-  //------
-  const [onSaleContinuation, setOnSaleContinuation] = useState(onSaleData?.continuation);
-  const {
-    data: onSale,
-    refetch: refetchOnSale,
-    isIdle: isIdleOOnSale,
-  } = useGetNftItems({
-    type: NftItemsRequestType.BY_OWNER,
-    continuation: onSaleContinuation,
-    ...commonQueryData,
-  });
-  const [onSaleItems, setOnSaleItems] = useState<NtfItem[]>(onSaleData?.items ?? []);
-  useEffect(() => {
-    if (onSale) {
-      setOnSaleItems([...onSaleItems, ...onSale.items]);
-      setOnSaleContinuation(onSale.continuation);
-    }
-  }, [onSale]);
 
   const onTabChange = useCallback(
     (index) => {
@@ -163,7 +100,17 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
             <Link title={`@${user.twitterUsername}`} to="#" />
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddr}</div>
-              <Button type={ButtonType.Secondary} icon={CopyIcon} equalPadding />
+              <Button
+                type={ButtonType.Secondary}
+                onClick={() => {
+                  navigator.clipboard.writeText(userId).then(
+                    () => console.log('copied'),
+                    () => console.log('failed')
+                  );
+                }}
+                icon={CopyIcon}
+                equalPadding
+              />
             </div>
           </div>
           <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">{user.about}</p>
@@ -180,54 +127,52 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
       <div className="py-4 bg-secondary">
-        {activeTab === 3 && (
-          <div>
-            <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
-              <div className="space-y-12">
-                <ul role="list">
-                  {dummyHistory.map((item) => (
-                    <ActivityCard {...item} username="Katherine Moss" userId="0X1243567853467352466U7I546786457890" />
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        )}
+        {activeTab === 0 && <OnSaleTab initialData={onSaleData} address={userId} />}
         {activeTab === 1 && <OwnedTab initialData={ownedData} address={userId} />}
         {activeTab === 2 && <CreatedTab initialData={createdData} address={userId} />}
+        {activeTab === 3 && <ActivityHistoryTab address={userId} />}
       </div>
     </>
   );
 };
-export async function getServerSideProps(context) {
+
+export async function getServerSideProps(context): Promise<{ props: ProfileProps }> {
   const address = context.query.id;
   const tabName = context.query.tab ?? tabs[0];
   const props: ProfileProps = { tab: tabs.indexOf(tabName) };
   const commonQueryData = { size: 1, showDeleted: false, includeMeta: true, address };
   switch (tabName) {
-    case tabs[0]:
-      props.ownedData = await getNftItems({
-        ...commonQueryData,
-        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+    case tabs[0]: {
+      const orderData = await getNftOrders({
+        size: 1,
+        address,
+        filterBy: OrderFilter.BY_MAKER,
+        type: OrderRequestTypes.SELL,
       });
-      break;
-    case tabs[1]:
-      props.ownedData = await getNftItems({
-        ...commonQueryData,
-        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
-      });
-      break;
-    case tabs[2]:
-      props.createdData = await getNftItems({
-        ...commonQueryData,
-        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
-      });
-      break;
-  }
-  console.log(
-    (await getNftOrders({ size: 1, address, filerBy: OrderFilter.BY_MAKER, type: OrderRequestTypes.SELL })).orders[0]
-  );
 
+      const items = await getItemsForSellOrders(orderData.orders ?? []);
+      props.onSaleData = { orders: orderData, items };
+      break;
+    }
+    case tabs[1]: {
+      const items = await getNftItems({
+        ...commonQueryData,
+        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      });
+      const orders = await getSellOrdersForItems(items.items);
+      props.ownedData = { orders, items };
+      break;
+    }
+    case tabs[2]: {
+      const items = await getNftItems({
+        ...commonQueryData,
+        type: tabItemsTypeMapping[tabName] as NftItemsRequestType,
+      });
+      const orders = await getSellOrdersForItems(items.items);
+      props.createdData = { orders, items };
+      break;
+    }
+  }
   return {
     props, // will be passed to the page component as props
   };

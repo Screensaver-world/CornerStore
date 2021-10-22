@@ -23,7 +23,7 @@ function HorizontalCard({ imageUrl, title, subtitle, actions, mainBackground = f
           <div>
             <span className="absolute inset-0" aria-hidden="true" />
             <p className="font-bold text-white">{title}</p>
-            {subtitle && <p className="pt-2 text-sm font-medium text-gray-700 truncate">{subtitle}</p>}
+            {subtitle && <div className="pt-2 text-sm font-medium text-gray-700 truncate">{subtitle}</div>}
           </div>
           {actions && <div className={'flex mt-2 sm:mt-0 justify-end pr-2'}>{actions}</div>}
         </div>

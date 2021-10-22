@@ -36,7 +36,7 @@ export type GetOrdersRequest = {
   // maker/item
   address?: string;
   type?: OrderRequestTypes;
-  filerBy?: OrderFilter;
+  filterBy?: OrderFilter;
 };
 
 export type GetOrdersResponse = {
@@ -127,4 +127,40 @@ export type CreateNftMetadata = {
   external_url: string;
   animation_url?: string;
   //TODO there is also attributes section if we need ti
+};
+
+export enum ActivityHistoryFilter {
+  BY_USER = 'byUser',
+  BY_COLLECTION = 'byCollection',
+  BY_ITEM = 'byItem',
+}
+
+export type GetActivityHistoryRequest = {
+  filterBy: ActivityHistoryFilter;
+  //user's address or contract:tokenId
+  address: string;
+  size?: number;
+  continuation?: string;
+  sort?: 'LATEST_FIRST' | 'EARLIEST_FIRST';
+};
+
+export type GetActivityHistoryResponse = {
+  filterBy: ActivityHistoryFilter;
+  //user's address or contract:tokenId
+  address: string;
+  size?: number;
+  continuation?: string;
+  sort?: 'LATEST_FIRST' | 'EARLIEST_FIRST';
+};
+
+export type SellOrderTake = {
+  valueDecimal: number;
+  assetType: { assetClass: string };
+};
+
+export type PrepareTransactionRequest = {
+  maker: string;
+  amount: number;
+  payouts: { account: string; value: string }[];
+  originFees: { account: string; value: string }[];
 };

@@ -2,46 +2,19 @@ import { useQuery } from 'react-query';
 import { BidItem, Currency, NFTItemOrder, NFTOwner } from '../types';
 import { QueryTypes } from './queryTypes';
 import {
+  ActivityHistoryFilter,
   GenerateNftTokenIdRequest,
+  GetActivityHistoryRequest,
   GetNftItemsRequest,
   GetNftItemsResponse,
   GetOrdersRequest,
-  LazyMintRequestBody,
   NftItemsRequestType,
   OrderFilter,
   OrderRequestTypes,
+  PrepareTransactionRequest,
 } from './raribleRequestTypes';
 
 const BASE_URL = 'https://ethereum-api-staging.rarible.org/v0.1';
-
-export function useGetNftItemOrderActivity() {
-  return useQuery<NFTItemOrder[]>('nft-item-order-activity', () => {
-    return mockWithTimeout<NFTItemOrder[]>([
-      {
-        '@type': 'transfer',
-        createdAt: new Date(),
-        price: '10,02',
-        currency: Currency.ETH,
-        createdBy: {
-          name: 'mladibejn',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        },
-        quantity: 2,
-      },
-      {
-        '@type': 'mint',
-        createdAt: new Date(),
-        price: '10,02',
-        currency: Currency.ETH,
-        createdBy: {
-          name: 'mladibejn2',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        },
-        quantity: 2,
-      },
-    ]);
-  });
-}
 
 export function useGetNftBids() {
   return useQuery<BidItem[]>('nft-item-bids', () => {
@@ -66,27 +39,6 @@ export function useGetNftBids() {
   });
 }
 
-export function useGetNFTItemOwnerships() {
-  return useQuery<NFTOwner[]>('nft-item-owners', () => {
-    return mockWithTimeout<NFTOwner[]>([
-      {
-        avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        price: '10,02',
-        currency: Currency.ETH,
-        name: 'mladibejn',
-        quantity: 2,
-      },
-      {
-        avatarUrl: 'https://avatars.githubusercontent.com/u/6930914?v=4',
-        price: '10,02',
-        currency: Currency.ETH,
-        name: 'mladibejn',
-        quantity: 2,
-      },
-    ]);
-  });
-}
-
 const mockWithTimeout = <T>(data: T) =>
   new Promise<T>((res) => {
     setTimeout(() => {
@@ -103,7 +55,7 @@ export function useGetNftItems(searchParams: GetNftItemsRequest = {}) {
 const searchTypesMapping = {
   [NftItemsRequestType.BY_CREATOR]: 'creator',
   [NftItemsRequestType.BY_OWNER]: 'owner',
-  [NftItemsRequestType.BY_COLLECTION]: 'collections',
+  [NftItemsRequestType.BY_COLLECTION]: 'collection',
 };
 
 export async function getNftItems(searchParams: GetNftItemsRequest = {}) {
@@ -126,28 +78,81 @@ export async function generateNftToken(params: GenerateNftTokenIdRequest) {
   ).json();
 }
 
-const orderTypeMapping = {
-  [OrderFilter.BY_MAKER]: 'maker',
-  [OrderFilter.BY_ITEM]: 'tokenId',
-};
-
 export async function getNftOrders(searchParams: GetOrdersRequest = {}) {
-  const queryParam = orderTypeMapping[searchParams.filerBy];
+  const { type, filterBy } = searchParams;
 
-  if (queryParam) {
-    searchParams[queryParam] = searchParams.address;
+  let queryParams: any = { ...searchParams, type: undefined, address: undefined, filterBy: undefined };
+  switch (searchParams.filterBy) {
+    case OrderFilter.BY_MAKER:
+      queryParams.maker = searchParams.address;
+      break;
+    case OrderFilter.BY_ITEM: {
+      const [contract, tokenId] = searchParams.address.split(':');
+      queryParams = { ...queryParams, contract, tokenId };
+      break;
+    }
   }
-  const query = encodeQuery(searchParams);
-  return (await fetch(`${BASE_URL}/order/orders/${searchParams.type ?? OrderRequestTypes.ALL}?${query}`)).json();
+
+  const query = encodeQuery(queryParams);
+
+  return (
+    await fetch(`${BASE_URL}/order/orders/${type ?? OrderRequestTypes.ALL}/${filterBy ?? OrderFilter.ALL}?${query}`)
+  ).json();
 }
 
-export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
-  return useQuery<GetNftItemsResponse>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
+//TODO create enum for history item types if needed
+//TODO check which types are needed
+//TODO add by_collection if needed
+const GetActiviryHistoryypeMapping = {
+  [ActivityHistoryFilter.BY_ITEM]: 'MINT,LIST,MATCH',
+  [ActivityHistoryFilter.BY_USER]: 'MINT,LIST,BUY,SELL',
+};
+
+//TODO move to helpers,utils,...
+function getActivityHistoryParams(address: string, filterBy: ActivityHistoryFilter) {
+  if (filterBy === ActivityHistoryFilter.BY_USER) {
+    return { user: address };
+  }
+  //TODO add collection if needed
+  const [contract, tokenId] = address.split(':');
+  return { contract, tokenId };
+}
+
+export async function getActivityHistory(params: GetActivityHistoryRequest) {
+  const { address, filterBy } = params;
+  const queryParams = {
+    ...getActivityHistoryParams(address, filterBy),
+    ...params,
+    type: GetActiviryHistoryypeMapping[filterBy],
+    address: undefined,
+  };
+  return (await fetch(`${BASE_URL}/nft-order/activities/${params.filterBy}?${encodeQuery(queryParams)}`)).json();
+}
+
+export function useGetActivityHistory(params: GetActivityHistoryRequest) {
+  return useQuery<any>([QueryTypes.NFT_ORDERS, params], async () => getActivityHistory(params), {
     enabled: false,
   });
 }
 
+export function useGetNftOrders(searchParams: GetOrdersRequest = {}) {
+  return useQuery<any>([QueryTypes.NFT_ORDERS, searchParams], async () => getNftOrders(searchParams), {
+    enabled: false,
+  });
+}
+
+export async function prepareTransaction(hash: string, params: PrepareTransactionRequest) {
+  return (
+    await fetch(`${BASE_URL}/order/orders/${hash}/prepareTx`, {
+      method: 'post',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(params),
+    })
+  ).json();
+}
+
 const encodeQuery = (searchParams) =>
   Object.keys(searchParams)
+    .filter((key) => searchParams[key] !== undefined)
     .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(searchParams[key])}`)
     .join('&');

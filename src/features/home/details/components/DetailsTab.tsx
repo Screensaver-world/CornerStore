@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import HorizontalCard from 'components/HorizontalCard';
-import { NFTOwner } from 'types';
 import makeBlockie from 'ethereum-blockies-base64';
 import { shortAddress } from 'utils/itemUtils';
 
@@ -28,8 +27,8 @@ function DetailsTab({ owner, categories }: Props) {
         <div className={'font-semibold pb-2'}>Categories</div>
         <div className={'flex flex-wrap'}>
           {categories.map((c, index) => (
-            <div className={'w-1/3'}>
-              <HorizontalCard key={index} title={c.name} imageUrl={c.imageUrl} />
+            <div key={index} className={'w-1/3'}>
+              <HorizontalCard title={c.name} imageUrl={c.imageUrl} />
             </div>
           ))}
         </div>

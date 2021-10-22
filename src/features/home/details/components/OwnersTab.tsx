@@ -1,22 +1,16 @@
 import React from 'react';
-import { useGetNFTItemOwnerships } from 'api/raribleApi';
 import OwnerCard from './OwnerCard';
 
 type Props = {
-  total: number;
+  owners: any[];
+  sellOrders: any[];
 };
 
-function OwnersTab({ total }: Props) {
-  const { isLoading, data } = useGetNFTItemOwnerships();
-
-  if (isLoading || !data) {
-    return null;
-  }
-
+function OwnersTab({ owners, sellOrders }: Props) {
   return (
     <>
-      {data.map((d, index) => (
-        <OwnerCard key={index} data={d} total={total} />
+      {(owners ?? []).map((d, index) => (
+        <OwnerCard key={index} owner={d} sellOrder={sellOrders.find((order) => order?.maker === d)} />
       ))}
     </>
   );

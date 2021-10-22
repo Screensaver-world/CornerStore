@@ -9,6 +9,7 @@ type Props = {
   options?: any; // TODO update to validation rules
   currencies?: string[];
   allowDecimals?: boolean;
+  disabled?: boolean;
 } & FormItemWrapperPops<any>;
 
 const NumberInput: FC<Props> = ({
@@ -21,16 +22,20 @@ const NumberInput: FC<Props> = ({
   options,
   allowDecimals,
   helperText,
+  disabled = false,
 }) => (
   <FormItemWrapper form={form} name={name} label={title} helperText={helperText}>
     <div className="mt-1">
       <CurrencyInput
         allowDecimals={type !== 'quantity' && allowDecimals}
+        decimalsLimit={10}
         placeholder={placeholder}
         {...form.register(name, options)}
         type="text"
+        disabled={disabled}
         name={name}
-        className="block w-full text-white border-gray-600 shadow-sm bg-secondary focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+        allowNegativeValue={false}
+        className="block w-full text-white border-gray-600 rounded-md shadow-sm bg-secondary focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
       />
       {type === 'percent' && (
         <div className="absolute inset-y-0 right-0 pr-3 pointer-events-none top-2">
@@ -44,7 +49,8 @@ const NumberInput: FC<Props> = ({
       )}
       {type === 'currency' && currencies && (
         <div className="absolute inset-y-0 items-center top-px right-2">
-          <select className="inline-flex items-center font-sans text-sm font-medium text-gray-400 border-0 border-none rounded bg-secondary"
+          <select
+            className="inline-flex items-center font-sans text-sm font-medium text-gray-400 border-0 border-none rounded bg-secondary"
             {...form.register(`${name}-currency`, options)}
           >
             {currencies.map((currency) => (

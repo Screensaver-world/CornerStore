@@ -6,6 +6,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import Avatar from 'components/Avatar/Avatar';
 import Web3 from 'web3';
 import { getOnboard } from 'utils/walletUtils';
+import { useRouter } from 'next/router';
 
 const itemClasses =
   'px-2 py-2 relative hover:text-transparent bg-clip-text bg-gradient-to-b from-primary-start to-primary-stop';
@@ -21,12 +22,12 @@ const renderListItem = ({ title, handler }: { title: string; handler?: () => voi
 );
 const ProfileDropdown: FC<unknown> = () => {
   const [state, dispatch] = useWallet();
-
+  const router = useRouter();
   const menuItems = [
     {
       title: 'My items',
       handler: () => {
-        console.log('clicked');
+        router.push(`/profile/${state.address}?tab=Owned`);
       },
     },
     {
@@ -37,6 +38,7 @@ const ProfileDropdown: FC<unknown> = () => {
       handler: () => {
         getOnboard(dispatch).walletReset();
         localStorage.removeItem('walletName');
+        dispatch({ type: 'RESET' });
       },
     },
   ];
