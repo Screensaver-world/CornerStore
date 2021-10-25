@@ -3,5 +3,3 @@ export const NETWORK_ID = 4;
 export const NETWORK_NAME = 'rinkeby';
 export const NFT_STORAGE_API_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDNGZjViYTM1YTg1YjI5YzY1QURlNjA2MDIwNWMzRTgwRjc0YjBBNEQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTYzNDgyMzQyMDI3MiwibmFtZSI6IlJhcmlibGVJbnRlcmZhY2UifQ.9XSJ_AyHnn_eoYV8Pia5PUTxtP-IaC5se-EZrHLkez4';
-
-//0x34d35fb855aef5441406c05d9e9d11c22068a6c0;
