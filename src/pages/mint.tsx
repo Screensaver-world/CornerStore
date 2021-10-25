@@ -4,7 +4,7 @@ import { routes } from './routes';
 import { useForm } from 'react-hook-form';
 import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
@@ -18,7 +18,6 @@ const MintPage = () => {
 
   const router = useRouter();
   const [{ address, web3, raribleSDK }] = useWallet();
-
   const submit = useCallback(
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
@@ -69,7 +68,7 @@ const MintPage = () => {
         maker: toAddress(address),
         originFees: [],
         payouts: [],
-        price: web3.utils.toWei(data.price).toString(),
+        price: web3.utils.toWei(data.price.replace(',', '')).toString(),
         takeAssetType: { assetClass: data['price-currency'] },
       };
       await raribleSDK.order.sell(request);
@@ -86,7 +85,7 @@ const MintPage = () => {
         <form onSubmit={form.handleSubmit(submit)}>
           <div className={'pb-8'}>
             <FormStep title={'Upload File'}>
-              <UploadArea form={form} />
+              <UploadArea form={form} name={'file-upload'} />
             </FormStep>
           </div>
           <div className={'pb-8'}>
