@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, ReactNode, useCallback } from 'react';
 import NextLink from 'next/link';
 
 //TODO: add other types
@@ -12,12 +12,18 @@ type Props = {
   to?: string;
   title?: string;
   type?: LinkType;
-  onClick?: () => void;
+  onClick?: (e?: any) => void;
 };
 
 const Link: FC<Props> = ({ to, title = '', type = LinkType.Primary, children, onClick }) => {
   const renderComponent = useCallback(() => {
-    return children ?? <a className={`${type}`}> {title}</a>;
+    return (
+      children ?? (
+        <a className={`${type}`} onClick={onClick}>
+          {title}
+        </a>
+      )
+    );
   }, [children, type, title]);
   if (onClick) {
     return children ?? renderComponent();

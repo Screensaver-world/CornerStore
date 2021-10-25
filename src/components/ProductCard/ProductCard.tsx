@@ -5,10 +5,14 @@ import Link from 'components/Link';
 import Avatar from 'components/Avatar/Avatar';
 import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
 import { getImage, shortAddress } from 'utils/itemUtils';
+import { useToggle } from 'hooks/useToggle';
+import CheckoutModal from 'features/home/details/components/CheckoutModal';
+import { getOnboard } from 'utils/walletUtils';
+import { useWallet } from 'wallet/state';
 
 type Props = {
   item: NtfItem;
-  sellOrder: { take?: SellOrderTake };
+  sellOrder: { take?: SellOrderTake; hash: string };
 };
 
 const ProductCard: FC<Props> = ({ item, sellOrder }) => {
@@ -16,7 +20,8 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
 
   const image = getImage(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
-
+  const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
+  const [state, dispatch] = useWallet();
   useEffect(() => {
     setRenderFavButton(true);
   }, []);
@@ -55,8 +60,28 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
-                <Link to="#" title="Buy Now" />
+                <Link
+                  title="Buy Now"
+                  onClick={async (e) => {
+                    e.stopPropagation();
+                    const onboard = getOnboard(dispatch);
+                    if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+                      setCheckoutVisible(true);
+                    }
+                  }}
+                />
               </div>
+              {isCheckoutVisible && (
+                <CheckoutModal
+                  isOpen={isCheckoutVisible}
+                  onClose={setCheckoutVisible}
+                  currency={sellOrder?.take?.assetType?.assetClass}
+                  orderHash={sellOrder.hash}
+                  price={sellOrder?.take.value}
+                  //TODO should we hide avail. quan. since we use erc721
+                  // availableQuantity={item.availableQuantity}
+                />
+              )}
               {renderFavButton && (
                 <Button
                   customClasses="text-gray-600 py-0"
