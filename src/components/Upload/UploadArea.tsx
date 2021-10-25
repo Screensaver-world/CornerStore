@@ -2,6 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import { UploadIcon } from 'assets';
 import Link from '../Link';
 import { useDropzone } from 'react-dropzone';
+import FormItemWrapper from 'components/Form/FormItemWrapper';
 
 type Props = { form: any; name: string };
 
@@ -17,14 +18,13 @@ function UploadArea({ form, name }: Props) {
   }, [ref]);
 
   const onDrop = useCallback((acceptedFiles) => {
-    console.log(acceptedFiles);
-    form.setValue(name, acceptedFiles);
+    form.setValue(name, acceptedFiles, { shouldValidate: true });
   }, []);
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-    <>
+    <FormItemWrapper form={form} name={name}>
       <div {...getRootProps()} className="flex flex-1" onClick={onClick}>
         <div className={`w-full border-dashed border-secondary border-2 ${borderGradient}`}>
           <div className={'flex justify-center align-center px-16 py-16 bg-gray-500 rounded-sm'}>
@@ -35,7 +35,7 @@ function UploadArea({ form, name }: Props) {
                 <label className="relative font-medium text-white bg-white rounded-md cursor-pointer hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                   <input
                     {...getInputProps()}
-                    onChange={(e) => form.setValue(name, e.target.files)}
+                    onChange={(e) => form.setValue(name, e.target.files, { shouldValidate: true })}
                     ref={ref}
                     id="file-upload"
                     name="file-upload"
@@ -49,7 +49,7 @@ function UploadArea({ form, name }: Props) {
           </div>
         </div>
       </div>
-    </>
+    </FormItemWrapper>
   );
 }
 

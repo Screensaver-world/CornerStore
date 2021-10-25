@@ -4,7 +4,7 @@ import { routes } from './routes';
 import { useForm } from 'react-hook-form';
 import UploadArea from '../components/Upload';
 import Button, { ButtonType } from '../components/Button';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
@@ -12,9 +12,27 @@ import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { useRouter } from 'next/router';
 import { store } from 'api/nftStorageApi';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = yup.object().shape({
+  title: yup.string().required('Name is missing'),
+  'file-upload': yup.mixed().required('File is required'),
+  price: yup
+    .string()
+    .required('Price is missing')
+    .test('format', 'Inccorect format', (value) => {
+      try {
+        Number.parseFloat(value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }),
+});
 
 const MintPage = () => {
-  const form = useForm();
+  const form = useForm({ resolver: yupResolver(schema) });
 
   const router = useRouter();
   const [{ address, web3, raribleSDK }] = useWallet();

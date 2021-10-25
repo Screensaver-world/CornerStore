@@ -15,6 +15,7 @@
     "@headlessui/react": "^1.4.1",
     "@heroicons/react": "^1.0.4",
     "@hookform/error-message": "^2.0.0",
+    "@hookform/resolvers": "^2.8.2",
     "@rarible/protocol-api-client": "^0.1.8",
     "@rarible/protocol-ethereum-sdk": "^0.7.5",
     "@rarible/types": "^0.1.9",
@@ -39,7 +40,8 @@
     "react-hook-form": "^7.16.1",
     "react-query": "^3.25.0",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
-    "web3": "^1.6.0"
+    "web3": "^1.6.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
