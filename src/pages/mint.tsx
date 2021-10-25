@@ -14,6 +14,8 @@ import { useRouter } from 'next/router';
 import { store } from 'api/nftStorageApi';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useToggle } from 'hooks/useToggle';
+import Modal from 'components/Modal';
 
 const schema = yup.object().shape({
   title: yup.string().required('Name is missing'),
@@ -33,7 +35,7 @@ const schema = yup.object().shape({
 
 const MintPage = () => {
   const form = useForm({ resolver: yupResolver(schema) });
-
+  const [showPreviewPicker, setShowPreviewPicker] = useToggle(false);
   const router = useRouter();
   const [{ address, web3, raribleSDK }] = useWallet();
   const submit = useCallback(
@@ -95,12 +97,13 @@ const MintPage = () => {
     },
     [web3, address]
   );
+  const submitForm = form.handleSubmit(submit);
   return (
     <>
       <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
-        <form onSubmit={form.handleSubmit(submit)}>
+        <form onSubmit={submitForm}>
           <div className={'pb-8'}>
             <FormStep title={'Upload File'}>
               <UploadArea form={form} name={'file-upload'} />
@@ -126,8 +129,25 @@ const MintPage = () => {
               title={'Other Information'}
               footer={
                 <div className={'flex justify-end'}>
-                  <Button title={'Preview'} type={ButtonType.Secondary} />
-                  <Button customClasses={'ml-4'} title={'Create Item'} />
+                  <Button
+                    title={'Preview'}
+                    type={ButtonType.Secondary}
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  />
+                  <Button
+                    customClasses={'ml-4'}
+                    title={'Create Item'}
+                    onClick={(e) => {
+                      const item = form.getValues('file-upload');
+                      if (item?.[0].type?.startsWith('image')) {
+                        return;
+                      }
+                      setShowPreviewPicker();
+                      e.preventDefault();
+                    }}
+                  />
                 </div>
               }
             >
@@ -167,6 +187,22 @@ const MintPage = () => {
               </div>
             </FormStep>
           </div>
+          <Modal
+            isOpen={showPreviewPicker}
+            onClose={setShowPreviewPicker}
+            title="Pick preview image"
+            description="Preview image"
+          >
+            <UploadArea
+              form={form}
+              accept="image/*"
+              name={'preview-upload'}
+              onFinish={() => {
+                setShowPreviewPicker();
+                submitForm();
+              }}
+            />
+          </Modal>
         </form>
       </div>
     </>
