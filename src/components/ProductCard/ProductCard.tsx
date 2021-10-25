@@ -71,8 +71,9 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                   }}
                 />
               </div>
-              {isCheckoutVisible && (
+              {isCheckoutVisible && state.balance !== '-1' && (
                 <CheckoutModal
+                  title={item?.meta?.name}
                   isOpen={isCheckoutVisible}
                   onClose={setCheckoutVisible}
                   currency={sellOrder?.take?.assetType?.assetClass}

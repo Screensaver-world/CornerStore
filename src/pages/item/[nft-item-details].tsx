@@ -35,7 +35,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   useEffect(() => {
     setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
   }, []);
-  const [{ address }, dispatch] = useWallet();
+  const [{ address, balance }, dispatch] = useWallet();
   return (
     <div>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
@@ -122,8 +122,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               }
               customClasses="sticky bottom-4 lg:static"
             />
-            {isCheckoutVisible && (
+            {isCheckoutVisible && balance !== '-1' && (
               <CheckoutModal
+                title={item?.meta?.name}
                 isOpen={isCheckoutVisible}
                 onClose={setCheckoutVisible}
                 currency={sellOrder?.take?.assetType?.assetClass}
