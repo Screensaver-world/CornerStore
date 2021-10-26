@@ -7,9 +7,10 @@ export type ModalProps = {
   isOpen: boolean;
   onClose?: () => void;
   children?: React.ReactNode;
+  large?: boolean;
 };
 
-function Modal({ isOpen, onClose, title, description, children }: ModalProps) {
+function Modal({ isOpen, onClose, title, description, children, large }: ModalProps) {
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={onClose}>
@@ -39,8 +40,12 @@ function Modal({ isOpen, onClose, title, description, children }: ModalProps) {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md px-6 py-8 my-8 overflow-hidden text-left align-middle border-2 border-gray-700 shadow-2xl transition-all transform bg-secondary rounded-md">
-              <Dialog.Title as="h3" className="text-xl font-bold text-white leading-6">
+            <div
+              className={`inline-block w-full ${
+                large ? 'max-w-screen-md' : 'max-w-md'
+              } px-6 py-8 my-8 overflow-hidden text-left align-middle transition-all transform border-2 border-gray-700 rounded-md shadow-2xl bg-secondary`}
+            >
+              <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-white">
                 {title}
               </Dialog.Title>
               <div className="mt-4">

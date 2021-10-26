@@ -192,6 +192,7 @@ const MintPage = () => {
             </FormStep>
           </div>
           <Modal
+            large
             isOpen={showPreviewPicker}
             onClose={setShowPreviewPicker}
             title="Pick preview image"
