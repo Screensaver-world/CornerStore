@@ -77,7 +77,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                   isOpen={isCheckoutVisible}
                   onClose={setCheckoutVisible}
                   currency={sellOrder?.take?.assetType?.assetClass}
-                  orderHash={sellOrder.hash}
+                  orderHash={sellOrder?.hash}
                   price={sellOrder?.take.value}
                   //TODO should we hide avail. quan. since we use erc721
                   // availableQuantity={item.availableQuantity}
