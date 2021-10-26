@@ -14,7 +14,7 @@ import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown'
 import { Popover } from '@headlessui/react';
 import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
-import { getImage, shortAddress } from 'utils/itemUtils';
+import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 import { useWallet } from 'wallet/state';
 import { getOnboard } from 'utils/walletUtils';
@@ -60,7 +60,15 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
           <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
             <div className={'flex justify-center bg-secondary'}>
               {/*// todo fix*/}
-              <img src={getImage(item.meta, true)} className={'p-5 lg:p-16 w-full h-full'} />
+              {item.meta.animation ? (
+                <video
+                  controls
+                  src={getImageOrAnimation(item.meta, true, true)}
+                  className={'p-5 lg:p-16 w-full h-full'}
+                />
+              ) : (
+                <img src={getImageOrAnimation(item.meta, true)} className={'p-5 lg:p-16 w-full h-full'} />
+              )}
             </div>
           </div>
 
@@ -158,6 +166,8 @@ export async function getServerSideProps(context) {
       sort: 'EARLIEST_FIRST',
     });
   }
+  console.log(props.item.meta.animation);
+
   return {
     props, // will be passed to the page component as props
   };

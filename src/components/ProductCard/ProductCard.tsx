@@ -4,7 +4,7 @@ import React, { FC, useState, useEffect } from 'react';
 import Link from 'components/Link';
 import Avatar from 'components/Avatar/Avatar';
 import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
-import { getImage, shortAddress } from 'utils/itemUtils';
+import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { useToggle } from 'hooks/useToggle';
 import CheckoutModal from 'features/home/details/components/CheckoutModal';
 import { getOnboard } from 'utils/walletUtils';
@@ -18,7 +18,7 @@ type Props = {
 const ProductCard: FC<Props> = ({ item, sellOrder }) => {
   const address = shortAddress(item?.creators?.[0]?.account ?? '0x000', 5, 4);
 
-  const image = getImage(item.meta);
+  const image = getImageOrAnimation(item.meta);
   const [renderFavButton, setRenderFavButton] = useState(false);
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   const [state, dispatch] = useWallet();

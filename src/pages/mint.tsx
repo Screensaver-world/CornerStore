@@ -42,20 +42,20 @@ const MintPage = () => {
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
 
-      const { IpfsHash: image } = await pinFileToIPFS(data['file-upload'][0]);
-      let animation;
+      const { IpfsHash: item } = await pinFileToIPFS(data['file-upload'][0]);
+      let preview;
       if (data['preview-upload']) {
-        animation = (await pinFileToIPFS(data['file-upload'][0])).IpfsHash;
+        preview = (await pinFileToIPFS(data['preview-upload'][0])).IpfsHash;
       }
       const { IpfsHash: metadata } = await pinJSONToIpfs(
         JSON.stringify({
           description: data.description,
           name: data.title,
-          image: `ipfs://ipfs/${image}`,
+          image: `ipfs://ipfs/${preview ?? item}`,
           creator: address,
           creationDate: new Date(),
           external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
-          animation,
+          animation_url: preview ? `ipfs://ipfs/${item}` : undefined,
         })
       );
 
@@ -89,7 +89,7 @@ const MintPage = () => {
         originFees: [],
         payouts: [],
         price: web3.utils.toWei(data.price.replace(',', '')).toString(),
-        takeAssetType: { assetClass: data['price-currency'] },
+        takeAssetType: { assetClass: data['price-currency'], contract: toAddress(CONTRACT_ID) },
       };
       await raribleSDK.order.sell(request);
 
