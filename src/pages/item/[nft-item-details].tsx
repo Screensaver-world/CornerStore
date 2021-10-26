@@ -166,7 +166,6 @@ export async function getServerSideProps(context) {
       sort: 'EARLIEST_FIRST',
     });
   }
-  console.log(props.item.meta.animation);
 
   return {
     props, // will be passed to the page component as props
