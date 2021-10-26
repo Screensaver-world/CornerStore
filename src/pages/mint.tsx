@@ -139,8 +139,12 @@ const MintPage = () => {
                   <Button
                     customClasses={'ml-4'}
                     title={'Create Item'}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       const item = form.getValues('file-upload');
+                      const valid = await form.trigger();
+                      if (!valid) {
+                        return;
+                      }
                       if (item?.[0].type?.startsWith('image')) {
                         return;
                       }
