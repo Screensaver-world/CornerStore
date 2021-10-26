@@ -11,7 +11,7 @@ import { useWallet } from 'wallet/state';
 import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
 import { toAddress, toBigNumber } from '@rarible/types';
 import { useRouter } from 'next/router';
-import { store } from 'api/nftStorageApi';
+import { pinFileToIPFS, pinJSONToIpfs } from 'api/pinataApi';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useToggle } from 'hooks/useToggle';
@@ -42,13 +42,12 @@ const MintPage = () => {
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
 
-      const {
-        value: { cid: image },
-      } = await store(data['file-upload'][0]);
-
-      const {
-        value: { cid: metadata },
-      } = await store(
+      const { IpfsHash: image } = await pinFileToIPFS(data['file-upload'][0]);
+      let animation;
+      if (data['preview-upload']) {
+        animation = (await pinFileToIPFS(data['file-upload'][0])).IpfsHash;
+      }
+      const { IpfsHash: metadata } = await pinJSONToIpfs(
         JSON.stringify({
           description: data.description,
           name: data.title,
@@ -56,6 +55,7 @@ const MintPage = () => {
           creator: address,
           creationDate: new Date(),
           external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
+          animation,
         })
       );
 
