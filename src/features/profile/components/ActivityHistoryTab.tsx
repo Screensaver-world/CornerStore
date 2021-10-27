@@ -38,7 +38,7 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
     }
   }, [address]);
   return (
-    <div className="max-w-screen-lg px-4 py-3 mx-auto sm:px-6 lg:px-6 lg:py-6">
+    <div className="px-4 py-3 mx-auto max-w-screen-lg sm:px-6 lg:px-6 lg:py-6">
       {items.map((item, id) => (
         <ActivityCard key={id} item={item} address={address} />
       ))}

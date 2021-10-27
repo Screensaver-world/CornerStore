@@ -45,7 +45,7 @@ function Modal({ isOpen, onClose, title, description, children, large }: ModalPr
                 large ? 'max-w-screen-md' : 'max-w-md'
               } px-6 py-8 my-8 overflow-hidden text-left align-middle transition-all transform border-2 border-gray-700 rounded-md shadow-2xl bg-secondary`}
             >
-              <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-white">
+              <Dialog.Title as="h3" className="text-xl font-bold text-white leading-6">
                 {title}
               </Dialog.Title>
               <div className="mt-4">
