@@ -45,7 +45,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <h1 className="text-2xl font-bold text-white">{item?.meta?.name}</h1>
               <Popover className="relative text-white">
                 <Popover.Button>
-                  <Button icon={DotsIcon} type={ButtonType.Secondary} />
+                  <div className="rounded px-4 py-2.5 border-gray-600 bg-secondary">
+                    <img className="px-0.5" src={DotsIcon} />
+                  </div>
                 </Popover.Button>
                 <Popover.Panel className="absolute right-0 z-10 text-white">
                   <div className="absolute right-0 flex">
