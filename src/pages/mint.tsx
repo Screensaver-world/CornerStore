@@ -89,7 +89,7 @@ const MintPage = () => {
         originFees: [],
         payouts: [],
         price: web3.utils.toWei(data.price.replace(',', '')).toString(),
-        takeAssetType: { assetClass: data['price-currency'], contract: toAddress(CONTRACT_ID) },
+        takeAssetType: { assetClass: data['price-currency'] },
       };
       await raribleSDK.order.sell(request);
 

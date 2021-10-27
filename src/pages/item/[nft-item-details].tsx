@@ -6,7 +6,7 @@ import HistoryTab from 'features/home/details/components/HistoryTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import BidsTab from 'features/home/details/components/BidsTab';
 import OwnersTab from 'features/home/details/components/OwnersTab';
-import Button, { ButtonType } from 'components/Button';
+import Button from 'components/Button';
 import CheckoutModal from '../../features/home/details/components/CheckoutModal';
 import { useToggle } from '../../hooks/useToggle';
 import { DotsIcon } from 'assets';

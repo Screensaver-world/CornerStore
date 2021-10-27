@@ -17,8 +17,8 @@ type Props = Omit<ModalProps, 'title' | 'description'> & {
 function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
   const [{ address, web3, balance }] = useWallet();
   const onSubmit = useCallback(async () => {
-    const tx = await matchOrder(address, orderHash, price);
-    web3.eth.sendTransaction({ ...tx, value: price });
+    const tx = await matchOrder(address, orderHash, 1);
+    web3.eth.sendTransaction(tx);
   }, [address, orderHash, price]);
   const form = useForm({
     defaultValues: {
