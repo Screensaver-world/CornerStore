@@ -1,10 +1,11 @@
 import { NftItemMeta } from 'api/raribleRequestTypes';
 
-export const getImage = (meta: NftItemMeta, reverseOrder = false) => {
-  if (!meta?.image) {
+export const getImageOrAnimation = (meta: NftItemMeta, reverseOrder = false, animation = false) => {
+  const attribute = animation ? 'animation' : 'image';
+  if (!meta?.[attribute]) {
     return null;
   }
-  const { url } = meta?.image ?? {};
+  const { url } = meta?.[attribute] ?? {};
   //TODO: improve xd
   const img = reverseOrder ? url?.PREVIEW ?? url?.ORIGINAL ?? url?.BIG : url?.BIG ?? url?.ORIGINAL ?? url?.PREVIEW;
   return img?.startsWith('ipfs') ? img.replace('ipfs://', 'https://ipfs.io/') : img;

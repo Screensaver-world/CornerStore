@@ -7,7 +7,7 @@ import ProductCard from './ProductCard';
 
 type Props = {
   itemsData: NtfItem[];
-  ordersData: { take?: SellOrderTake }[];
+  ordersData: { take?: SellOrderTake; hash: string }[];
   onLoadMore?: () => void;
 };
 
@@ -20,7 +20,7 @@ const ProductList: FC<Props> = ({ itemsData, onLoadMore, ordersData }) => {
           className="grid sm:grid-cols-2 sm:gap-x-6 gap-y-6 sm:space-y-0 lg:grid-cols-4 lg:gap-x-6 xl:grid-cols-5 "
         >
           {itemsData?.map((item, idx) => (
-            <ProductCard key={item.id} item={item} sellOrder={ordersData?.[idx] ?? {}} />
+            <ProductCard key={item.id} item={item} sellOrder={ordersData?.[idx] ?? null} />
           ))}
         </ul>
       </div>

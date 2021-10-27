@@ -156,6 +156,7 @@ export type GetActivityHistoryResponse = {
 export type SellOrderTake = {
   valueDecimal: number;
   assetType: { assetClass: string };
+  value: number;
 };
 
 export type PrepareTransactionRequest = {

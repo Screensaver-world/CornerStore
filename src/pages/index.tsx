@@ -7,6 +7,13 @@ import { GetNftItemsResponse, NftItemsRequestType, NtfItem } from 'api/raribleRe
 import { getSellOrdersForItems } from 'utils/raribleApiUtils';
 import { CONTRACT_ID } from 'utils/constants';
 
+const searchParams = {
+  size: 25,
+  showDeleted: false,
+  includeMeta: true,
+  type: NftItemsRequestType.BY_COLLECTION,
+  address: CONTRACT_ID,
+};
 enum OrderBy {
   RecentlyAdded = 'Recently added',
   PriceLowToHigh = 'Price: Low to High',
@@ -30,7 +37,7 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => 
     []
   );
   const [continuation, setContinuation] = useState(itemsData.continuation);
-  const { data, refetch } = useGetNftItems({ continuation, size: 20, includeMeta: true });
+  const { data, refetch } = useGetNftItems({ continuation, ...searchParams });
   const [items, setItems] = useState<NtfItem[]>(itemsData.items);
 
   useEffect(() => {
@@ -62,11 +69,7 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => 
 };
 export async function getServerSideProps(context) {
   const itemsData = await getNftItems({
-    size: 25,
-    showDeleted: false,
-    includeMeta: true,
-    type: NftItemsRequestType.BY_COLLECTION,
-    address: CONTRACT_ID,
+    ...searchParams,
   });
   const ordersData = await getSellOrdersForItems(itemsData.items);
   return {

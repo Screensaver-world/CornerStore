@@ -8,35 +8,54 @@ import { useCallback } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
-import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
-import { toAddress, toBigNumber } from '@rarible/types';
+import { toAddress } from '@rarible/types';
 import { useRouter } from 'next/router';
-import { store } from 'api/nftStorageApi';
+import { pinFileToIPFS, pinJSONToIpfs } from 'api/pinataApi';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useToggle } from 'hooks/useToggle';
+import Modal from 'components/Modal';
+import { createSellOrder } from 'utils/raribleApiUtils';
+
+const schema = yup.object().shape({
+  title: yup.string().required('Name is missing'),
+  'file-upload': yup.mixed().required('File is required'),
+  price: yup
+    .string()
+    .required('Price is missing')
+    .test('format', 'Inccorect format', (value) => {
+      try {
+        Number.parseFloat(value);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }),
+});
 
 const MintPage = () => {
-  const form = useForm();
-
+  const form = useForm({ resolver: yupResolver(schema) });
+  const [showPreviewPicker, setShowPreviewPicker] = useToggle(false);
   const router = useRouter();
   const [{ address, web3, raribleSDK }] = useWallet();
-
   const submit = useCallback(
     async (data) => {
       const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
 
-      const {
-        value: { cid: image },
-      } = await store(data['file-upload'][0]);
-
-      const {
-        value: { cid: metadata },
-      } = await store(
+      const { IpfsHash: item } = await pinFileToIPFS(data['file-upload'][0]);
+      let preview;
+      if (data['preview-upload']) {
+        preview = (await pinFileToIPFS(data['preview-upload'][0])).IpfsHash;
+      }
+      const { IpfsHash: metadata } = await pinJSONToIpfs(
         JSON.stringify({
           description: data.description,
           name: data.title,
-          image: `ipfs://ipfs/${image}`,
+          image: `ipfs://ipfs/${preview ?? item}`,
           creator: address,
           creationDate: new Date(),
           external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
+          animation_url: preview ? `ipfs://ipfs/${item}` : undefined,
         })
       );
 
@@ -59,34 +78,28 @@ const MintPage = () => {
         lazy: true,
       });
 
-      const request: SellRequest = {
-        makeAssetType: {
-          assetClass: 'ERC721',
-          contract: toAddress(CONTRACT_ID),
-          tokenId: toBigNumber(token.tokenId),
-        },
-        amount: 1,
-        maker: toAddress(address),
-        originFees: [],
-        payouts: [],
-        price: web3.utils.toWei(data.price).toString(),
-        takeAssetType: { assetClass: data['price-currency'] },
-      };
-      await raribleSDK.order.sell(request);
+      await createSellOrder(
+        raribleSDK,
+        token.tokenId,
+        address,
+        web3.utils.toWei(data.price.replace(',', '')).toString(),
+        data['price-currency']
+      );
 
       router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },
     [web3, address]
   );
+  const submitForm = form.handleSubmit(submit);
   return (
     <>
-      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
+      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
-        <form onSubmit={form.handleSubmit(submit)}>
+        <form onSubmit={submitForm}>
           <div className={'pb-8'}>
             <FormStep title={'Upload File'}>
-              <UploadArea form={form} />
+              <UploadArea form={form} name={'file-upload'} />
             </FormStep>
           </div>
           <div className={'pb-8'}>
@@ -109,8 +122,29 @@ const MintPage = () => {
               title={'Other Information'}
               footer={
                 <div className={'flex justify-end'}>
-                  <Button title={'Preview'} type={ButtonType.Secondary} />
-                  <Button customClasses={'ml-4'} title={'Create Item'} />
+                  <Button
+                    title={'Preview'}
+                    type={ButtonType.Secondary}
+                    onClick={(e) => {
+                      e.preventDefault();
+                    }}
+                  />
+                  <Button
+                    customClasses={'ml-4'}
+                    title={'Create Item'}
+                    onClick={async (e) => {
+                      const item = form.getValues('file-upload');
+                      const valid = await form.trigger();
+                      if (!valid) {
+                        return;
+                      }
+                      if (item?.[0].type?.startsWith('image')) {
+                        return;
+                      }
+                      setShowPreviewPicker();
+                      e.preventDefault();
+                    }}
+                  />
                 </div>
               }
             >
@@ -150,6 +184,23 @@ const MintPage = () => {
               </div>
             </FormStep>
           </div>
+          <Modal
+            large
+            isOpen={showPreviewPicker}
+            onClose={setShowPreviewPicker}
+            title="Pick preview image"
+            description="Preview image"
+          >
+            <UploadArea
+              form={form}
+              accept="image/*"
+              name={'preview-upload'}
+              onFinish={() => {
+                setShowPreviewPicker();
+                submitForm();
+              }}
+            />
+          </Modal>
         </form>
       </div>
     </>

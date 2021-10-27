@@ -6,7 +6,7 @@ import HistoryTab from 'features/home/details/components/HistoryTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import BidsTab from 'features/home/details/components/BidsTab';
 import OwnersTab from 'features/home/details/components/OwnersTab';
-import Button, { ButtonType } from 'components/Button';
+import Button from 'components/Button';
 import CheckoutModal from '../../features/home/details/components/CheckoutModal';
 import { useToggle } from '../../hooks/useToggle';
 import { DotsIcon } from 'assets';
@@ -14,7 +14,7 @@ import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown'
 import { Popover } from '@headlessui/react';
 import { getActivityHistory, getNftItemById, getNftOrders } from 'api/raribleApi';
 import makeBlockie from 'ethereum-blockies-base64';
-import { getImage, shortAddress } from 'utils/itemUtils';
+import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 import { useWallet } from 'wallet/state';
 import { getOnboard } from 'utils/walletUtils';
@@ -35,7 +35,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   useEffect(() => {
     setCreatorAvatar(makeBlockie(item?.creators?.[0].account ?? '0x000'));
   }, []);
-  const [{ address }, dispatch] = useWallet();
+  const [{ address, balance }, dispatch] = useWallet();
   return (
     <div>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
@@ -45,7 +45,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <h1 className="text-2xl font-bold text-white">{item?.meta?.name}</h1>
               <Popover className="relative text-white">
                 <Popover.Button>
-                  <Button icon={DotsIcon} type={ButtonType.Secondary} />
+                  <div className="rounded px-4 py-2.5 border-gray-600 bg-secondary">
+                    <img className="px-0.5" src={DotsIcon} />
+                  </div>
                 </Popover.Button>
                 <Popover.Panel className="absolute right-0 z-10 text-white">
                   <div className="absolute right-0 flex">
@@ -60,7 +62,15 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
           <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
             <div className={'flex justify-center bg-secondary'}>
               {/*// todo fix*/}
-              <img src={getImage(item.meta, true)} className={'p-5 lg:p-16 w-full h-full'} />
+              {item.meta.animation ? (
+                <video
+                  controls
+                  src={getImageOrAnimation(item.meta, true, true)}
+                  className={'p-5 lg:p-16 w-full h-full'}
+                />
+              ) : (
+                <img src={getImageOrAnimation(item.meta, true)} className={'p-5 lg:p-16 w-full h-full'} />
+              )}
             </div>
           </div>
 
@@ -122,8 +132,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               }
               customClasses="sticky bottom-4 lg:static"
             />
-            {isCheckoutVisible && (
+            {isCheckoutVisible && balance !== '-1' && (
               <CheckoutModal
+                title={item?.meta?.name}
                 isOpen={isCheckoutVisible}
                 onClose={setCheckoutVisible}
                 currency={sellOrder?.take?.assetType?.assetClass}
@@ -157,6 +168,7 @@ export async function getServerSideProps(context) {
       sort: 'EARLIEST_FIRST',
     });
   }
+
   return {
     props, // will be passed to the page component as props
   };
