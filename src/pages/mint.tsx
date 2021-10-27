@@ -8,14 +8,14 @@ import { useCallback } from 'react';
 import { generateNftToken } from 'api/raribleApi';
 import { CONTRACT_ID } from 'utils/constants';
 import { useWallet } from 'wallet/state';
-import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
-import { toAddress, toBigNumber } from '@rarible/types';
+import { toAddress } from '@rarible/types';
 import { useRouter } from 'next/router';
 import { pinFileToIPFS, pinJSONToIpfs } from 'api/pinataApi';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useToggle } from 'hooks/useToggle';
 import Modal from 'components/Modal';
+import { createSellOrder } from 'utils/raribleApiUtils';
 
 const schema = yup.object().shape({
   title: yup.string().required('Name is missing'),
@@ -78,20 +78,13 @@ const MintPage = () => {
         lazy: true,
       });
 
-      const request: SellRequest = {
-        makeAssetType: {
-          assetClass: 'ERC721',
-          contract: toAddress(CONTRACT_ID),
-          tokenId: toBigNumber(token.tokenId),
-        },
-        amount: 1,
-        maker: toAddress(address),
-        originFees: [],
-        payouts: [],
-        price: web3.utils.toWei(data.price.replace(',', '')).toString(),
-        takeAssetType: { assetClass: data['price-currency'] },
-      };
-      await raribleSDK.order.sell(request);
+      await createSellOrder(
+        raribleSDK,
+        token.tokenId,
+        address,
+        web3.utils.toWei(data.price.replace(',', '')).toString(),
+        data['price-currency']
+      );
 
       router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
     },

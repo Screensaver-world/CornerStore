@@ -1,5 +1,10 @@
+import { Order } from '@rarible/protocol-api-client';
+import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
+import { SellRequest } from '@rarible/protocol-ethereum-sdk/build/order/sell';
+import { toAddress, toBigNumber } from '@rarible/types';
 import { getNftItemById, getNftOrders, prepareTransaction } from 'api/raribleApi';
 import { NtfItem, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
+import { CONTRACT_ID } from './constants';
 
 export const getSellOrdersForItems = async (items: NtfItem[]) => {
   const orders = await Promise.all(
@@ -82,4 +87,30 @@ export async function matchOrder(maker: string, hash: string, amount: number): P
     value,
   };
   return tx;
+}
+
+export async function createSellOrder(
+  raribleSDK: ReturnType<typeof createRaribleSdk>,
+  tokenId: string,
+  address: string,
+  price: string,
+  currency: 'ETH' | 'ERC20'
+): Promise<Order> {
+  const takeAssetType =
+    currency === 'ERC20' ? { assetClass: currency, contract: toAddress(CONTRACT_ID) } : { assetClass: currency };
+
+  const request: SellRequest = {
+    makeAssetType: {
+      assetClass: 'ERC721',
+      contract: toAddress(CONTRACT_ID),
+      tokenId: toBigNumber(tokenId),
+    },
+    amount: 1,
+    maker: toAddress(address),
+    originFees: [],
+    payouts: [],
+    price,
+    takeAssetType: takeAssetType,
+  };
+  return await raribleSDK.order.sell(request);
 }
