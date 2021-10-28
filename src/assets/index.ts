@@ -12,6 +12,8 @@ export { default as SearchIcon } from './icons/search.svg';
 export { default as CopyIcon } from './icons/copy.svg';
 export { default as DotsIcon } from './icons/dots.svg';
 export { default as VerifiedIcon } from './icons/verified.svg';
+export { default as PriceIcon } from './icons/price.svg';
+export { default as BidsIcon } from './icons/bids.svg';
 
 export { default as Logo } from './logo.png';
 

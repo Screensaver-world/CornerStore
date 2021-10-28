@@ -18,6 +18,7 @@ import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { ActivityHistoryFilter, OrderFilter, OrderRequestTypes } from 'api/raribleRequestTypes';
 import { useWallet } from 'wallet/state';
 import { getOnboard } from 'utils/walletUtils';
+import PutOnSaleModal from 'features/home/details/sales/PutOnSaleModal';
 
 //TODO fix types.. here and in queries :)
 type Props = { item: any; sellOrder: any; initialHistory?: any; id: string };
@@ -30,6 +31,8 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   };
   const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
+  const [isPutOnSaleVisible, setPutOnSaleVisible] = useToggle(false);
+
   const [creatorAvatar, setCreatorAvatar] = useState(null);
 
   useEffect(() => {
@@ -118,6 +121,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               title={
                 sellOrder
                   ? `Buy for ${sellOrder?.take.valueDecimal} ${sellOrder?.take.assetType.assetClass}`
+                  : // TODO hadnele multiple owners
+                  item.owners[0] === address
+                  ? 'Set on sale'
                   : 'Not for sale'
               }
               onClick={
@@ -128,6 +134,8 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
                         setCheckoutVisible(true);
                       }
                     }
+                  : item.owners[0] === address
+                  ? setPutOnSaleVisible
                   : null
               }
               customClasses="sticky bottom-4 lg:static"
@@ -140,6 +148,15 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
                 currency={sellOrder?.take?.assetType?.assetClass}
                 orderHash={sellOrder.hash}
                 price={sellOrder?.take.value}
+                //TODO should we hide avail. quan. since we use erc721
+                // availableQuantity={item.availableQuantity}
+              />
+            )}
+            {isPutOnSaleVisible && (
+              <PutOnSaleModal
+                isOpen={isPutOnSaleVisible}
+                onClose={setPutOnSaleVisible}
+
                 //TODO should we hide avail. quan. since we use erc721
                 // availableQuantity={item.availableQuantity}
               />
