@@ -18,8 +18,9 @@ export const getSellOrdersForItems = async (items: NtfItem[]) => {
     if (!order) {
       return { take: {} };
     }
-    const { take } = order;
-    return { take };
+
+    const { take, hash } = order;
+    return { take, hash };
   });
 };
 
@@ -76,6 +77,7 @@ export async function matchOrder(maker: string, hash: string, amount: number): P
     payouts: [],
     originFees: [],
   });
+
   const {
     transaction: { data, to },
     asset: { value },

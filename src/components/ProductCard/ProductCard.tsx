@@ -1,14 +1,14 @@
-import { FavouriteIcon } from 'assets';
-import Button, { ButtonType } from '../Button';
-import React, { FC, useState, useEffect } from 'react';
-import Link from 'components/Link';
-import Avatar from 'components/Avatar/Avatar';
 import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
-import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
-import { useToggle } from 'hooks/useToggle';
+import { FavouriteIcon } from 'assets';
+import Avatar from 'components/Avatar/Avatar';
+import Link from 'components/Link';
 import CheckoutModal from 'features/home/details/components/CheckoutModal';
+import { useToggle } from 'hooks/useToggle';
+import React, { FC, useEffect, useState } from 'react';
+import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { getOnboard } from 'utils/walletUtils';
 import { useWallet } from 'wallet/state';
+import Button, { ButtonType } from '../Button';
 
 type Props = {
   item: NtfItem;
