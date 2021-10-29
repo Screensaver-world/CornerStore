@@ -156,7 +156,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <PutOnSaleModal
                 isOpen={isPutOnSaleVisible}
                 onClose={setPutOnSaleVisible}
-
+                tokenId={item.tokenId}
                 //TODO should we hide avail. quan. since we use erc721
                 // availableQuantity={item.availableQuantity}
               />
