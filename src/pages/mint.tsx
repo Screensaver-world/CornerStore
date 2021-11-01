@@ -1,21 +1,15 @@
-import { FormStep, NumberInput, TextArea, TextInput } from '../components/Form';
-import Breadcrumb from '../components/Breadcrumb';
-import { routes } from './routes';
-import { useForm } from 'react-hook-form';
-import UploadArea from '../components/Upload';
-import Button, { ButtonType } from '../components/Button';
-import { useCallback } from 'react';
-import { generateNftToken } from 'api/raribleApi';
-import { CONTRACT_ID } from 'utils/constants';
-import { useWallet } from 'wallet/state';
-import { toAddress } from '@rarible/types';
-import { useRouter } from 'next/router';
-import { pinFileToIPFS, pinJSONToIpfs } from 'api/pinataApi';
-import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useToggle } from 'hooks/useToggle';
 import Modal from 'components/Modal';
-import { createSellOrder } from 'utils/raribleApiUtils';
+import MintModal from 'features/mint/MintModal';
+import { useToggle } from 'hooks/useToggle';
+import { useCallback, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import Breadcrumb from '../components/Breadcrumb';
+import Button, { ButtonType } from '../components/Button';
+import { FormStep, NumberInput, TextArea, TextInput } from '../components/Form';
+import UploadArea from '../components/Upload';
+import { routes } from './routes';
 
 const schema = yup.object().shape({
   title: yup.string().required('Name is missing'),
@@ -36,64 +30,19 @@ const schema = yup.object().shape({
 const MintPage = () => {
   const form = useForm({ resolver: yupResolver(schema) });
   const [showPreviewPicker, setShowPreviewPicker] = useToggle(false);
-  const router = useRouter();
-  const [{ address, web3, raribleSDK }] = useWallet();
+  const [showMintModal, setShowMintModal] = useToggle(false);
+  const [mintData, setMintData] = useState({});
   const submit = useCallback(
     async (data) => {
-      const token = await generateNftToken({ collection: CONTRACT_ID, minter: address });
-
-      const { IpfsHash: item } = await pinFileToIPFS(data['file-upload'][0]);
-      let preview;
-      if (data['preview-upload']) {
-        preview = (await pinFileToIPFS(data['preview-upload'][0])).IpfsHash;
-      }
-      const { IpfsHash: metadata } = await pinJSONToIpfs(
-        JSON.stringify({
-          description: data.description,
-          name: data.title,
-          image: `ipfs://ipfs/${preview ?? item}`,
-          creator: address,
-          creationDate: new Date(),
-          external_url: `localhost:3000/${CONTRACT_ID}:${token.tokenId}`,
-          animation_url: preview ? `ipfs://ipfs/${item}` : undefined,
-        })
-      );
-
-      const nftCollection = await raribleSDK.apis.nftCollection.getNftCollectionById({ collection: CONTRACT_ID });
-      await raribleSDK.nft.mint({
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //@ts-ignore
-        collection: nftCollection,
-        uri: `ipfs://ipfs/${metadata}`,
-        nftTokenId: token,
-        creators: [{ account: toAddress(address), value: 10000 }],
-        royalties: data.royalties
-          ? [
-              {
-                account: toAddress(address),
-                value: data.royalties * 100,
-              },
-            ]
-          : [],
-        lazy: true,
-      });
-
-      await createSellOrder(
-        raribleSDK,
-        token.tokenId,
-        address,
-        web3.utils.toWei(data.price.replace(',', '')).toString(),
-        data['price-currency']
-      );
-
-      router.push(`item/${CONTRACT_ID}:${token.tokenId}`);
+      setMintData(data);
+      setShowMintModal(true);
     },
-    [web3, address]
+    [setMintData, setShowMintModal]
   );
   const submitForm = form.handleSubmit(submit);
   return (
     <>
-      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
+      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <form onSubmit={submitForm}>
@@ -203,6 +152,7 @@ const MintPage = () => {
           </Modal>
         </form>
       </div>
+      {showMintModal && <MintModal mintData={mintData} isOpen={showMintModal} onClose={setShowMintModal} />}
     </>
   );
 };
