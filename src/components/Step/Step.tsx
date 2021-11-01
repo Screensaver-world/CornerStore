@@ -17,7 +17,6 @@ export type Props = {
 };
 
 const Step: FC<Props> = ({ stepState, title, description, retryAction, errorMessage }) => {
-  console.log(stepState, retryAction);
   return (
     <div className="flex flex-col">
       <div className="flex">

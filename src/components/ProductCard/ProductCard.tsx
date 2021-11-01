@@ -4,7 +4,7 @@ import Avatar from 'components/Avatar/Avatar';
 import Link from 'components/Link';
 import CheckoutModal from 'features/home/details/components/CheckoutModal';
 import { useToggle } from 'hooks/useToggle';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { getOnboard } from 'utils/walletUtils';
 import { useWallet } from 'wallet/state';
@@ -26,10 +26,21 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
     setRenderFavButton(true);
   }, []);
 
+  const onBuyNow = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      const onboard = getOnboard(dispatch);
+      if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+        setCheckoutVisible(true);
+      }
+    },
+    [state]
+  );
+
   return (
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold hover:bg-gray-900">
-        <div className="flex flex-col justify-between h-full px-4 py-3 border border-gray-600 space-y-4 rounded-md">
+        <div className="flex flex-col justify-between h-full px-4 py-3 space-y-4 border border-gray-600 rounded-md">
           <div className="flex items-center space-x-4">
             <Link to={`/profile/${item?.creators?.[0].account}`}>
               <Avatar
@@ -37,7 +48,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                 // verified={item.userVerified}
               />
             </Link>
-            <div className="font-medium space-y-1 leading-6 text-small">
+            <div className="space-y-1 font-medium leading-6 text-small">
               <Link to={`/profile/${item?.creators?.[0].account}`}>
                 <h3 className="text-gray-700 hover:text-white">{`${address}`}</h3>
               </Link>
@@ -60,16 +71,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
-                <Link
-                  title="Buy Now"
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    const onboard = getOnboard(dispatch);
-                    if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
-                      setCheckoutVisible(true);
-                    }
-                  }}
-                />
+                <Link title="Buy Now" onClick={onBuyNow} />
               </div>
               {isCheckoutVisible && state.balance !== '-1' && (
                 <CheckoutModal
