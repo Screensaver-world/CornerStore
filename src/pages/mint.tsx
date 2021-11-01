@@ -42,7 +42,7 @@ const MintPage = () => {
   const submitForm = form.handleSubmit(submit);
   return (
     <>
-      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
+      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <form onSubmit={submitForm}>

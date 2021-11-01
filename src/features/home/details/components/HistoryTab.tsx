@@ -42,13 +42,13 @@ function HistoryTab({ initialHistory, address }: Props) {
         <HistoryCard key={index} data={d} />
       ))}
       {continuation && (
-        <div className="flex justify-center">
+        <div className="flex justify-center pb-5">
           <Button
             type={ButtonType.Main}
             title="Load more"
             customClasses="px-7 py-3"
             icon={ReloadIcon}
-            onClick={() => refetch}
+            onClick={() => refetch()}
           />
         </div>
       )}
