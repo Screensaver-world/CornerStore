@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
-import Modal, { ModalProps } from 'components/Modal';
-import { NumberInput } from 'components/Form';
 import Button from 'components/Button';
+import { NumberInput } from 'components/Form';
+import Modal, { ModalProps } from 'components/Modal';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { Currencies } from 'types';
-import { useWallet } from 'wallet/state';
 import { matchOrder } from 'utils/raribleApiUtils';
+import { useWallet } from 'wallet/state';
 
 type Props = Omit<ModalProps, 'title' | 'description'> & {
   price: number;
@@ -18,7 +18,8 @@ function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
   const [{ address, web3, balance }] = useWallet();
   const onSubmit = useCallback(async () => {
     const tx = await matchOrder(address, orderHash, 1);
-    web3.eth.sendTransaction(tx);
+    await web3.eth.sendTransaction(tx);
+    location.reload();
   }, [address, orderHash, price]);
   const form = useForm({
     defaultValues: {

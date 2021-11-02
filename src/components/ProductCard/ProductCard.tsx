@@ -1,14 +1,14 @@
-import { FavouriteIcon } from 'assets';
-import Button, { ButtonType } from '../Button';
-import React, { FC, useState, useEffect } from 'react';
-import Link from 'components/Link';
-import Avatar from 'components/Avatar/Avatar';
 import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
-import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
-import { useToggle } from 'hooks/useToggle';
+import { FavouriteIcon } from 'assets';
+import Avatar from 'components/Avatar/Avatar';
+import Link from 'components/Link';
 import CheckoutModal from 'features/home/details/components/CheckoutModal';
+import { useToggle } from 'hooks/useToggle';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { getOnboard } from 'utils/walletUtils';
 import { useWallet } from 'wallet/state';
+import Button, { ButtonType } from '../Button';
 
 type Props = {
   item: NtfItem;
@@ -25,6 +25,17 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
   useEffect(() => {
     setRenderFavButton(true);
   }, []);
+
+  const onBuyNow = useCallback(
+    async (e) => {
+      e.stopPropagation();
+      const onboard = getOnboard(dispatch);
+      if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+        setCheckoutVisible(true);
+      }
+    },
+    [state]
+  );
 
   return (
     <Link to={`/item/${item.id}`}>
@@ -60,16 +71,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
-                <Link
-                  title="Buy Now"
-                  onClick={async (e) => {
-                    e.stopPropagation();
-                    const onboard = getOnboard(dispatch);
-                    if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
-                      setCheckoutVisible(true);
-                    }
-                  }}
-                />
+                <Link title="Buy Now" onClick={onBuyNow} />
               </div>
               {isCheckoutVisible && state.balance !== '-1' && (
                 <CheckoutModal

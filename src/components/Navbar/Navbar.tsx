@@ -1,15 +1,14 @@
 import { MenuIcon, XIcon } from '@heroicons/react/outline';
-import { Logo, SunIcon, TwitterIcon, TelegramIcon, DiscordIcon, InstagramIcon } from 'assets';
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { DiscordIcon, InstagramIcon, Logo, TelegramIcon, TwitterIcon } from 'assets';
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import Link, { LinkType } from 'components/Link/Link';
-import HamburgerMenu from './HamburgerMenu';
 import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
-import { useWallet } from 'wallet/state';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import { getOnboard } from 'utils/walletUtils';
-import makeBlockie from 'ethereum-blockies-base64';
+import { useWallet } from 'wallet/state';
+import HamburgerMenu from './HamburgerMenu';
 import ProfileDropdown from './ProfileDropdown';
 //TODO update links
 const socialButtons = [
@@ -88,7 +87,16 @@ const Navbar: FC<unknown> = () => {
           </div>
           <div className="hidden lg:block lg:ml-6">
             <div className="flex items-center space-x-4 lg:space-12">
-              <Button type={ButtonType.Primary} title="Create" onClick={() => router.push('/mint')} />
+              <Button
+                type={ButtonType.Primary}
+                title="Create"
+                onClick={async () => {
+                  const onboard = getOnboard(dispatch);
+                  if (state.address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
+                    router.push('/mint');
+                  }
+                }}
+              />
               {!state.address ? (
                 <Button
                   type={ButtonType.Secondary}
