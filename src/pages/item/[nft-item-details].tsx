@@ -92,6 +92,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
     <div>
       {/* TODO maybe move somewhere else, or use npm lib */}
       <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+      <style>model-viewer {'{height:100%;max-height:100%;}'}</style>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
@@ -113,13 +114,13 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
           </div>
 
           {/*// LEFT SIDE CONTENT*/}
-          <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
-            <div className={'flex justify-center bg-secondary'}>
+          <div className="h-full mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
+            <div className={'flex h-full max-h-full justify-center bg-secondary'}>
               {/*// todo fix*/}
               {dataType?.startsWith('video') && (
                 <video controls src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />
               )}
-              {dataType?.startsWith('image') && <img src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />}
+              {dataType?.startsWith('image') && <img src={dataToDisplay} className={' p-5 lg:p-16 w-full h-full'} />}
               {dataType?.startsWith('model') && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //@ts-ignore
