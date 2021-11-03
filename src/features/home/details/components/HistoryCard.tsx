@@ -1,7 +1,7 @@
-import React from 'react';
 import HorizontalCard from 'components/HorizontalCard';
-import { formatDate } from 'utils/dateTimeUtils';
 import makeBlockie from 'ethereum-blockies-base64';
+import React from 'react';
+import { formatDate } from 'utils/dateTimeUtils';
 import { shortAddress } from 'utils/itemUtils';
 
 function generateBody(actionName, content = '') {
@@ -20,6 +20,8 @@ function getCardBody(data) {
       return generateBody('Minted');
     case 'match':
       return generateBody('Purchased for', `${data.price} ${data?.right?.asset.assetType?.assetClass}`);
+    case 'cancel_list':
+      return generateBody('Removed from sale');
   }
 }
 
