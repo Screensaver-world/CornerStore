@@ -39,14 +39,13 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
 
   const hadnleItemData = async () => {
     const url = getImageOrAnimation(item.meta, true, !!item.meta.animation);
-
     const response = await fetch(url);
     const blob = await response.blob();
     const type = await FileType.fromBlob(blob);
-    const dataURL = await URL.createObjectURL(blob);
+    const dataURL = URL.createObjectURL(blob);
     setDataType(type?.mime);
-    setDataToDisplay(dataURL);
     console.log(type);
+    setDataToDisplay(dataURL);
   };
   useEffect(() => {
     hadnleItemData();
@@ -118,6 +117,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
             <div className={'flex h-full max-h-full justify-center bg-secondary'}>
               {/*// todo fix*/}
               {dataType?.startsWith('video') && (
+                <video controls src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />
+              )}
+              {dataType?.startsWith('audio') && (
                 <video controls src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />
               )}
               {dataType?.startsWith('image') && <img src={dataToDisplay} className={' p-5 lg:p-16 w-full h-full'} />}
