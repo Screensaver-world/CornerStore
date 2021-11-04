@@ -5,9 +5,7 @@ import makeBlockie from 'ethereum-blockies-base64';
 import { useToggle } from 'hooks/useToggle';
 import React from 'react';
 import { shortAddress } from 'utils/itemUtils';
-import { getOnboard } from 'utils/walletUtils';
 import { useWallet } from 'wallet/state';
-import PutOnSaleModal from '../sales/PutOnSaleModal';
 import CheckoutModal from './CheckoutModal';
 
 type Props = {
@@ -17,43 +15,9 @@ type Props = {
 };
 
 function OwnerCard({ owner, sellOrder, item }: Props) {
-  const [{ address, raribleSDK, balance }, dispatch] = useWallet();
+  const [{ address, balance }] = useWallet();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   const isOwner = owner === address;
-  const [isPutOnSaleVisible, setPutOnSaleVisible] = useToggle(false);
-
-  const renderButton = () => {
-    if (!sellOrder && !isOwner) {
-      return null;
-    }
-
-    const options = {
-      order: {
-        owner: {
-          title: 'Remove from Sale',
-          onClick: async () => {
-            await (await raribleSDK.order.cancel(sellOrder)).wait();
-            location.reload();
-          },
-        },
-        notOwner: {
-          title: 'Buy',
-          onClick: async () => {
-            const onboard = getOnboard(dispatch);
-            if (address || ((await onboard.walletSelect()) && (await onboard.walletCheck()))) {
-              setCheckoutVisible(true);
-            }
-          },
-        },
-      },
-      noOrder: {
-        owner: { title: 'Put on Sale', onClick: setPutOnSaleVisible },
-      },
-    };
-
-    const { title, onClick } = options[sellOrder ? 'order' : 'noOrder'][isOwner ? 'owner' : 'notOwner'];
-    return <Button fullWidth title={title} onClick={onClick} customClasses="sticky bottom-4 lg:static" />;
-  };
 
   return (
     <>
@@ -72,7 +36,13 @@ function OwnerCard({ owner, sellOrder, item }: Props) {
             'Not for sale'
           )
         }
-        actions={<div className="z-10">{renderButton()} </div>}
+        actions={
+          <div className="z-10">
+            {!isOwner && (
+              <Button fullWidth title={'Buy'} onClick={setCheckoutVisible} customClasses="sticky bottom-4 lg:static" />
+            )}
+          </div>
+        }
       />
       {isCheckoutVisible && balance !== '-1' && (
         <CheckoutModal
@@ -82,15 +52,6 @@ function OwnerCard({ owner, sellOrder, item }: Props) {
           currency={sellOrder?.take?.assetType?.assetClass}
           orderHash={sellOrder?.hash}
           price={sellOrder?.take.value}
-          //TODO should we hide avail. quan. since we use erc721
-          // availableQuantity={item.availableQuantity}
-        />
-      )}
-      {isPutOnSaleVisible && (
-        <PutOnSaleModal
-          isOpen={isPutOnSaleVisible}
-          onClose={setPutOnSaleVisible}
-          tokenId={item.tokenId}
           //TODO should we hide avail. quan. since we use erc721
           // availableQuantity={item.availableQuantity}
         />

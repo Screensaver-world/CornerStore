@@ -122,7 +122,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               {dataType?.startsWith('audio') && (
                 <video controls src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />
               )}
-              {dataType?.startsWith('image') && <img src={dataToDisplay} className={' p-5 lg:p-16 w-full h-full'} />}
+              {dataType?.startsWith('image') && (
+                <img src={dataToDisplay} className={' p-5 lg:p-16 w-full object-contain'} />
+              )}
               {dataType?.startsWith('model') && (
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                 //@ts-ignore
