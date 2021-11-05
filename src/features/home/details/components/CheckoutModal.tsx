@@ -43,7 +43,12 @@ function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
     <>
       <Modal {...props} title={'Checkout'} description={`You are about to purchase a ${title}`}>
         {showWertModal ? (
-          <iframe className="w-full h-full" style={{ height: 505 }} src={wertWidget.getEmbedUrl()} />
+          <iframe
+            allow="camera *; microphone *"
+            className="w-full h-full"
+            style={{ height: 505 }}
+            src={wertWidget.getEmbedUrl()}
+          />
         ) : (
           <>
             {' '}
