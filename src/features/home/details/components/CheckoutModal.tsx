@@ -51,7 +51,6 @@ function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
           />
         ) : (
           <>
-            {' '}
             <NumberInput
               type={'quantity'}
               form={form}
