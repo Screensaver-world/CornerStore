@@ -1,16 +1,17 @@
+import { NtfItem } from 'api/raribleRequestTypes';
 import React from 'react';
 import OwnerCard from './OwnerCard';
 
 type Props = {
-  owners: any[];
   sellOrders: any[];
+  item: NtfItem;
 };
 
-function OwnersTab({ owners, sellOrders }: Props) {
+function OwnersTab({ sellOrders, item }: Props) {
   return (
     <>
-      {(owners ?? []).map((d, index) => (
-        <OwnerCard key={index} owner={d} sellOrder={sellOrders.find((order) => order?.maker === d)} />
+      {(item.owners ?? []).map((d, index) => (
+        <OwnerCard key={index} item={item} owner={d} sellOrder={sellOrders.find((order) => order?.maker === d)} />
       ))}
     </>
   );

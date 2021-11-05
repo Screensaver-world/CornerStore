@@ -24,7 +24,7 @@ const PutOnSaleModal: React.FunctionComponent<Props> = ({ tokenId, ...props }) =
   return (
     <>
       {!fixedPriceModalVisible && (
-        <Modal {...props} title="Put on sale" description="Chose sale type">
+        <Modal {...props} title="Put on sale" description="Choose sale type">
           <div className="flex text-white gap-x-2.5">
             {options.map(({ title, icon, onClick }) => (
               <div
