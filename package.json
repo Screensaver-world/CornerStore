@@ -23,6 +23,7 @@
     "@storybook/addon-docs": "^6.3.8",
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/postcss7-compat": "^2.0.2",
+    "@wert-io/widget-initializer": "^0.1.2",
     "autoprefixer": "^9.8.6",
     "bnc-onboard": "^1.35.1",
     "date-fns": "^2.24.0",

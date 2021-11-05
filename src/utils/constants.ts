@@ -4,3 +4,5 @@ export const NETWORK_NAME = 'rinkeby';
 
 export const PINATA_API_KEY = 'b4c6678b157443c345ed';
 export const PINATA_API_SECRET = '3004afe91d89922111263b2fa5bb912d6e93cdd31a8d38668f5fb2c00198020a';
+
+export const WERT_IO_PARTNER_ID = '01FJM8654W9K57RS25MA48Q1EZ';
