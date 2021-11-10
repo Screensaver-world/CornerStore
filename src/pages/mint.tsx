@@ -1,8 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import Modal from 'components/Modal';
+import AssetDisplay from 'features/home/details/components/AssetDisplay';
 import MintModal from 'features/mint/MintModal';
 import { useToggle } from 'hooks/useToggle';
-import { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import Breadcrumb from '../components/Breadcrumb';
@@ -40,15 +41,30 @@ const MintPage = () => {
     [setMintData, setShowMintModal]
   );
   const submitForm = form.handleSubmit(submit);
+  const [dataToDisplay, setDataToDisplay] = useState(null);
+
+  const file = form.watch('file-upload');
+
+  useEffect(() => {
+    if (file && file?.[0]) {
+      setDataToDisplay(file[0]);
+    }
+  }, [file]);
+
   return (
     <>
-      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
+      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.Mint]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Create multiple collectible</div>
         <form onSubmit={submitForm}>
           <div className={'pb-8'}>
             <FormStep title={'Upload File'}>
               <UploadArea form={form} name={'file-upload'} />
+              {dataToDisplay && (
+                <div className="relative flex justify-center h-52">
+                  <AssetDisplay omitStyles dataToDisplay={dataToDisplay} />
+                </div>
+              )}
             </FormStep>
           </div>
           <div className={'pb-8'}>
