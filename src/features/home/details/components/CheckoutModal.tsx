@@ -49,7 +49,7 @@ function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
         type={'currency'}
         form={form}
         name={'price'}
-        currencies={Currencies.all()}
+        currencies={Currencies?.all() ?? ['ETH']}
       />
       <div className="flex flex-col pb-2 text-gray-700 gap-y-1">
         {insufficient && <div>Insufficiently Funds</div>}

@@ -46,7 +46,7 @@ function FixedPriceSaleModal({ tokenId, ...props }: Props) {
           type={'currency'}
           form={form}
           name={'price'}
-          currencies={Currencies.all()}
+          currencies={Currencies?.all() ?? ['ETH']}
           placeholder="Enter price for one piece"
         />
 
