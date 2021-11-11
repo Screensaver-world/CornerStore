@@ -20,6 +20,7 @@ import OwnedTab from 'features/profile/components/OwnedTab';
 import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
 import { getItemsForSellOrders, getSellOrdersForItems } from 'utils/raribleApiUtils';
 import OnSaleTab from 'features/profile/components/OnSaleTab';
+import { useProfile, useSocials } from 'api/ceramic';
 
 //MOCKED DATA
 const dummyData = {
@@ -52,6 +53,8 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
   const [activeTab, setActiveTab] = useState(tab);
   const [userId, setUserId] = useState<string | null>(null);
   const user = dummyData;
+  const userProfile = useProfile(userId);
+  const userSocials = useSocials(userId);
   const shortAddr = shortAddress(userId, 10, 4);
   useEffect(() => {
     if (router && router.query) {
@@ -92,12 +95,12 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
             <Avatar
               sizeClasses="w-20 h-20 lg:w-48 lg:h-48"
               verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
-              username={userId}
+              username={userProfile?.basicProfileInfo?.name || userId}
             />
           </div>
           <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{userId}</h1>
           <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
-            <Link title={`@${user.twitterUsername}`} to="#" />
+            {/* <Link title={`@${user.twitterUsername}`} to="#" /> */}
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddr}</div>
               <Button
@@ -113,7 +116,9 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
               />
             </div>
           </div>
-          <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">{user.about}</p>
+          <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">
+            {userProfile?.basicProfileInfo?.description || ''}
+          </p>
           <div className="flex items-center justify-center w-full px-4 pb-9 sm:justify-between md:w-9/12 md:px-0">
             <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
               <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />
@@ -121,7 +126,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
               <Button type={ButtonType.Main} equalPadding icon={TelegramIcon} />
               <Button type={ButtonType.Main} equalPadding icon={DiscordIcon} />
             </div>
-            <Link to={user.site} title={user.site} />
+            <Link to={userProfile?.basicProfileInfo?.url} title={userProfile?.basicProfileInfo?.url} />
           </div>
         </div>
       </div>
