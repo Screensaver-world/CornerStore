@@ -59,7 +59,7 @@ const Navbar: FC<unknown> = () => {
     }
   }, []);
   return (
-    <nav className="bg-secondary">
+    <nav className="sticky top-0 z-20 bg-secondary">
       <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
         <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
           <div className="flex-shrink-0">
