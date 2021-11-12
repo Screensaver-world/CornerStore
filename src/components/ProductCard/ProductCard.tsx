@@ -62,12 +62,12 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
           <div>
             <div className="font-bold leading-6">
               <h3 className={'text-lg'}>{item?.meta?.name}</h3>
-              {sellOrder && (
+              {sellOrder?.hash && (
                 <span className={'text-sm'}>
                   {sellOrder?.take?.valueDecimal} {sellOrder?.take?.assetType?.assetClass}
                 </span>
               )}
-              <span className="px-1 text-gray-600 normal">1/1</span>
+              <span className="px-1 text-gray-600 normal">{sellOrder?.hash ? '1' : '0'}/1</span>
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
