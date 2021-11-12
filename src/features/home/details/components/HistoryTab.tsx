@@ -13,7 +13,7 @@ function HistoryTab({ initialHistory, address }: Props) {
     address,
     filterBy: ActivityHistoryFilter.BY_ITEM,
     size: 5,
-    sort: 'EARLIEST_FIRST',
+    sort: 'LATEST_FIRST',
     continuation,
   });
 
