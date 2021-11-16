@@ -16,3 +16,5 @@ yarn install
 yarn dev
 
 ### Figma 
+
+https://www.figma.com/file/USlp6KamaA2H7wWPgfgi2i/Rarible?node-id=834%3A4572
