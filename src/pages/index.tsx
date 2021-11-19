@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { ProductList } from 'components/ProductCard';
-import Dropdown from 'components/Dropdown/Dropdown';
-
 import { getNftItems, useGetNftItems } from 'api/raribleApi';
 import { GetNftItemsResponse, NftItemsRequestType, NtfItem } from 'api/raribleRequestTypes';
-import { getSellOrdersForItems } from 'utils/raribleApiUtils';
+import Dropdown from 'components/Dropdown/Dropdown';
+import { ProductList } from 'components/ProductCard';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CONTRACT_ID } from 'utils/constants';
+import { getSellOrdersForItems } from 'utils/raribleApiUtils';
 
 const searchParams = {
   size: 25,

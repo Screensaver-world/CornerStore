@@ -46,7 +46,6 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
     const dataURL = await URL.createObjectURL(blob);
     setDataType(type?.mime);
     setDataToDisplay(dataURL);
-    console.log(type);
   };
   useEffect(() => {
     hadnleItemData();

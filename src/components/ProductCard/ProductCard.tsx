@@ -50,7 +50,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </Link>
             <div className="font-medium space-y-1 leading-6 text-small">
               <Link to={`/profile/${item?.creators?.[0].account}`}>
-                <h3 className="text-gray-700 hover:text-white">{`${address}`}</h3>
+                <h3 className="text-gray-700 cursor-pointer hover:text-white">{`${address}`}</h3>
               </Link>
             </div>
           </div>
@@ -71,7 +71,9 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </div>
             <div className="flex items-end justify-between font-bold leading-6">
               <div className={`${!sellOrder?.take?.valueDecimal ? 'invisible' : ''}`}>
-                <Link title="Buy Now" onClick={onBuyNow} />
+                <div className="cursor-pointer">
+                  <Link title="Buy Now" onClick={onBuyNow} />
+                </div>
               </div>
               {isCheckoutVisible && state.balance !== '-1' && (
                 <CheckoutModal
