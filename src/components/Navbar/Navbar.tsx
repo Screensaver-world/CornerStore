@@ -126,7 +126,9 @@ const Navbar: FC<unknown> = () => {
           </div>
         </div>
       </div>
-      {hamburgerOpened && <HamburgerMenu renderSocialButtons={renderSocialButtons} />}
+      {hamburgerOpened && (
+        <HamburgerMenu renderSocialButtons={renderSocialButtons} hideMenu={() => setHamburgerOpened(false)} />
+      )}
     </nav>
   );
 };
