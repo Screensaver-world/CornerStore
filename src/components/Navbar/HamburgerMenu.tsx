@@ -32,7 +32,7 @@ const HamburgerMenu: FC<Props> = ({ renderSocialButtons, hideMenu }) => {
   return (
     <div className="fixed z-10 flex flex-col w-screen h-screen lg:hidden bg-main">
       <div>
-        <div className="flex flex-col px-8 pt-2 pb-3 space-y-1 text-xl text-white divide-y divide-gray-300 ">
+        <div className="flex flex-col px-8 pt-2 pb-3 text-xl text-white space-y-1 divide-y divide-gray-300 ">
           {renderLinks(navigationLinks, hideMenu)}
           <div className="flex justify-center pt-10"> {renderSocialButtons()}</div>
         </div>

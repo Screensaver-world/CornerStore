@@ -39,7 +39,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
 
   return (
     <Link to={`/item/${item.id}`}>
-      <li className="text-white bold hover:bg-gray-900">
+      <li className="text-white bold hover:bg-gray-900 ">
         <div className="flex flex-col justify-between h-full px-4 py-3 border border-gray-600 space-y-4 rounded-md">
           <div className="flex items-center space-x-4">
             <Link to={`/profile/${item?.creators?.[0].account}`}>
@@ -55,8 +55,8 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             </div>
           </div>
 
-          <div className="flex justify-center aspect-w-3 aspect-h-2">
-            <img className="object-cover rounded-lg shadow-lg" src={image} alt="" />
+          <div className="flex justify-center h-56 aspect-w-3 aspect-h-2">
+            <img className="object-contain rounded-lg shadow-lg" src={image} alt="" />
           </div>
 
           <div>
