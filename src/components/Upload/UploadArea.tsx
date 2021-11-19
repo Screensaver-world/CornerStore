@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react';
 import { UploadIcon } from 'assets';
-import Link from '../Link';
-import { useDropzone } from 'react-dropzone';
 import FormItemWrapper from 'components/Form/FormItemWrapper';
+import React, { useCallback, useRef } from 'react';
+import { useDropzone } from 'react-dropzone';
+import Link from '../Link';
 
 type Props = { form: any; name: string; onFinish?: any; accept?: string };
 
@@ -11,11 +11,15 @@ const borderGradient = 'bg-gradient-to-tr from-primary-start to-primary-stop hov
 function UploadArea({ form, name, onFinish, accept }: Props) {
   const ref = useRef();
 
-  const onClick = useCallback(() => {
-    if (ref?.current) {
-      (ref?.current as any)?.click?.();
-    }
-  }, [ref]);
+  const onClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (ref?.current) {
+        (ref?.current as any)?.click?.();
+      }
+    },
+    [ref]
+  );
 
   const onDrop = useCallback((acceptedFiles) => {
     if (acceptedFiles.length === 0) {

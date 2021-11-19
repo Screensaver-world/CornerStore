@@ -1,12 +1,20 @@
 
-# Nextjs, Tailwindcss, storybook and TypeScript
+# Open Source Frontend - Rarible Protocol
 
-A boilerplate with
+<img width="527" alt="Screen Shot 2021-11-16 at 1 37 43 PM" src="https://user-images.githubusercontent.com/24348787/142053850-fb9494c3-66fa-4833-b2c7-87a121f4cdee.png">
+<img width="559" alt="Screen Shot 2021-11-16 at 1 37 57 PM" src="https://user-images.githubusercontent.com/24348787/142053834-311a610b-cd35-414a-93c8-b4815b639d10.png">
 
-Next.js (with TypeScript)
 
-- - A React framework that allows server-side rendering (compared to Create React App, which specializes in client-side rendering)
-- Tailwind CSS
-  - Productive and maintainable CSS framework that uses utility classes heavily. Pairs quite well with the [Headwind](https://marketplace.visualstudio.com/items?itemName=heybourn.headwind) VS Code extension
-- Storybook
-  - Makes it easier to build UI components. Build components in isolation, mock hard-to-reach use cases, and more
+### TLDR
+
+We built a minimal storefront using the Rarible Protocol - lazy mint ERC721s as well as buy and sell for a fixed price. Please feel free to make PRs and reach out on discord.
+
+### How to run.
+
+yarn install
+
+yarn dev
+
+### Figma 
+
+https://www.figma.com/file/USlp6KamaA2H7wWPgfgi2i/Rarible?node-id=834%3A4572

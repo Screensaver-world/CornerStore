@@ -14,7 +14,7 @@ function HorizontalCard({ imageUrl, title, subtitle, actions, mainBackground = f
       <div
         className={`relative rounded-lg ${
           mainBackground ? 'bg-main' : 'bg-secondary'
-        } px-2 py-4 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500`}
+        } px-2 py-4 shadow-sm flex items-center space-x-3 hover:border-gray-400 `}
       >
         <div className="flex-shrink-0">
           <img className="w-16 h-16 border-2 border-gray-700 rounded-full" src={imageUrl} alt="" />

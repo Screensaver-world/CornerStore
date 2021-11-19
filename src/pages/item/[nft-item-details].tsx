@@ -6,6 +6,7 @@ import Button from 'components/Button';
 import HorizontalCard from 'components/HorizontalCard';
 import Tabs from 'components/Tabs';
 import makeBlockie from 'ethereum-blockies-base64';
+import AssetDisplay from 'features/home/details/components/AssetDisplay';
 import BidsTab from 'features/home/details/components/BidsTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import HistoryTab from 'features/home/details/components/HistoryTab';
@@ -13,7 +14,6 @@ import OwnersTab from 'features/home/details/components/OwnersTab';
 import PurchaseDropdown from 'features/home/details/components/PurchaseDropdown';
 import PutOnSaleModal from 'features/home/details/sales/PutOnSaleModal';
 import { useItemDetailsData } from 'features/home/details/useItemDetailsData';
-import FileType from 'file-type/browser';
 import React, { useEffect, useState } from 'react';
 import { getImageOrAnimation, shortAddress } from 'utils/itemUtils';
 import { getOnboard } from 'utils/walletUtils';
@@ -35,17 +35,12 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
   const [isPutOnSaleVisible, setPutOnSaleVisible] = useToggle(false);
   const [creatorAvatar, setCreatorAvatar] = useState(null);
   const [dataToDisplay, setDataToDisplay] = useState(null);
-  const [dataType, setDataType] = useState(null);
 
   const hadnleItemData = async () => {
     const url = getImageOrAnimation(item.meta, true, !!item.meta.animation);
-
     const response = await fetch(url);
     const blob = await response.blob();
-    const type = await FileType.fromBlob(blob);
-    const dataURL = await URL.createObjectURL(blob);
-    setDataType(type?.mime);
-    setDataToDisplay(dataURL);
+    setDataToDisplay(blob);
   };
   useEffect(() => {
     hadnleItemData();
@@ -89,8 +84,6 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
 
   return (
     <div>
-      {/* TODO maybe move somewhere else, or use npm lib */}
-      <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
       <main className="max-w-2xl px-4 pb-16 mx-auto mt-8 sm:pb-24 sm:px-6 lg:max-w-full lg:px-8">
         <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
           <div className="lg:col-start-8 lg:col-span-5">
@@ -112,28 +105,9 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
           </div>
 
           {/*// LEFT SIDE CONTENT*/}
-          <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
-            <div className={'flex justify-center bg-secondary'}>
-              {/*// todo fix*/}
-              {dataType?.startsWith('video') && (
-                <video controls src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />
-              )}
-              {dataType?.startsWith('image') && <img src={dataToDisplay} className={'p-5 lg:p-16 w-full h-full'} />}
-              {dataType?.startsWith('model') && (
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                //@ts-ignore
-                <model-viewer
-                  src={dataToDisplay}
-                  ios-src=""
-                  alt="A 3D model"
-                  shadow-intensity="1"
-                  camera-controls
-                  auto-rotate
-                  ar
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  //@ts-ignore
-                ></model-viewer>
-              )}
+          <div className="h-full mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
+            <div className={'flex h-full max-h-full justify-center bg-secondary'}>
+              {dataToDisplay && <AssetDisplay dataToDisplay={dataToDisplay} />}
             </div>
           </div>
 
@@ -171,7 +145,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
               <Tabs titles={tabs} active={activeTab} onChange={setActiveTab} />
             </div>
             <div className={'pt-5'}>
-              {isOwnersTab && <OwnersTab owners={item.owners} sellOrders={[sellOrder]} />}
+              {isOwnersTab && <OwnersTab item={item} sellOrders={[sellOrder]} />}
               {isBidsTab && <BidsTab />}
               {isDetailsTab && <DetailsTab owner={item.owners[0]} categories={[collection]} />}
               {isHistoryTab && <HistoryTab initialHistory={initialHistory} address={id} />}
