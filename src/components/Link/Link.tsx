@@ -1,5 +1,5 @@
-import React, { FC, ReactNode, useCallback } from 'react';
 import NextLink from 'next/link';
+import React, { FC, useCallback } from 'react';
 
 //TODO: add other types
 export enum LinkType {

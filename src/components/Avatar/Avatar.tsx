@@ -27,7 +27,7 @@ const Avatar: FC<Props> = ({
 
   return (
     <Link to={`/profile/${username}`}>
-      <div className="relative flex">
+      <div className="relative flex cursor-pointer">
         <img
           className={`${additionalClasses} ${
             sizeClasses ?? 'w-10 h-10'

@@ -193,7 +193,7 @@ export async function getServerSideProps(context) {
       address: id,
       filterBy: ActivityHistoryFilter.BY_ITEM,
       size: 5,
-      sort: 'EARLIEST_FIRST',
+      sort: 'LATEST_FIRST',
     });
   }
 

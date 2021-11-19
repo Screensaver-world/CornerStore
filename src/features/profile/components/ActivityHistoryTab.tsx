@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { getActivityHistory } from 'api/raribleApi';
 import { ActivityHistoryFilter } from 'api/raribleRequestTypes';
+import { ReloadIcon } from 'assets';
 import ActivityCard from 'components/ActivityCard/ActivityCard';
 import Button, { ButtonType } from 'components/Button';
-import { ReloadIcon } from 'assets';
+import React, { useCallback, useEffect, useState } from 'react';
 import { mapActivityHistory } from 'utils/raribleApiUtils';
 
 export interface Props {
@@ -18,7 +18,7 @@ const ActivityHistoryTab: React.FunctionComponent<Props> = ({ address }) => {
     const newItems = await getActivityHistory({
       address,
       filterBy: ActivityHistoryFilter.BY_USER,
-      sort: 'EARLIEST_FIRST',
+      sort: 'LATEST_FIRST',
       size: 10,
       continuation,
     });
