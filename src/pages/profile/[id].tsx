@@ -126,7 +126,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
               <Button type={ButtonType.Main} equalPadding icon={TelegramIcon} />
               <Button type={ButtonType.Main} equalPadding icon={DiscordIcon} />
             </div>
-            <Link to={userProfile?.basicProfileInfo?.url} title={userProfile?.basicProfileInfo?.url} />
+            <Link to={userProfile?.basicProfileInfo?.url || '#'} title={userProfile?.basicProfileInfo?.url} />
           </div>
         </div>
       </div>
