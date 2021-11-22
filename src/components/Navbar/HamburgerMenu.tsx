@@ -46,14 +46,16 @@ const HamburgerMenu: FC<Props> = ({ renderSocialButtons, hideMenu }) => {
             router.push('/mint');
           }}
         />
-        <Button
-          type={ButtonType.Secondary}
-          title="Connect"
-          onClick={() => {
-            hideMenu?.();
-            router.push('/wallet/connect');
-          }}
-        />
+        <div className={`${address ? 'hidden' : ''}`}>
+          <Button
+            type={ButtonType.Secondary}
+            title="Connect"
+            onClick={() => {
+              hideMenu?.();
+              router.push('/wallet/connect');
+            }}
+          />
+        </div>
       </div>
     </div>
   );
