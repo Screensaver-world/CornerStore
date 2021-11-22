@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build-prod": "next build",
     "start": "next start",
     "build:tailwind": "postcss src/scss/base.scss -o src/scss/tailwind.scss",
     "storybook": "start-storybook -p 5000",
