@@ -65,7 +65,10 @@ export function getOnboard(dispatch: React.Dispatch<WalletAction>): ReturnType<t
         console.log(NETWORK_NAME);
         dispatch({
           type: 'SET_SDK',
-          payload: createRaribleSdk(new Web3Ethereum({ web3 }), NETWORK_NAME),
+          payload: createRaribleSdk(
+            new Web3Ethereum({ web3 }),
+            NETWORK_NAME as 'e2e' | 'ropsten' | 'rinkeby' | 'mainnet'
+          ),
         });
       },
     } as Pick<Parameters<typeof Onboard>[0], 'subscriptions'>);
