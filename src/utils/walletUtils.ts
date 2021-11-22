@@ -22,7 +22,7 @@ const initOnboard = (subscriptions) =>
   Onboard({
     hideBranding: true,
     darkMode: true,
-    networkId: NETWORK_ID,
+    networkId: Number.parseInt(NETWORK_ID),
     subscriptions,
     walletSelect: { wallets },
     walletCheck: [{ checkName: 'connect' }, { checkName: 'network' }, { checkName: 'balance' }],
@@ -62,6 +62,7 @@ export function getOnboard(dispatch: React.Dispatch<WalletAction>): ReturnType<t
           type: 'SET_WEB3',
           payload: web3,
         });
+        console.log(NETWORK_NAME);
         dispatch({
           type: 'SET_SDK',
           payload: createRaribleSdk(new Web3Ethereum({ web3 }), NETWORK_NAME),
