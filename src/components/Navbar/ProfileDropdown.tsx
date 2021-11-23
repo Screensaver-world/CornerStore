@@ -74,7 +74,7 @@ const ProfileDropdown: FC<unknown> = () => {
   ];
 
   return (
-    <div className="relative flex justify-center w-10">
+    <div className="relative flex items-center justify-center w-10">
       <Popover className="relative hidden text-white lg:flex">
         <Popover.Button>
           <img className="h-10" src={makeBlockie(state.address)} />
