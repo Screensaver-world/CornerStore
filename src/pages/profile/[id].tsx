@@ -95,10 +95,17 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
             <Avatar
               sizeClasses="w-20 h-20 lg:w-48 lg:h-48"
               verificationSymbolSizes={'w-6 h-6 lg:w-14 lg:h-14'}
-              username={userProfile?.basicProfileInfo?.name || userId}
+              username={userId}
+              imgSrc={
+                userProfile?.basicProfileInfo?.image?.original?.src
+                  ? `https://dweb.link/ipfs/${userProfile?.basicProfileInfo?.image?.original?.src?.split('/')?.pop()}`
+                  : null
+              }
             />
           </div>
-          <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">{userId}</h1>
+          <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">
+            {userProfile?.basicProfileInfo?.name || userId}
+          </h1>
           <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
             {/* <Link title={`@${user.twitterUsername}`} to="#" /> */}
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
