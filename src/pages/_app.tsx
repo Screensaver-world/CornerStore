@@ -2,7 +2,6 @@ import Navbar from 'components/Navbar/Navbar';
 import { AppProps } from 'next/app';
 import React, { FC } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import 'tailwindcss/tailwind.css';
 import { WalletProvider } from 'wallet/state';
 import '../styles/global.css';
 
