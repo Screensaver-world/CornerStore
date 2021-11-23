@@ -1,5 +1,6 @@
 import { Popover } from '@headlessui/react';
 import { XIcon } from '@heroicons/react/solid';
+import { useProfile } from 'api/ceramic';
 import Avatar from 'components/Avatar/Avatar';
 import makeBlockie from 'ethereum-blockies-base64';
 import { useToggle } from 'hooks/useToggle';
@@ -23,7 +24,7 @@ const renderListItem = ({ title, handler }: { title: string; handler?: () => voi
   </li>
 );
 
-const renderContent = (state, menuItems, swapColors = false) => (
+const renderContent = (state, menuItems, userProfile, swapColors = false) => (
   <div className="flex ">
     <ul
       className={`${styles.dropdown} p-2 z-10 font-semibold  -bottom-1 flex flex-col text-white  right-0 min-w-max ${
@@ -31,7 +32,15 @@ const renderContent = (state, menuItems, swapColors = false) => (
       } rounded-md text-sm gap-y-4 px-4 py-4 border border-gray-900`}
     >
       <li className={`flex w-full px-4 py-3 ${swapColors ? 'bg-gray-800' : 'bg-main'} gap-x-4`}>
-        <Avatar sizeClasses="h-10 w-10 " username={state.address} />
+        <Avatar
+          sizeClasses="h-10 w-10 "
+          username={state.address}
+          imgSrc={
+            userProfile?.basicProfileInfo?.image?.original?.src
+              ? `https://dweb.link/ipfs/${userProfile?.basicProfileInfo?.image?.original?.src?.split('/')?.pop()}`
+              : null
+          }
+        />
         <div className="flex flex-col justify-center">
           <div>{Web3?.utils?.fromWei(state?.balance ?? '0')} ETH</div>
           <div className="text-sm text-gray-600">Balance</div>
@@ -73,17 +82,34 @@ const ProfileDropdown: FC<unknown> = () => {
     },
   ];
 
+  const userProfile = useProfile(state.address);
+
   return (
     <div className="relative flex justify-center w-10">
       <Popover className="relative hidden text-white lg:flex">
         <Popover.Button>
-          <img className="h-10" src={makeBlockie(state.address)} />
+          <img
+            className="h-10"
+            src={
+              userProfile?.basicProfileInfo?.image?.original?.src
+                ? `https://dweb.link/ipfs/${userProfile?.basicProfileInfo?.image?.original?.src?.split('/')?.pop()}`
+                : makeBlockie(state.address)
+            }
+          />
         </Popover.Button>
         <Popover.Panel className="absolute right-0 z-10 text-white top-11">
-          {renderContent(state, menuItems)}
+          {renderContent(state, menuItems, userProfile)}
         </Popover.Panel>
       </Popover>
-      <img className="flex h-10 text-white lg:hidden" src={makeBlockie(state.address)} onClick={setDisplayWalletData} />
+      <img
+        className="flex h-10 text-white lg:hidden"
+        src={
+          userProfile?.basicProfileInfo?.image?.original?.src
+            ? `https://dweb.link/ipfs/${userProfile?.basicProfileInfo?.image?.original?.src?.split('/')?.pop()}`
+            : makeBlockie(state.address)
+        }
+        onClick={setDisplayWalletData}
+      />
 
       {displayWalletData && (
         <div className="fixed top-0 left-0 z-10 flex flex-col w-screen h-screen lg:hidden bg-main">
@@ -91,7 +117,7 @@ const ProfileDropdown: FC<unknown> = () => {
             <XIcon className="block w-6 h-6 text-gray-400 " aria-hidden="true" onClick={setDisplayWalletData} />
           </div>
 
-          {renderContent(state, menuItems, true)}
+          {renderContent(state, menuItems, userProfile, true)}
         </div>
       )}
     </div>
