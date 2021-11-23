@@ -1,10 +1,9 @@
 import { WalletImage, WalletPageCover } from 'assets';
 import Avatar from 'components/Avatar/Avatar';
 import Breadcrumb from 'components/Breadcrumb';
-import { routes } from 'pages/routes';
-import React, { FC, useEffect, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
+import { routes } from 'utils/routes';
 import { getOnboard } from 'utils/walletUtils';
-
 import { useWallet } from 'wallet/state';
 
 const renderProfileImage = () => (

@@ -5,4 +5,7 @@ module.exports = {
   images: {
     disableStaticImages: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
