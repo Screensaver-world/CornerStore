@@ -1,4 +1,4 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import Modal from 'components/Modal';
 import AssetDisplay from 'features/home/details/components/AssetDisplay';
 import MintModal from 'features/mint/MintModal';
