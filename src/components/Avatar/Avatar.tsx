@@ -9,6 +9,7 @@ type Props = {
   sizeClasses?: string;
   verificationSymbolSizes?: string;
   username: string;
+  imgSrc: string | null;
 };
 
 const Avatar: FC<Props> = ({
@@ -17,13 +18,17 @@ const Avatar: FC<Props> = ({
   sizeClasses,
   username,
   verificationSymbolSizes,
+  imgSrc: origImgSrc,
 }) => {
-  const [imgSrc, setImgSrc] = useState(null);
+  const [imgSrc, setImgSrc] = useState(origImgSrc);
   useEffect(() => {
-    if (username) {
+    if (username && !origImgSrc) {
       setImgSrc(makeBlockie(username));
     }
-  }, [username]);
+    if (origImgSrc) {
+      setImgSrc(origImgSrc);
+    }
+  }, [username, origImgSrc]);
 
   return (
     <Link to={`/profile/${username}`}>

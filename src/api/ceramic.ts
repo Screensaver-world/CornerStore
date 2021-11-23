@@ -21,43 +21,38 @@ async function getProfileInfo(did: string): Promise<BasicProfile | null> {
 
 async function getSocials(did: string): Promise<AlsoKnownAsAccount[]> {
   const socials = await core.get('alsoKnownAs', did);
-  return socials.accounts || [];
+  return socials?.accounts || []; // FIXME: parse this into a type the UI can understand
 }
-
-// example call
-// const someEthAddress = '0xasdf';
-// const basicProfileInfo = await getProfileInfo(someEthAddress);
 
 export function useProfile(ethAddress: string | null): {
   basicProfileInfo: BasicProfile | null;
   loading: boolean;
   error: unknown;
 } {
-  console.log('ethAddress', ethAddress);
-  console.log('caip', addrToCaip.eth(ethAddress || ''));
-
   const {
     data: did,
     error: didError,
     isLoading: didLoading,
     refetch: refetchDID,
-  } = useQuery(['did', 'eth', ethAddress], () => (ethAddress ? getDID(addrToCaip.eth(ethAddress)) : undefined));
+  } = useQuery(['did', 'eth', ethAddress], ({ queryKey: [_did, _eth, ethAddress] }) =>
+    ethAddress ? getDID(addrToCaip.eth(ethAddress.toLowerCase())) : undefined
+  );
 
   useEffect(() => {
-    console.log('fetch DID');
     refetchDID();
   }, [ethAddress]);
 
-  console.log('did', did);
-
-  const { data, isLoading, error, refetch: refetchProfile } = useQuery(['profile', did], () => getProfileInfo(did));
+  const {
+    data,
+    isLoading,
+    error,
+    refetch: refetchProfile,
+  } = useQuery(['profile', did], ({ queryKey: [_profile, did] }) => (did ? getProfileInfo(did) : undefined));
 
   useEffect(() => {
-    console.log('fetch profile');
     refetchProfile();
   }, [did]);
 
-  console.log('profile', data);
   return {
     basicProfileInfo: data,
     loading: isLoading || didLoading,
@@ -66,7 +61,7 @@ export function useProfile(ethAddress: string | null): {
 }
 
 export function useSocials(ethAddress: string | null): {
-  socials: AlsoKnownAsAccount[];
+  socials: AlsoKnownAsAccount[]; // id = username, host = website's hostname, protocol = https
   loading: boolean;
   error: unknown;
 } {
@@ -74,11 +69,28 @@ export function useSocials(ethAddress: string | null): {
     data: did,
     error: didError,
     isLoading: didLoading,
-  } = useQuery(['did', 'eth', ethAddress], () => (ethAddress ? getDID(addrToCaip.eth(ethAddress)) : undefined));
+    refetch: refetchDID,
+  } = useQuery(
+    ['did', 'eth', ethAddress],
+    ({ queryKey: [_did, _eth, ethAddress] }): Promise<string | undefined> =>
+      ethAddress ? getDID(addrToCaip.eth(ethAddress.toLowerCase())) : undefined
+  );
 
-  const { data, isLoading, error } = useQuery(['socials', did], () => getSocials(did), {
-    enabled: !!did && !didError && !didLoading,
-  });
+  useEffect(() => {
+    refetchDID();
+  }, [ethAddress]);
+
+  const {
+    data,
+    isLoading,
+    error,
+    refetch: refetchSocials,
+  } = useQuery(['socials', did], ({ queryKey: [_socials, did] }) => (did ? getSocials(did) : undefined));
+
+  useEffect(() => {
+    refetchSocials();
+  }, [did]);
+
   return {
     socials: data,
     loading: isLoading || didLoading,
