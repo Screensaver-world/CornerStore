@@ -5,12 +5,12 @@ import MintModal from 'features/mint/MintModal';
 import { useToggle } from 'hooks/useToggle';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { routes } from 'utils/routes';
 import * as yup from 'yup';
 import Breadcrumb from '../components/Breadcrumb';
 import Button, { ButtonType } from '../components/Button';
 import { FormStep, NumberInput, TextArea, TextInput } from '../components/Form';
 import UploadArea from '../components/Upload';
-import { routes } from './routes';
 
 const schema = yup.object().shape({
   title: yup.string().required('Name is missing'),
