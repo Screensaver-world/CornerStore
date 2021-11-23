@@ -1,3 +1,4 @@
+import { useProfile } from 'api/ceramic';
 import { NtfItem, SellOrderTake } from 'api/raribleRequestTypes';
 import { FavouriteIcon } from 'assets';
 import Avatar from 'components/Avatar/Avatar';
@@ -37,6 +38,8 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
     [state]
   );
 
+  const creatorProfile = useProfile(item?.creators?.[0].account || null);
+
   return (
     <Link to={`/item/${item.id}`}>
       <li className="text-white bold h-96 hover:bg-gray-900">
@@ -45,12 +48,21 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
             <Link to={`/profile/${item?.creators?.[0].account}`}>
               <Avatar
                 username={item?.creators?.[0].account}
+                imgSrc={
+                  creatorProfile?.basicProfileInfo?.image?.original?.src
+                    ? `https://dweb.link/ipfs/${creatorProfile?.basicProfileInfo?.image?.original?.src
+                        ?.split('/')
+                        ?.pop()}`
+                    : null
+                }
                 // verified={item.userVerified}
               />
             </Link>
             <div className="space-y-1 font-medium leading-6 text-small">
               <Link to={`/profile/${item?.creators?.[0].account}`}>
-                <h3 className="text-gray-700 cursor-pointer hover:text-white">{`${address}`}</h3>
+                <h3 className="text-gray-700 cursor-pointer hover:text-white">{`${
+                  creatorProfile?.basicProfileInfo?.name || address
+                }`}</h3>
               </Link>
             </div>
           </div>
