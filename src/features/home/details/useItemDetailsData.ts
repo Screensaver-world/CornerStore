@@ -25,7 +25,7 @@ export function useItemDetailsData() {
   );
 
   const isHistoryTab = tab === 'History';
-  const isBidsTab = tab === 'Bids';
+  // const isBidsTab = tab === 'Bids';
   const isOwnersTab = tab === 'Owners';
   const isDetailsTab = tab === 'Details';
 
@@ -34,7 +34,7 @@ export function useItemDetailsData() {
     setActiveTab,
     tabs: itemDetailsTabs,
     isHistoryTab,
-    isBidsTab,
+    // isBidsTab,
     isOwnersTab,
     isDetailsTab,
   };

@@ -99,7 +99,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                   // availableQuantity={item.availableQuantity}
                 />
               )}
-              {renderFavButton && (
+              {/* {renderFavButton && (
                 <Button
                   customClasses="text-gray-600 py-0"
                   icon={FavouriteIcon}
@@ -111,7 +111,7 @@ const ProductCard: FC<Props> = ({ item, sellOrder }) => {
                     console.log('liked');
                   }}
                 />
-              )}
+              )} */}
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import { DiscordIcon, InstagramIcon, Logo, TelegramIcon, TwitterIcon } from 'ass
 import Button from 'components/Button';
 import { ButtonType } from 'components/Button/Button';
 import Link, { LinkType } from 'components/Link/Link';
-import SearchBar from 'components/SearchBar/SearchBar';
+// import SearchBar from 'components/SearchBar/SearchBar';
 import { useRouter } from 'next/router';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { getOnboard } from 'utils/walletUtils';
@@ -62,24 +62,28 @@ const Navbar: FC<unknown> = () => {
     <nav className="sticky top-0 z-20 bg-secondary">
       <div className="flex px-2 py-3.5 mx-auto md:py-0 md:h-24 max-w-screen-2xl sm:px-4 lg:px-8">
         <div className="flex items-center justify-between w-full px-2 lg:px-0 ">
-          <div className="flex-shrink-0">
-            <img onClick={goToHome} className="block w-auto h-8 cursor-pointer lg:hidden" src={Logo} alt="Rarible" />
+          <div className="flex-1">
+            <div onClick={goToHome} className="block w-auto text-2xl -mt-1 cursor-pointer lg:hidden">
+              🏪
+            </div>
             <div className="flex items-center">
-              <img onClick={goToHome} className="hidden w-auto h-8 cursor-pointer lg:block" src={Logo} alt="Rarible" />
+              <div onClick={goToHome} className="hidden w-auto text-2xl -mt-1 cursor-pointer lg:block">
+                🏪
+              </div>
               <span
                 onClick={goToHome}
                 className="hidden h-auto pl-3 text-xl font-bold text-white cursor-pointer lg:block align-cente"
               >
-                Rarible
+                CornerStore
               </span>
             </div>
           </div>
 
-          <SearchBar hidden={hamburgerOpened} />
+          {/* <SearchBar hidden={hamburgerOpened} /> */}
           <div className="hidden lg:block lg:ml-6 lg:mr-6">
             <div className="flex items-center space-x-10">
               <Link type={LinkType.Main} title="Explore" to="/" />
-              <Link type={LinkType.Secondary} title="How it works" to="#" />
+              <Link type={LinkType.Secondary} title="About" to="#" />
             </div>
           </div>
           <div className="hidden lg:block lg:ml-4">

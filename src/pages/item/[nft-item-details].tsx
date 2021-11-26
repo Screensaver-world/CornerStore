@@ -7,7 +7,7 @@ import HorizontalCard from 'components/HorizontalCard';
 import Tabs from 'components/Tabs';
 import makeBlockie from 'ethereum-blockies-base64';
 import AssetDisplay from 'features/home/details/components/AssetDisplay';
-import BidsTab from 'features/home/details/components/BidsTab';
+// import BidsTab from 'features/home/details/components/BidsTab';
 import DetailsTab from 'features/home/details/components/DetailsTab';
 import HistoryTab from 'features/home/details/components/HistoryTab';
 import OwnersTab from 'features/home/details/components/OwnersTab';
@@ -30,7 +30,8 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
       'https://lh3.googleusercontent.com/1rLhxHFIebBPBtCFeXCxiwdbIE2f2idunmGyU1RvgU7qk1TGiFHCORMepdQLt6b7uRYyn5FtlnLkTkO8kdTMsnvbHbTwpHEytcbz',
     name: 'Rarible',
   };
-  const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
+  // const { isOwnersTab, isBidsTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
+  const { isOwnersTab, isDetailsTab, isHistoryTab, activeTab, tabs, setActiveTab } = useItemDetailsData();
   const [isCheckoutVisible, setCheckoutVisible] = useToggle(false);
   const [isPutOnSaleVisible, setPutOnSaleVisible] = useToggle(false);
   const [creatorAvatar, setCreatorAvatar] = useState(null);
@@ -146,7 +147,7 @@ function ItemDetailsPage({ item, sellOrder, initialHistory, id }: Props) {
             </div>
             <div className={'pt-5'}>
               {isOwnersTab && <OwnersTab item={item} sellOrders={[sellOrder]} />}
-              {isBidsTab && <BidsTab />}
+              {/* {isBidsTab && <BidsTab />} */}
               {isDetailsTab && <DetailsTab owner={item.owners[0]} categories={[collection]} />}
               {isHistoryTab && <HistoryTab initialHistory={initialHistory} address={id} />}
             </div>

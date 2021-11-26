@@ -54,16 +54,16 @@ const Home: React.FunctionComponent<HomeProps> = ({ itemsData, ordersData }) => 
   }, [refetch]);
 
   return (
-    <>
-      <div className="flex items-center justify-between px-6 py-10 mx-auto max-w-screen-2xl">
+    <div className="py-8">
+      {/* <div className="flex items-center justify-between px-6 py-2 mx-auto max-w-screen-2xl">
         <h1 className="py-0.5 text-2xl font-bold text-white">Explore</h1>
         <Dropdown
           displayText="Recently added"
           dropDownContent={<div className="divide-y divide-gray-600">{renderDropDownContent()}</div>}
         />
-      </div>
+      </div> */}
       <ProductList itemsData={items || []} onLoadMore={continuation ? loadMore : null} ordersData={ordersData} />
-    </>
+    </div>
   );
 };
 export async function getServerSideProps(context) {
