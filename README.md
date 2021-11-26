@@ -1,5 +1,6 @@
+## What is CornerStore?
 
-# Open Source Frontend - Rarible Protocol
+CornerStore is an open source NFT marketplace build by Rarible DAO using the Rarible Protocol. You can easily plug in your NFT contract address and spin up your own marketplace in a couple minutes.
 
 ### DEMO
 
