@@ -1,6 +1,5 @@
-import Web3 from 'web3';
-import * as IPFS from 'ipfs-core';
 import { createRaribleSdk } from '@rarible/protocol-ethereum-sdk';
+import Web3 from 'web3';
 
 export type WalletAction = SET_ADDRESS | SET_NETWORK | SET_BALANCE | SET_WALLET | SET_WEB3 | SET_ENS | SET_SDK | RESET;
 

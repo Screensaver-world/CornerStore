@@ -85,7 +85,7 @@ const ProfileDropdown: FC<unknown> = () => {
   const userProfile = useProfile(state.address);
 
   return (
-    <div className="relative flex justify-center w-10">
+    <div className="relative flex items-center justify-center w-10">
       <Popover className="relative hidden text-white lg:flex">
         <Popover.Button>
           <img

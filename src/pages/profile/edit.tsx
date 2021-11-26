@@ -1,15 +1,15 @@
-import { FormStep, TextArea, TextInput } from 'components/Form';
 import Breadcrumb from 'components/Breadcrumb';
-import { useForm } from 'react-hook-form';
-import { routes } from '../routes';
 import Button from 'components/Button';
+import { FormStep, TextArea, TextInput } from 'components/Form';
 import ChooseProfilePicture from 'features/profile/components/ChooseProfilePicture';
+import { useForm } from 'react-hook-form';
+import { routes } from 'utils/routes';
 
 const EditProfilePage = () => {
   const form = useForm();
   return (
     <>
-      <div className="flex flex-col justify-between px-6 py-6 pt-10 mx-auto max-w-screen-lg">
+      <div className="flex flex-col justify-between max-w-screen-lg px-6 py-6 pt-10 mx-auto">
         <Breadcrumb path={[routes.Home, routes.EditProfile]} />
         <div className={'flex flex-start my-8 font-bold text-white text-xl'}>Edit Profile</div>
         <div className={'pb-8'}>
