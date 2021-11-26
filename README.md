@@ -15,13 +15,13 @@ https://naughty-easley-e107df.netlify.app/
 
 1. To deploy on Netlify just click the button below 👇
 
-[https://gist.github.com/0xJacobean/cedeaf67c8f3763b5e203adf0ce5e3fd](https://gist.github.com/0xJacobean/cedeaf67c8f3763b5e203adf0ce5e3fd)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/Screensaver-world/RaribleProtocol-Interface)
 
-1. Replace these inputs with the correct information. These will be added to your .env variables. 
+2. Replace these inputs with the correct information. These will be added to your .env variables. 
     
-    ![Screen Shot 2021-11-25 at 8.22.17 PM.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2935df39-f2ba-468a-bba2-72ad217a4cc0/Screen_Shot_2021-11-25_at_8.22.17_PM.png)
+<img width="407" alt="Screen Shot 2021-11-25 at 8 22 17 PM" src="https://user-images.githubusercontent.com/24348787/143517507-4ea99dac-3826-477f-bd07-9f0cfe24bd00.png">
     
-2. Wait for deployment and your marketplace should be ready to go!
+3. Wait for deployment and your marketplace should be ready to go!
 
 
 ### TLDR
