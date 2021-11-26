@@ -26,11 +26,6 @@ Feel free to fork our design files to start redesigning the marketplace.
     
 3. Wait for deployment and your marketplace should be ready to go!
 
-
-### TLDR
-
-We built a minimal storefront using the Rarible Protocol - lazy mint ERC721s as well as buy and sell for a fixed price. Please feel free to make PRs and reach out on discord.
-
 ### How to run locally.
 
 yarn install
