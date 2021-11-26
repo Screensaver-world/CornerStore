@@ -38,14 +38,14 @@ const HamburgerMenu: FC<Props> = ({ renderSocialButtons, hideMenu }) => {
         </div>
       </div>
       <div className="fixed flex justify-around w-full bottom-4">
-        <Button
+        {/* <Button
           type={ButtonType.Primary}
           title="Create"
           onClick={() => {
             hideMenu?.();
             router.push('/mint');
           }}
-        />
+        /> */}
         <div className={`${address ? 'hidden' : ''}`}>
           <Button
             type={ButtonType.Secondary}

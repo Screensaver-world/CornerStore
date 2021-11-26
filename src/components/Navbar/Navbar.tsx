@@ -91,7 +91,7 @@ const Navbar: FC<unknown> = () => {
           </div>
           <div className="hidden lg:block lg:ml-6">
             <div className="flex items-center space-x-4 lg:space-12">
-              <Button
+              {/* <Button
                 type={ButtonType.Primary}
                 title="Create"
                 onClick={async () => {
@@ -100,7 +100,7 @@ const Navbar: FC<unknown> = () => {
                     router.push('/mint');
                   }
                 }}
-              />
+              /> */}
               {!state.address ? (
                 <Button
                   type={ButtonType.Secondary}
