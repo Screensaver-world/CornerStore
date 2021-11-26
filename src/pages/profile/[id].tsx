@@ -21,6 +21,7 @@ import ActivityHistoryTab from 'features/profile/components/ActivityHistoryTab';
 import { getItemsForSellOrders, getSellOrdersForItems } from 'utils/raribleApiUtils';
 import OnSaleTab from 'features/profile/components/OnSaleTab';
 import { useProfile, useSocials } from 'api/ceramic';
+import { useWallet } from 'wallet/state';
 
 //MOCKED DATA
 const dummyData = {
@@ -56,6 +57,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
   const userProfile = useProfile(userId);
   const userSocials = useSocials(userId);
   const shortAddr = shortAddress(userId, 10, 4);
+  const [state] = useWallet();
   useEffect(() => {
     if (router && router.query) {
       setActiveTab(
@@ -86,6 +88,11 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
     [userId]
   );
 
+  console.log('userProfile', userProfile);
+  console.log('userSocials', userSocials);
+  console.log('state.address', state.address);
+  console.log('userId', userId);
+
   return (
     <>
       <div className="flex flex-col items-center m-auto text-lg text-white max-w-screen-2xl">
@@ -106,7 +113,7 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
           <h1 className="relative text-lg font-bold lg:text-2xl md:text-4xl -top-4 ">
             {userProfile?.basicProfileInfo?.name || userId}
           </h1>
-          <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:pt-4">
+          <div className="flex flex-col items-center text-lg font-medium gap-y-4 gap-x-10 sm:flex-row md:gap-x-20 md:py-4">
             {/* <Link title={`@${user.twitterUsername}`} to="#" /> */}
             <div className="flex items-center px-3 py-2 gap-x-4 bg-main">
               <div>{shortAddr}</div>
@@ -123,18 +130,36 @@ const Profile: React.FunctionComponent<ProfileProps> = ({ onSaleData, ownedData,
               />
             </div>
           </div>
-          <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">
-            {userProfile?.basicProfileInfo?.description || ''}
-          </p>
-          <div className="flex items-center justify-center w-full px-4 pb-9 sm:justify-between md:w-9/12 md:px-0">
-            <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
-              <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />
-              <Button type={ButtonType.Main} equalPadding icon={InstagramIcon} />
-              <Button type={ButtonType.Main} equalPadding icon={TelegramIcon} />
-              <Button type={ButtonType.Main} equalPadding icon={DiscordIcon} />
-            </div>
-            <Link to={userProfile?.basicProfileInfo?.url || '#'} title={userProfile?.basicProfileInfo?.url} />
-          </div>
+          {!userProfile.basicProfileInfo && userId?.toLowerCase() === state.address?.toLowerCase() ? (
+            <>
+              <p className="text-center pt-3 pb-5">
+                Edit your profile information at <b>DNS.xyz</b>
+              </p>
+              <div className="flex items-center space-x-4 lg:space-12 py-11">
+                <Button
+                  customClasses="px-9"
+                  title="Edit your DNS profile"
+                  type={ButtonType.Primary}
+                  onClick={() => window.open('https://dns.xyz/login')}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="px-5 py-10 text-base font-semibold text-center md:w-9/12 sm:px-4">
+                {userProfile.basicProfileInfo?.description || ''}
+              </p>
+              <div className="flex items-center justify-center w-full px-4 pb-9 sm:justify-between md:w-9/12 md:px-0">
+                <div className="hidden sm:flex gap-x-1 lg:gap-x-2 xl:gap-x:4 ">
+                  <Button type={ButtonType.Main} equalPadding icon={TwitterIcon} />
+                  <Button type={ButtonType.Main} equalPadding icon={InstagramIcon} />
+                  <Button type={ButtonType.Main} equalPadding icon={TelegramIcon} />
+                  <Button type={ButtonType.Main} equalPadding icon={DiscordIcon} />
+                </div>
+                <Link to={userProfile.basicProfileInfo?.url || '#'} title={userProfile.basicProfileInfo?.url} />
+              </div>
+            </>
+          )}
         </div>
       </div>
       <Tabs titles={tabs} active={activeTab} onChange={onTabChange} />
