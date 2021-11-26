@@ -1,6 +1,8 @@
 [build]
+  environment = { AWS_LAMBDA_JS_RUNTIME = "nodejs14.x" }
   publish = "out"
   command = "yarn run build-prod"
+<<<<<<< HEAD
 
 [template]
   incoming-hooks = ["Contentful"]
@@ -12,3 +14,5 @@
   NEXT_PUBLIC_NETWORK_NAME = "REPLACE_WITH_NETWORK_NAME"  
   NEXT_PUBLIC_PINATA_API_KEY = "REPLACE_WITH_PINATA_API_KEY"  
   NEXT_PUBLIC_PINATA_API_SECRET = "REPLACE_WITH_PINATA_API_SECRET"  
+=======
+>>>>>>> f506786dafcf3e034d6cf9b9119924d1378ef696
