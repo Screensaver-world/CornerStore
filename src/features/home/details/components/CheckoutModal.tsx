@@ -60,11 +60,11 @@ function CheckoutModal({ price, currency, orderHash, title, ...props }: Props) {
         ))}
       </div>
       <div className={'flex flex-col'}>
-        <Button
-          title={insufficient ? 'Add Funds' : 'Buy Now'}
-          fullWidth
-          onClick={insufficient ? null : form.handleSubmit(onSubmit)}
-        />
+        {insufficient ? (
+          <div className="pt-2 text-lg font-bold text-center text-white">Not enugh ETH</div>
+        ) : (
+          <Button title={'Buy Now'} fullWidth onClick={form.handleSubmit(onSubmit)} />
+        )}
       </div>
     </Modal>
   );
